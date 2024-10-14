@@ -22,6 +22,7 @@ $parametro4 = isset($_SESSION['parametro4'] ) ? $_SESSION['parametro4'] : "";
 <html>
 <head>
     <meta charset="utf-8" />
+    <!-- <link rel="stylesheet" href="style.css" type="text/css" /> -->
     <!-- <link rel="stylesheet" href="../css/style.css" type="text/css" /> -->
 
     <style>
