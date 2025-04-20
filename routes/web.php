@@ -30,11 +30,11 @@ Route::get('/', function () {
 });
 
 //Pagina inicial
-Route::get('/home',  [DashboardController::class , 'index'])->name('pagina_inicial');
+Route::get('/home',  [DashboardController::class, 'index'])->name('pagina_inicial');
 
 //Login & Logout
-Route::post('/autenticar', [LoginController::class , 'autenticar'])->name('autenticar');
-Route::get('/', [LoginController::class , 'logout'])->name('logout');
+Route::post('/autenticar', [LoginController::class, 'autenticar'])->name('autenticar');
+Route::get('/', [LoginController::class, 'logout'])->name('logout');
 
 
 //Produto
@@ -81,8 +81,3 @@ Route::get('/dashboard/requisicoes_grafico_pizza', [DashboardController::class, 
 //Relatorios
 Route::get('relatorio', [DashboardController::class, 'index1'])->name('relatorio.list');
 Route::get('relatorios', [DashboardController::class, 'list'])->name('listar');
-
-
-
-
-
