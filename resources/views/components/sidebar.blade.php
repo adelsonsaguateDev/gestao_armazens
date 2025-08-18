@@ -2,9 +2,55 @@
     session()->start();
 @endphp
 
-<div class="sidebar-panel">
-    <div class="gull-brand pr-3 text-center mt-4 mb-2 d-flex justify-content-center align-items-center"><img class="pl-3" src="{{ asset('dist-assets/images/logo.png')}}" alt="alt" />
-        <span style="font-size: 0.7rem" class=" item-name text-20 text-primary font-weight-700">GESTÃO ARMAZENS</span> 
+<style>
+    /* Hide the icon logo by default */
+    .icon-logo {
+        display: none;
+    }
+    /* When sidebar is compact, hide the full logo */
+    .sidebar-compact .full-logo {
+        display: none;
+    }
+    /* When sidebar is compact, show the icon logo */
+    .sidebar-compact .icon-logo {
+        display: block !important;
+    }
+</style>
+
+<div class="sidebar-panel" style="background-color: #2c3e50;">
+    <div class="gull-brand pr-3 text-center mt-4 mb-2 d-flex justify-content-center align-items-center">
+        
+        <!-- Full Logo -->
+        <svg class="full-logo" width="180" height="40" viewBox="0 0 340 60" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#0056b3;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#007bff;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <g transform="translate(5, 5)">
+                <path d="M20 0 L0 0 L0 50 L20 50 L20 30 L10 30 L10 20 L20 20 Z" fill="url(#grad1)"/>
+                <path d="M25 0 L45 0 Q50 0 50 5 L50 45 Q50 50 45 50 L25 50 Z M35 10 A15 15 0 0 0 35 40 A15 15 0 0 0 35 10" fill="url(#grad1)"/>
+            </g>
+            <text x="65" y="40" font-family="'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif" font-size="28" font-weight="600" fill="#ffffff">
+                Fenomenal <tspan font-weight="400">Comercial</tspan>
+            </text>
+        </svg>
+
+        <!-- Icon Logo for Compact Sidebar -->
+        <svg class="icon-logo" width="40" height="40" viewBox="0 0 55 55" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <defs>
+                <linearGradient id="grad1_icon" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#0056b3;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#007bff;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <g transform="translate(5, 5)">
+                <path d="M20 0 L0 0 L0 50 L20 50 L20 30 L10 30 L10 20 L20 20 Z" fill="url(#grad1_icon)"/>
+                <path d="M25 0 L45 0 Q50 0 50 5 L50 45 Q50 50 45 50 L25 50 Z M35 10 A15 15 0 0 0 35 40 A15 15 0 0 0 35 10" fill="url(#grad1_icon)"/>
+            </g>
+        </svg>
+
         <div class="sidebar-compact-switch ml-auto"><span></span></div>
     </div>
     <!--  user -->
@@ -12,22 +58,47 @@
         <div class="side-nav">
             <div class="main-menu">
                 <ul class="metismenu" id="menu">
-                    <li id="dashboard_li" class="Ul_li--hover"><a id="dashboard_link" class="has-arrow" href="{{ route('pagina_inicial')}}"><i class="i-Bar-Chart text-20 mr-2 text-muted"></i><span class="item-name text-15 text-muted">Dashboard</span></a></li>
-                    <li class="Ul_li--hover"><a class="has-arrow" href="{{ route('produto.list') }}"><i class="i-Library text-20 mr-2 text-muted"></i><span class="item-name text-15 text-muted">Produtos</span></a></li>
-                    <li class="Ul_li--hover"><a class="has-arrow" href="{{ route('requisicao.list') }}"><i class="i-Remove-Cart text-20 mr-2 text-muted"></i><span class="item-name text-15 text-muted">Requisições</span></a></li>
+                    <li class="Ul_li--hover"><a href="{{ route('pagina_inicial')}}"><i class="i-Bar-Chart text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Dashboard</span></a></li>
+                    
+                    <li class="Ul_li--hover">
+                        <a class="has-arrow" href="#"><i class="i-Shop-4 text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Vendas</span></a>
+                        <ul class="mm-collapse">
+                            <li class="Ul_li--hover"><a href="#"><span class="item-name text-15 text-white">Nova Venda</span></a></li>
+                            <li class="Ul_li--hover"><a href="#"><span class="item-name text-15 text-white">Listar Vendas</span></a></li>
+                        </ul>
+                    </li>
+
+                    <li class="Ul_li--hover">
+                        <a class="has-arrow" href="#"><i class="i-Full-Cart text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Entradas</span></a>
+                        <ul class="mm-collapse">
+                            <li class="Ul_li--hover"><a href="#"><span class="item-name text-15 text-white">Nova Entrada</span></a></li>
+                            <li class="Ul_li--hover"><a href="#"><span class="item-name text-15 text-white">Listar Entradas</span></a></li>
+                        </ul>
+                    </li>
+
+                    <li class="Ul_li--hover">
+                        <a class="has-arrow" href="#"><i class="i-Financial text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Pagamentos</span></a>
+                        <ul class="mm-collapse">
+                            <li class="Ul_li--hover"><a href="#"><span class="item-name text-15 text-white">Registar Pagamento</span></a></li>
+                            <li class="Ul_li--hover"><a href="#"><span class="item-name text-15 text-white">Listar Pagamentos</span></a></li>
+                        </ul>
+                    </li>
+
+                    <li class="Ul_li--hover"><a href="{{ route('produto.list') }}"><i class="i-Library text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Produtos</span></a></li>
+                    <li class="Ul_li--hover"><a href="{{ route('requisicao.list') }}"><i class="i-Remove-Cart text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Requisições</span></a></li>
+                    
                     @if(session('permissao_nome') == 'admin' || session('permissao_nome') == 'gestor')
-                    <li class="Ul_li--hover"><a class="has-arrow" href="{{ route('utilizador.list') }}" ><i class="i-Administrator text-20 mr-2 text-muted"></i><span class="item-name text-15 text-muted">Funcionarios</span></a></li>
-                    <li class="Ul_li--hover"><a class="has-arrow" href="{{ route('relatorio.list') }}"><i class="i-Line-Chart-4 text-20 mr-2 text-muted"></i><span class="item-name text-15 text-muted">Relatórios</span></a></li>
+                    <li class="Ul_li--hover">
+                        <a class="has-arrow" href="#"><i class="i-Gears text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Administração</span></a>
+                        <ul class="mm-collapse">
+                            <li class="Ul_li--hover"><a href="{{ route('utilizador.list') }}" ><i class="i-Administrator text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Funcionarios</span></a></li>
+                            <li class="Ul_li--hover"><a href="{{ route('relatorio.list') }}"><i class="i-Line-Chart-4 text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Relatórios</span></a></li>
+                        </ul>
+                    </li>
                     @endif
                     
                 </ul>
             </div>
-        </div>
-        <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
-            <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
-        </div>
-        <div class="ps__rail-y" style="top: 0px; height: 404px; right: 0px;">
-            <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 325px;"></div>
         </div>
         <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
             <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>

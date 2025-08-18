@@ -17,11 +17,57 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $total_produtos = Produto::where('estado', '=',1)->count();
-        $total_funcionarios = User::where('estado', '=',1)->count();
-        $total_requisicoes = Requisicoes::where('estado', '=',1)->count();
+        // Card stats
+        $total_produtos = Produto::where('estado', 1)->count();
+        $total_funcionarios = User::where('estado', 1)->count();
+        $total_requisicoes = Requisicoes::where('estado', 1)->count();
+        
+        // Define low stock threshold, e.g., quantity < 10
+        $low_stock_threshold = 10;
+        $produtos_stock_baixo = Produto::where('estado', 1)->where('quantidade', '<', $low_stock_threshold)->count();
+        
+        // Requisition status: 1 = Pendente
+        $requisicoes_pendentes = Requisicoes::where('estado_requisicao', 1)->count();
 
-        return view('home', compact('total_produtos','total_funcionarios','total_requisicoes'));
+        // Table data: Top 5 low stock products
+        $lista_produtos_stock_baixo = Produto::where('estado', 1)
+                                            ->where('quantidade', '<', $low_stock_threshold)
+                                            ->orderBy('quantidade', 'asc')
+                                            ->limit(5)
+                                            ->get();
+
+        // Recent Activity Feed
+        $recent_products = Produto::latest()->limit(3)->get();
+        $recent_requisitions = Requisicoes::with('users', 'produtos')->latest()->limit(3)->get();
+        $atividades_recentes = collect();
+
+        foreach ($recent_products as $produto) {
+            $atividades_recentes->push((object)[
+                'icon' => 'i-Library',
+                'descricao' => 'Novo produto: ' . $produto->descricao,
+                'created_at' => $produto->created_at
+            ]);
+        }
+
+        foreach ($recent_requisitions as $requisicao) {
+            $atividades_recentes->push((object)[
+                'icon' => 'i-Remove-Cart',
+                'descricao' => 'Requisição para ' . ($requisicao->produtos->descricao ?? 'N/A'),
+                'created_at' => $requisicao->created_at
+            ]);
+        }
+
+        $atividades_recentes = $atividades_recentes->sortByDesc('created_at');
+
+        return view('home', compact(
+            'total_produtos',
+            'total_funcionarios',
+            'total_requisicoes',
+            'produtos_stock_baixo',
+            'requisicoes_pendentes',
+            'lista_produtos_stock_baixo',
+            'atividades_recentes'
+        ));
 
     }
 
