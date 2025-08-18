@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
-        'reference' => 'efdb83eea09149ffd26c5092c2d54ef65f9b16ad',
+        'pretty_version' => 'dev-develop',
+        'version' => 'dev-develop',
+        'reference' => '3c7d2e2f7483d1c8a33f93e6502b01d5f6bcba6a',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
-            'reference' => 'efdb83eea09149ffd26c5092c2d54ef65f9b16ad',
+            'pretty_version' => 'dev-develop',
+            'version' => 'dev-develop',
+            'reference' => '3c7d2e2f7483d1c8a33f93e6502b01d5f6bcba6a',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -83,9 +83,9 @@
             'dev_requirement' => false,
         ),
         'setasign/fpdi' => array(
-            'pretty_version' => 'v2.6.0',
-            'version' => '2.6.0.0',
-            'reference' => 'a6db878129ec6c7e141316ee71872923e7f1b7ad',
+            'pretty_version' => 'v2.6.1',
+            'version' => '2.6.1.0',
+            'reference' => '09a816004fcee9ed3405bd164147e3fdbb79a56f',
             'type' => 'library',
             'install_path' => __DIR__ . '/../setasign/fpdi',
             'aliases' => array(),
