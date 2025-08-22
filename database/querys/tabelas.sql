@@ -77,22 +77,31 @@ CREATE TABLE produtos (
     FOREIGN KEY (estado_id) REFERENCES estados(id)
 );
 
--- Entradas
+
+
 CREATE TABLE entradas (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    tipo_entrada_id BIGINT NOT NULL,
-    fornecedor_id BIGINT NULL,
-    data_entrada DATE NOT NULL,
-    imposto_aplicado BOOLEAN DEFAULT FALSE,
-    total NUMERIC(12,2) DEFAULT 0,
-    user_id BIGINT NULL,
-    estado_id BIGINT NOT NULL DEFAULT 1,
+    tipo_entrada_id BIGINT NOT NULL,         -- tipo de entrada (compra, transferência, inventário)
+    fornecedor_id BIGINT NULL,               -- fornecedor, se houver
+    fornecedor_ref VARCHAR(100),             -- referência do fornecedor (nome ou código)
+    numero_factura VARCHAR(45),              -- número da factura física
+    data_aquisicao DATE NOT NULL,            -- data em que o produto foi adquirido
+    data_factura DATE NOT NULL,              -- data da factura
+    total NUMERIC(12,2) DEFAULT 0,          -- total do registo
+    total_factura NUMERIC(12,2) DEFAULT 0,  -- total da factura
+    total_desconto NUMERIC(12,2) DEFAULT 0, -- total de descontos aplicados
+    total_iva NUMERIC(12,2) DEFAULT 0,      -- total do imposto aplicado
+    valor_remanescente NUMERIC(12,2) DEFAULT 0, -- valor restante, se aplicável
+    ficheiro_entrada TEXT,                   -- caminho do ficheiro da factura
+    user_id BIGINT NULL,                     -- quem registou a entrada
+    estado_id BIGINT NOT NULL DEFAULT 1,     -- estado do registo (terminado, pendente, etc.)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (tipo_entrada_id) REFERENCES tipos_entradas(id),
     FOREIGN KEY (fornecedor_id) REFERENCES fornecedores(id),
     FOREIGN KEY (estado_id) REFERENCES estados(id)
 );
+
 
 -- Entradas Itens (Lotes)
 CREATE TABLE entradas_itens (

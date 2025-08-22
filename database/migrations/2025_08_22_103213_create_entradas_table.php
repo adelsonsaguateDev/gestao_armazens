@@ -11,20 +11,38 @@ class CreateTiposEntradasTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('entradas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('tipo_entrada_id')->constrained('tipos_entradas');
-            $table->foreignId('fornecedor_id')->nullable()->constrained('fornecedores');
-            $table->date('data_entrada');
-            $table->boolean('imposto_aplicado')->default(false);
+
+            $table->unsignedBigInteger('tipo_entrada_id');
+            $table->unsignedBigInteger('fornecedor_id')->nullable();
+            $table->string('fornecedor_ref', 100)->nullable();
+            $table->string('numero_factura', 45)->nullable();
+
+            $table->date('data_aquisicao');
+            $table->date('data_factura');
+
             $table->decimal('total', 12, 2)->default(0);
-            $table->foreignId('user_id')->nullable();
-            $table->foreignId('estado_id')->default(1)->constrained('estados');
+            $table->decimal('total_factura', 12, 2)->default(0);
+            $table->decimal('total_desconto', 12, 2)->default(0);
+            $table->decimal('total_iva', 12, 2)->default(0);
+            $table->decimal('valor_remanescente', 12, 2)->default(0);
+
+            $table->text('ficheiro_entrada')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('estado_id')->default(1);
+
             $table->timestamps();
+
+            // Chaves estrangeiras
+            $table->foreign('tipo_entrada_id')->references('id')->on('tipos_entradas');
+            $table->foreign('fornecedor_id')->references('id')->on('fornecedores');
+            $table->foreign('estado_id')->references('id')->on('estados');
         });
     }
+
 
 
 
