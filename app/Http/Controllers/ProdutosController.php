@@ -22,23 +22,52 @@ class ProdutosController extends Controller
 
     public function list(Request $request)
     {
-        $query = Produto::query();
-        $total = $query->count();
+        // Subquery for total entradas (in units)
+        $entradas = DB::table('entradas_itens')
+            ->select('produto_id', DB::raw('SUM(qtd_caixas * qtd_por_caixa) as total_entradas'))
+            ->where('estado', 1)
+            ->groupBy('produto_id');
 
-        if ($request->has('estado')) {
+        // Subquery for total saidas (in units)
+        $saidas = DB::table('saidas_itens as si')
+            ->join('entradas_itens as ei', 'si.entrada_item_id', '=', 'ei.id')
+            ->select('si.produto_id', DB::raw('SUM((si.qtd_caixas * ei.qtd_por_caixa) + si.qtd_unidades) as total_saidas'))
+            ->where('si.estado', 1)
+            ->groupBy('si.produto_id');
+
+        $query = DB::table('produtos as p')
+            ->leftJoin('unidades as u', 'p.unidade_id', '=', 'u.id') // JOIN with unidades
+            ->leftJoinSub($entradas, 'entradas', function ($join) {
+                $join->on('p.id', '=', 'entradas.produto_id');
+            })
+            ->leftJoinSub($saidas, 'saidas', function ($join) {
+                $join->on('p.id', '=', 'saidas.produto_id');
+            })
+            ->select(
+                'p.id',
+                'p.descricao',
+                'p.created_at',
+                'p.estado',
+                'p.nome',
+                'p.stock_minimo',
+                'u.nome as unidade', // Get unit name from unidades table
+                'p.codigo_barras',
+                DB::raw('COALESCE(entradas.total_entradas, 0) - COALESCE(saidas.total_saidas, 0) as quantidade')
+            );
+
+
+        if ($request->has('estado') && $request->input('estado') != "") {
             $estado = $request->input('estado');
-            $query->where('estado', $estado);
-
-            $total = $query->count();
+            $query->where('p.estado', $estado);
         }
 
-        if ($request->has('descricao')) {
+        if ($request->has('descricao') && $request->input('descricao') != "") {
             $descricao = $request->input('descricao');
-            $query->where('descricao', 'like','%' . $descricao . '%');
-
-            $total = $query->count();
-
+            $query->where('p.descricao', 'like','%' . $descricao . '%');
         }
+
+        // The total count should be calculated on the filtered query before pagination.
+        $total = $query->count();
 
         // Define o número de itens por página (você pode ajustar conforme necessário)
         $itensPorPagina = $request->input('limite', 10); // Padrão: 10 itens por página

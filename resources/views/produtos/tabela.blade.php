@@ -17,15 +17,18 @@
     <table class="display table table-hover" width="100%">
         <thead>
             <tr style="font-weight: bold; color:black">
-                <th style="width: 1%;">#</th>
-                <th class="text-center col-5"  >Descricao</th>
-                <th class="text-center col-1"  >Quantidade</th>
-                <th class="text-center col-2"  >Data Criação</th>
-                <th class="text-center col-1"  >Estado</th>
+                <th style="width: 1%">#</th>
+                <th class="text-center col-2">Código Barras</th>
+                <th class="text-center col-2">Descrição</th>
+                <th class="text-center col-1">Unidade</th>
+                <th class="text-center col-1">Quantidade</th>
+                <th class="text-center col-1">Stock Mín.</th>
+                <th class="text-center col-2">Data Criação</th>
+                <th class="text-center col-1">Estado</th>
     @php
         $content .= ob_get_contents();
     @endphp
-                <th class="col-3 text-center">Acções</th>
+                <th class="text-center col-2">Acções</th>
    @php
         ob_start();
    @endphp
@@ -39,18 +42,20 @@
             @foreach ($produtos as $item)
                 <tr>
                     <th scope="row">{{ $cont++ }}</th>
+                    <td class="text-center">{{ $item->codigo_barras }}</td>
                     <td class="text-center">{{ $item->descricao }}</td>
+                    <td class="text-center">{{ $item->unidade }}</td>
                     <td class="text-center">
                         @php
-                        if($item->quantidade == 0) :
+                        if($item->stock_minimo > 0 && $item->quantidade <= $item->stock_minimo) :
                        @endphp
                         <div class="badge bg-danger text-white">{{ $item->quantidade }}</div>
                        @php
-                        elseif($item->quantidade >= 10 && $item->quantidade <= 50) :
+                        elseif($item->stock_minimo > 0 && $item->quantidade > $item->stock_minimo && $item->quantidade <= ($item->stock_minimo * 1.2)) :
                        @endphp
                         <div class="badge bg-warning text-white">{{ $item->quantidade }}</div>
                        @php
-                        elseif($item->quantidade > 50) :
+                        else :
                        @endphp
                         <div class="badge bg-success text-white">{{ $item->quantidade }}</div>
                        @php
@@ -58,6 +63,7 @@
                        @endphp
 
                     </td>
+                    <td class="text-center">{{ $item->stock_minimo }}</td>
                     <td class="text-center" >{{ $item->created_at }}</td>
                     <td class="text-center">
                         @php
@@ -73,9 +79,9 @@
                         @endphp
 
                     </td>
-    @php
-        $content .= ob_get_contents();
-    @endphp
+                    @php
+                        $content .= ob_get_contents();
+                    @endphp
                     <td class="text-center">
                         <a href="{{ route('detalhes', ['id' => $item->id]) }}"  class="btn btn-primary"><i class="fa fa-eye text-white"></i> </a>
 
@@ -88,14 +94,14 @@
                         <button title="Activar a produto" class="btn btn-success" value="{{ $item->id }}" id="btn_active"><i class="fa fa-check"></i> </button>
                         @endif
 
-                        @if($item->estado == '1')
+                        {{-- @if($item->estado == '1')
                         <button title="Solictar o produto" class="btn btn-success" descricao="{{ $item->descricao }}"  value="{{ $item->id }}" id="btn_requisitar"><i class="fa fa-book"></i> Requisitar </button>
-                        @endif
+                        @endif --}}
 
                     </td>
-    @php
-        ob_start();
-    @endphp
+                    @php
+                        ob_start();
+                    @endphp
 
                 </tr>
             @endforeach
