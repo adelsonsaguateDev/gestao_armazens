@@ -17,7 +17,6 @@ class ProdutosController extends Controller
     public function index()
     {
         return view('produtos.index');
-
     }
 
     public function list(Request $request)
@@ -56,14 +55,24 @@ class ProdutosController extends Controller
             );
 
 
-        if ($request->has('estado') && $request->input('estado') != "") {
-            $estado = $request->input('estado');
-            $query->where('p.estado', $estado);
+        if ($request->filled('estado')) {
+            $query->where('p.estado', $request->input('estado'));
         }
 
-        if ($request->has('descricao') && $request->input('descricao') != "") {
-            $descricao = $request->input('descricao');
-            $query->where('p.descricao', 'like','%' . $descricao . '%');
+        if ($request->filled('descricao')) {
+            $query->where('p.descricao', 'like', '%' . $request->input('descricao') . '%');
+        }
+
+        if ($request->filled('codigo_filtro')) {
+            $query->where('p.codigo_barras', 'like', '%' . $request->input('codigo_filtro') . '%');
+        }
+
+        if ($request->filled('stock_minimo_filtro')) {
+            $query->where('p.stock_minimo', '=', $request->input('stock_minimo_filtro'));
+        }
+        
+        if ($request->filled('quantidade_filtro')) {
+            $query->having('quantidade', '=', $request->input('quantidade_filtro'));
         }
 
         // The total count should be calculated on the filtered query before pagination.
@@ -105,28 +114,25 @@ class ProdutosController extends Controller
             $data['user_id'] = auth()->user()->id;
 
             $check = DB::selectOne("SELECT codigo FROM produtos WHERE codigo = '{$request->codigo}' ");
-            if(empty($check)) {
+            if (empty($check)) {
                 if ($produto = Produto::create($data)) {
 
-                        $descricao = 'Registou o produto ' . $produto->descricao . '.';
-                        $historico->insert($produto->getTable(), $produto->id, $descricao);
+                    $descricao = 'Registou o produto ' . $produto->descricao . '.';
+                    $historico->insert($produto->getTable(), $produto->id, $descricao);
 
-                        $json['success'] = true;
-                        $json['message'] = 'O produto ' . $produto->descricao . ' foi adicionado com sucesso.';
-                        $json['code'] = 200;
-
+                    $json['success'] = true;
+                    $json['message'] = 'O produto ' . $produto->descricao . ' foi adicionado com sucesso.';
+                    $json['code'] = 200;
                 } else {
                     $json['success'] = false;
-                    $json['message'] = 'Erro ao adicionar o produto '. $produto->descricao;
+                    $json['message'] = 'Erro ao adicionar o produto ' . $produto->descricao;
                     $json['code'] = 500;
                 }
-            }else {
+            } else {
                 $json['success'] = false;
                 $json['message'] = 'O codigo do produto já existe.';
                 $json['code'] = 409;
             }
-
-
         } catch (\Illuminate\Validation\ValidationException $e) {
 
             $errors = $e->validator->errors()->all();
@@ -137,7 +143,6 @@ class ProdutosController extends Controller
         }
 
         echo json_encode($json);
-
     }
 
     public function show_details($id)
@@ -146,7 +151,7 @@ class ProdutosController extends Controller
         $produtos = Produto::find($id);
 
         $historico = Historico::where('row_id', $id)
-                       ->where('tabela', 'produtos')->with('users')->get();
+            ->where('tabela', 'produtos')->with('users')->get();
 
 
         if (!$produtos) {
@@ -168,20 +173,19 @@ class ProdutosController extends Controller
             $data = ['estado' => $estado];
             if ($produto->update($data)) {
                 $json['success'] = true;
-                if($estado == '1'){
+                if ($estado == '1') {
                     $json['message'] = 'Produto activado com sucesso.';
 
                     $descricao = 'Activou o produto ' . $produto->descricao . '.';
                     $historico->insert($produto->getTable(), $produto->id, $descricao);
-
-                }else if($estado == '2'){
+                } else if ($estado == '2') {
                     $json['message'] = 'Produto removido com sucesso.';
 
                     $descricao = 'Removeu o produto ' . $produto->descricao . '.';
                     $historico->insert($produto->getTable(), $produto->id, $descricao);
                 }
                 $json['code'] = 200;
-            }else{
+            } else {
                 $json['success'] = false;
                 $json['message'] = 'Ocorreu um erro ao remover o produto.';
                 $json['code'] = 500;
@@ -194,7 +198,6 @@ class ProdutosController extends Controller
     {
         $produto = Produto::where('id', $id)->get();
         return view('produtos.form_update', compact('produto'));
-
     }
 
     public function edit()
@@ -221,10 +224,9 @@ class ProdutosController extends Controller
                 $json['message'] = 'Produto ' . $produto->descricao . ' actualizado com sucesso.';
                 $json['code'] = 200;
 
-                $descricao = "Actualizou o produto ". $produto->descricao ."";
+                $descricao = "Actualizou o produto " . $produto->descricao . "";
                 $historico->insert($produto->getTable(), $produto->id, $descricao);
-
-            }else{
+            } else {
                 $json['success'] = false;
                 $json['message'] = 'Ocorreu um erro ao editar o produto.';
                 $json['code'] = 500;
@@ -253,21 +255,19 @@ class ProdutosController extends Controller
                 'user_id' => auth()->user()->id
             ];
 
-                if ($requisicoes = Requisicoes::create($data)) {
+            if ($requisicoes = Requisicoes::create($data)) {
 
-                        $descricao = 'Registou a requisição ' . $requisicoes->id . '.';
-                        $historico->insert($requisicoes->getTable(), $requisicoes->id, $descricao);
+                $descricao = 'Registou a requisição ' . $requisicoes->id . '.';
+                $historico->insert($requisicoes->getTable(), $requisicoes->id, $descricao);
 
-                        $json['success'] = true;
-                        $json['message'] = 'A requisição foi adicionado com sucesso.';
-                        $json['code'] = 200;
-
-                } else {
-                    $json['success'] = false;
-                    $json['message'] = 'Erro ao fazer a requisição.';
-                    $json['code'] = 500;
-                }
-
+                $json['success'] = true;
+                $json['message'] = 'A requisição foi adicionado com sucesso.';
+                $json['code'] = 200;
+            } else {
+                $json['success'] = false;
+                $json['message'] = 'Erro ao fazer a requisição.';
+                $json['code'] = 500;
+            }
         } catch (\Illuminate\Validation\ValidationException $e) {
 
             $errors = $e->validator->errors()->all();
@@ -278,9 +278,5 @@ class ProdutosController extends Controller
         }
 
         echo json_encode($json);
-
     }
-
-
-
 }

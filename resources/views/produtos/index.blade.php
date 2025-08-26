@@ -41,13 +41,25 @@
                                         <button  title="Imprimir um pdf" class="btn btn-info" type="button" id="print"><i class="fa fa-print"></i> PDF</button> 
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row mt-4">
                                     <div class="col-md-3 mb-3">
-                                        <label for="" style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Descrição do produto</label>
+                                        <label for="codigo_filtro" style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Código do produto</label>
+                                        <input type="text" class="form-control" name="codigo_filtro" id="codigo_filtro" />
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="descricao_filtro" style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Descrição do produto</label>
                                         <input type="text" class="form-control" name="descricao_filtro" id="descricao_filtro" />
                                     </div>
                                     <div class="col-md-3 mb-3">
-                                        <label for="" style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Estado</label>
+                                        <label for="quantidade_filtro" style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Quantidade</label>
+                                        <input type="number" class="form-control" name="quantidade_filtro" id="quantidade_filtro" />
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="stock_minimo_filtro" style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Stock Mínimo</label>
+                                        <input type="number" class="form-control" name="stock_minimo_filtro" id="stock_minimo_filtro" />
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="estado_filtro" style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Estado</label>
                                         <select name="estado_filtro" id="estado_filtro" class="form-control select2">
 
                                             <option value=""> Selecione uma opção </option>
@@ -56,7 +68,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-3 mb-3">
-                                        <label for="" style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Limite</label>
+                                        <label for="limit" style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Limite</label>
                                         <select name="limit" id="limit" class="form-control select2">
 
                                             <option value="10">10</option>
@@ -145,7 +157,7 @@
                 let descricao = $(this).attr('descricao');
                 let quantidade = $(this).attr('quantidade');
                 let stock_minimo = $(this).attr('stock_minimo');
-
+    
                 //Preencher os campos do modal de upadte
                 
                 $("#id").val(id)
@@ -292,16 +304,24 @@
 
             function list(page, limite) {
                 showLoader();
-                var estado = $("#estado_filtro").val() == "" ? "1" : $("#estado_filtro").val();
-                var descricao = $("#descricao_filtro").val()
+                var estado = $("#estado_filtro").val();
+                var descricao = $("#descricao_filtro").val();
+                var codigo = $("#codigo_filtro").val();
+                var quantidade = $("#quantidade_filtro").val();
+                var stock_minimo = $("#stock_minimo_filtro").val();
 
                 $.ajax({
-                    url: '{{url("produtos")}}?page=' + page,
-                    method: 'GET',
+                    url: '{{ url('produtos') }}',
+                    method: 'POST',
                     data: {
-                        "estado": estado,
-                        "descricao": descricao,
-                        "limite": limite,
+                        _token: '{{csrf_token()}}',
+                        estado: estado,
+                        descricao: descricao,
+                        codigo_filtro: codigo,
+                        quantidade_filtro: quantidade,
+                        stock_minimo_filtro: stock_minimo,
+                        limite: limite,
+                        page: page,
                     },
                     dataType: 'html', 
                     success: function(data) {
