@@ -25,7 +25,8 @@ class CreateTiposEntradasTable extends Migration
             $table->decimal('subtotal', 12, 2)->storedAs('(qtd_caixas * COALESCE(preco_venda_caixa,0)) + (qtd_unidades * preco_venda_unitario)');
             $table->foreignId('user_id')->nullable();
             $table->foreignId('estado_id')->default(1)->constrained('estados');
-            $table->timestamps();
+            $table->dateTime('created_at')->useCurrent();
+            $table->dateTime('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 

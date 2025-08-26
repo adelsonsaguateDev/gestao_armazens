@@ -18,7 +18,8 @@ class CreateTiposEntradasTable extends Migration
             $table->string('nome', 100);
             $table->text('descricao')->nullable();
             $table->foreignId('estado_id')->default(1)->constrained('estados');
-            $table->timestamps();
+            $table->dateTime('created_at')->useCurrent();
+            $table->dateTime('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 

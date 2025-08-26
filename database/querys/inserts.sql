@@ -57,197 +57,195 @@ VALUES
         1
     );
 
--- 6. Produtos
+-- Unidades
+CREATE TABLE unidades (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL,
+    sigla VARCHAR(10) NOT NULL,
+    estado_id BIGINT NOT NULL DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_unidades_estado FOREIGN KEY (estado_id) REFERENCES estados(id)
+);
+
+INSERT INTO
+    unidades (id, nome, sigla, estado_id)
+VALUES
+    (1, 'Peça', 'pc', 1),
+    (2, 'Metro', 'm', 1),
+    (3, 'Placa', 'pl', 1),
+    (4, 'Caixa', 'cx', 1),
+    (5, 'Litro', 'L', 1),
+    (6, 'Rolo', 'rl', 1),
+    (7, 'Saco', 'sc', 1);
+
+-- Produtos
 INSERT INTO
     produtos (
         codigo_barras,
         nome,
         descricao,
-        unidade,
+        unidade_id,
         stock_minimo,
         estado_id
     )
 VALUES
-    ('PB001', 'Napa', 'Napa', 'unidade', 0, 1),
-    (
-        'PB002',
-        'Veludo HL001',
-        'Veludo HL001',
-        'unidade',
-        0,
-        1
-    ),
-    ('PB003', 'Linho', 'Linho', 'unidade', 0, 1),
-    ('PB004', 'Linho RE', 'Linho RE', 'unidade', 0, 1),
+    ('PB001', 'Napa', 'Napa', 2, 0, 1),
+    -- Metro
+    ('PB002', 'Veludo HL001', 'Veludo HL001', 2, 0, 1),
+    -- Metro
+    ('PB003', 'Linho', 'Linho', 2, 0, 1),
+    -- Metro
+    ('PB004', 'Linho RE', 'Linho RE', 2, 0, 1),
+    -- Metro
     (
         'PB005',
         'Molas grandes',
         'Molas grandes',
-        'unidade',
+        1,
         0,
         1
     ),
+    -- Peça
     (
         'PB006',
         'Molas pequenas',
         'Molas pequenas',
-        'unidade',
+        1,
         0,
         1
     ),
+    -- Peça
     (
         'PB007',
         'Mola Quadrada',
         'Mola Quadrada',
-        'unidade',
+        1,
         0,
         1
     ),
-    (
-        'PB008',
-        'prega mola',
-        'prega mola',
-        'unidade',
-        0,
-        1
-    ),
+    -- Peça
+    ('PB008', 'Prega mola', 'Prega mola', 1, 0, 1),
+    -- Peça
     (
         'PB009',
         'Cinta elástica grande',
         'Cinta elástica grande',
-        'unidade',
+        2,
         0,
         1
     ),
+    -- Metro
     (
         'PB010',
         'Cinta elástica pequena',
         'Cinta elástica pequena',
-        'unidade',
+        2,
         0,
         1
     ),
-    (
-        'PB011',
-        'Agrafo 10/13',
-        'Agrafo 10/13',
-        'unidade',
-        0,
-        1
-    ),
-    (
-        'PB012',
-        'Agrafo 80/12',
-        'Agrafo 80/12',
-        'unidade',
-        0,
-        1
-    ),
+    -- Metro
+    ('PB011', 'Agrafo 10/13', 'Agrafo 10/13', 4, 0, 1),
+    -- Caixa
+    ('PB012', 'Agrafo 80/12', 'Agrafo 80/12', 4, 0, 1),
+    -- Caixa
     (
         'PB013',
         'Caixinha de Agrafo montagem N-21',
         'Caixinha de Agrafo montagem N-21',
-        'unidade',
+        4,
         0,
         1
     ),
-    ('PB014', 'Encaixo', 'Encaixo', 'unidade', 0, 1),
+    -- Caixa
+    ('PB014', 'Encaixo', 'Encaixo', 1, 0, 1),
+    -- Peça
     (
         'PB015',
         'Cola (contato, Spray) 1L',
         'Cola 1L',
-        'unidade',
+        5,
         0,
         1
     ),
-    ('PB016', 'Dacron', 'Dacron', 'unidade', 0, 1),
-    (
-        'PB017',
-        'Rolo Dacron',
-        'Rolo Dacron',
-        'unidade',
-        0,
-        1
-    ),
+    -- Litro
+    ('PB016', 'Dacron', 'Dacron', 2, 0, 1),
+    -- Metro
+    ('PB017', 'Rolo Dacron', 'Rolo Dacron', 6, 0, 1),
+    -- Rolo
     (
         'PB018',
         'Botões diamante',
         'Botões diamante',
-        'unidade',
+        1,
         0,
         1
     ),
-    ('PB019', 'Calico', 'Calico', 'unidade', 0, 1),
+    -- Peça
+    ('PB019', 'Calico', 'Calico', 2, 0, 1),
+    -- Metro
     (
         'PB020',
         'Pernas Plásticas',
         'Pernas Plásticas',
-        'unidade',
+        1,
         0,
         1
     ),
+    -- Peça
     (
         'PB021',
         'Aderente pequeno',
         'Aderente pequeno',
-        'unidade',
+        1,
         0,
         1
     ),
+    -- Peça
     (
         'PB022',
         'Aderente Grande',
         'Aderente Grande',
-        'unidade',
+        1,
         0,
         1
     ),
-    ('PB023', 'Saco', 'Saco', 'unidade', 0, 1),
-    ('PB024', 'Prego', 'Prego', 'unidade', 0, 1),
-    ('PB025', 'Copo', 'Copo', 'unidade', 0, 1),
-    ('PB026', 'Pionizes', 'Pionizes', 'unidade', 0, 1),
+    -- Peça
+    ('PB023', 'Saco', 'Saco', 7, 0, 1),
+    -- Saco
+    ('PB024', 'Prego', 'Prego', 1, 0, 1),
+    -- Peça
+    ('PB025', 'Copo', 'Copo', 1, 0, 1),
+    -- Peça
+    ('PB026', 'Pionizes', 'Pionizes', 1, 0, 1),
+    -- Peça
     (
         'PB027',
         'Placa branca 1 cm',
         'Placa branca 1 cm',
-        'unidade',
+        3,
         0,
         1
     ),
-    (
-        'PB028',
-        'Placa Azul',
-        'Placa Azul',
-        'unidade',
-        0,
-        1
-    ),
+    -- Placa
+    ('PB028', 'Placa Azul', 'Placa Azul', 3, 0, 1),
+    -- Placa
     (
         'PB029',
         'Placa Cinzenta 5cm x 75',
         'Placa Cinzenta 5cm x 75',
-        'unidade',
+        3,
         0,
         1
     ),
-    (
-        'PB030',
-        'Enchimento',
-        'Enchimento',
-        'unidade',
-        0,
-        1
-    ),
-    ('PB031', 'Flocos', 'Flocos', 'unidade', 0, 1),
-    (
-        'PB032',
-        'Placa 10 cm',
-        'Placa 10 cm',
-        'unidade',
-        0,
-        1
-    );
+    -- Placa
+    ('PB030', 'Enchimento', 'Enchimento', 7, 0, 1),
+    -- Saco
+    ('PB031', 'Flocos', 'Flocos', 7, 0, 1),
+    -- Saco
+    ('PB032', 'Placa 10 cm', 'Placa 10 cm', 3, 0, 1);
 
+-- Placa
 -- 7. Entradas (exemplo)
 INSERT INTO
     entradas (

@@ -34,7 +34,8 @@ class CreateTiposEntradasTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('estado_id')->default(1);
 
-            $table->timestamps();
+            $table->dateTime('created_at')->useCurrent();
+            $table->dateTime('updated_at')->useCurrent()->useCurrentOnUpdate();
 
             // Chaves estrangeiras
             $table->foreign('tipo_entrada_id')->references('id')->on('tipos_entradas');

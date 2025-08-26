@@ -21,7 +21,8 @@ class CreateTiposEntradasTable extends Migration
             $table->text('endereco')->nullable();
             $table->foreignId('user_id')->nullable();
             $table->foreignId('estado_id')->default(1)->constrained('estados');
-            $table->timestamps();
+            $table->dateTime('created_at')->useCurrent();
+            $table->dateTime('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 

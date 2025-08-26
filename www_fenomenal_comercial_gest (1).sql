@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 26-Ago-2025 às 06:46
+-- Tempo de geração: 26-Ago-2025 às 07:19
 -- Versão do servidor: 8.3.0
 -- versão do PHP: 8.2.18
 
@@ -38,7 +38,14 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Extraindo dados da tabela `clientes`
+--
+
+INSERT INTO `clientes` (`id`, `nome`, `contacto`, `endereco`, `user_id`, `estado_id`, `created_at`, `updated_at`) VALUES
+(1, 'Cliente Exemplo 1', '841234569', 'Av. 1, Maputo', NULL, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -63,13 +70,20 @@ CREATE TABLE IF NOT EXISTS `entradas` (
   `ficheiro_entrada` text,
   `user_id` bigint DEFAULT NULL,
   `estado_id` bigint NOT NULL DEFAULT '1',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `tipo_entrada_id` (`tipo_entrada_id`),
   KEY `fornecedor_id` (`fornecedor_id`),
   KEY `estado_id` (`estado_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Extraindo dados da tabela `entradas`
+--
+
+INSERT INTO `entradas` (`id`, `tipo_entrada_id`, `fornecedor_id`, `fornecedor_ref`, `numero_factura`, `data_aquisicao`, `data_factura`, `total`, `total_factura`, `total_desconto`, `total_iva`, `valor_remanescente`, `ficheiro_entrada`, `user_id`, `estado_id`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'FENOMENAL COMERCIAL', 'FAC-001/2025', '2025-07-30', '2025-07-30', 5000.00, 5000.00, 0.00, 500.00, 0.00, 'entradas/fac001.pdf', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14');
 
 -- --------------------------------------------------------
 
@@ -93,13 +107,25 @@ CREATE TABLE IF NOT EXISTS `entradas_itens` (
   `subtotal` decimal(12,2) GENERATED ALWAYS AS ((`qtd_caixas` * `preco_compra_caixa`)) STORED,
   `user_id` bigint DEFAULT NULL,
   `estado_id` bigint NOT NULL DEFAULT '1',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `entrada_id` (`entrada_id`),
   KEY `produto_id` (`produto_id`),
   KEY `estado_id` (`estado_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Extraindo dados da tabela `entradas_itens`
+--
+
+INSERT INTO `entradas_itens` (`id`, `entrada_id`, `produto_id`, `codigo_barras_lote`, `qtd_caixas`, `qtd_por_caixa`, `preco_compra_caixa`, `preco_compra_unitario`, `preco_venda_caixa`, `preco_venda_unitario`, `data_validade`, `user_id`, `estado_id`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'PB001-L1', 10, 1, 220.00, 220.00, 300.00, 300.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(2, 1, 2, 'PB002-L1', 5, 1, 185.00, 185.00, 250.00, 250.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(3, 1, 3, 'PB003-L1', 8, 1, 220.00, 220.00, 300.00, 300.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(4, 1, 4, 'PB004-L1', 12, 1, 145.00, 145.00, 200.00, 200.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(5, 1, 5, 'PB005-L1', 2, 1, 800.00, 800.00, 1000.00, 1000.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(6, 1, 6, 'PB006-L1', 3, 1, 450.00, 450.00, 600.00, 600.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14');
 
 -- --------------------------------------------------------
 
@@ -113,10 +139,19 @@ CREATE TABLE IF NOT EXISTS `estados` (
   `nome` varchar(100) DEFAULT NULL,
   `descricao` text,
   `estado_id` bigint DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Extraindo dados da tabela `estados`
+--
+
+INSERT INTO `estados` (`id`, `nome`, `descricao`, `estado_id`, `created_at`, `updated_at`) VALUES
+(1, 'Activo', 'Registo activo no sistema', NULL, '2025-08-03 08:57:12', '2025-08-04 08:57:26'),
+(2, 'Inactivo', 'Registo inactivo no sistema', NULL, '2025-08-05 08:57:17', '2025-08-15 08:57:30'),
+(3, 'Pendente', 'Registo pendente', NULL, '2025-08-06 08:57:22', '2025-08-11 08:57:33');
 
 -- --------------------------------------------------------
 
@@ -150,10 +185,17 @@ CREATE TABLE IF NOT EXISTS `fornecedores` (
   `endereco` text,
   `user_id` bigint DEFAULT NULL,
   `estado_id` bigint DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Extraindo dados da tabela `fornecedores`
+--
+
+INSERT INTO `fornecedores` (`id`, `nome`, `telefone`, `email`, `endereco`, `user_id`, `estado_id`, `created_at`, `updated_at`) VALUES
+(1, 'FENOMENAL COMERCIAL', '841234567', 'fenomenal@exemplo.com', 'Rua Comercial, Maputo', 1, 1, '2025-08-11 08:58:43', '2025-08-05 08:58:47');
 
 -- --------------------------------------------------------
 
@@ -387,16 +429,55 @@ CREATE TABLE IF NOT EXISTS `produtos` (
   `codigo_barras` varchar(100) DEFAULT NULL,
   `nome` varchar(150) NOT NULL,
   `descricao` text,
-  `unidade` varchar(20) NOT NULL,
   `stock_minimo` int DEFAULT '0',
   `imagem` varchar(255) DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
   `estado_id` bigint NOT NULL DEFAULT '1',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `unidade_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `estado_id` (`estado_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `estado_id` (`estado_id`),
+  KEY `fk_produtos_unidades` (`unidade_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Extraindo dados da tabela `produtos`
+--
+
+INSERT INTO `produtos` (`id`, `codigo_barras`, `nome`, `descricao`, `stock_minimo`, `imagem`, `user_id`, `estado_id`, `created_at`, `updated_at`, `unidade_id`) VALUES
+(1, 'PB001', 'Napa', 'Napa', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
+(2, 'PB002', 'Veludo HL001', 'Veludo HL001', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
+(3, 'PB003', 'Linho', 'Linho', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
+(4, 'PB004', 'Linho RE', 'Linho RE', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
+(5, 'PB005', 'Molas grandes', 'Molas grandes', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
+(6, 'PB006', 'Molas pequenas', 'Molas pequenas', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
+(7, 'PB007', 'Mola Quadrada', 'Mola Quadrada', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
+(8, 'PB008', 'Prega mola', 'Prega mola', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
+(9, 'PB009', 'Cinta elástica grande', 'Cinta elástica grande', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
+(10, 'PB010', 'Cinta elástica pequena', 'Cinta elástica pequena', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
+(11, 'PB011', 'Agrafo 10/13', 'Agrafo 10/13', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 4),
+(12, 'PB012', 'Agrafo 80/12', 'Agrafo 80/12', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 4),
+(13, 'PB013', 'Caixinha de Agrafo montagem N-21', 'Caixinha de Agrafo montagem N-21', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 4),
+(14, 'PB014', 'Encaixo', 'Encaixo', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
+(15, 'PB015', 'Cola (contato, Spray) 1L', 'Cola 1L', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 5),
+(16, 'PB016', 'Dacron', 'Dacron', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
+(17, 'PB017', 'Rolo Dacron', 'Rolo Dacron', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 6),
+(18, 'PB018', 'Botões diamante', 'Botões diamante', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
+(19, 'PB019', 'Calico', 'Calico', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
+(20, 'PB020', 'Pernas Plásticas', 'Pernas Plásticas', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
+(21, 'PB021', 'Aderente pequeno', 'Aderente pequeno', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
+(22, 'PB022', 'Aderente Grande', 'Aderente Grande', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
+(23, 'PB023', 'Saco', 'Saco', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 7),
+(24, 'PB024', 'Prego', 'Prego', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
+(25, 'PB025', 'Copo', 'Copo', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
+(26, 'PB026', 'Pionizes', 'Pionizes', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
+(27, 'PB027', 'Placa branca 1 cm', 'Placa branca 1 cm', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 3),
+(28, 'PB028', 'Placa Azul', 'Placa Azul', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 3),
+(29, 'PB029', 'Placa Cinzenta 5cm x 75', 'Placa Cinzenta 5cm x 75', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 3),
+(30, 'PB030', 'Enchimento', 'Enchimento', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 7),
+(31, 'PB031', 'Flocos', 'Flocos', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 7),
+(32, 'PB032', 'Placa 10 cm', 'Placa 10 cm', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 3);
 
 -- --------------------------------------------------------
 
@@ -466,12 +547,19 @@ CREATE TABLE IF NOT EXISTS `saidas` (
   `total` decimal(12,2) DEFAULT '0.00',
   `user_id` bigint DEFAULT NULL,
   `estado_id` bigint NOT NULL DEFAULT '1',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `tipo_saida_id` (`tipo_saida_id`),
   KEY `estado_id` (`estado_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Extraindo dados da tabela `saidas`
+--
+
+INSERT INTO `saidas` (`id`, `tipo_saida_id`, `data_saida`, `total`, `user_id`, `estado_id`, `created_at`, `updated_at`) VALUES
+(1, 1, '2025-08-01', 2500.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14');
 
 -- --------------------------------------------------------
 
@@ -492,14 +580,26 @@ CREATE TABLE IF NOT EXISTS `saidas_itens` (
   `subtotal` decimal(12,2) GENERATED ALWAYS AS (((`qtd_caixas` * coalesce(`preco_venda_caixa`,0)) + (`qtd_unidades` * `preco_venda_unitario`))) STORED,
   `user_id` bigint DEFAULT NULL,
   `estado_id` bigint NOT NULL DEFAULT '1',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `saida_id` (`saida_id`),
   KEY `entrada_item_id` (`entrada_item_id`),
   KEY `produto_id` (`produto_id`),
   KEY `estado_id` (`estado_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Extraindo dados da tabela `saidas_itens`
+--
+
+INSERT INTO `saidas_itens` (`id`, `saida_id`, `entrada_item_id`, `produto_id`, `qtd_caixas`, `qtd_unidades`, `preco_venda_unitario`, `preco_venda_caixa`, `user_id`, `estado_id`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1, 2, 0, 300.00, 300.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(2, 1, 2, 2, 1, 0, 250.00, 250.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(3, 1, 3, 3, 1, 0, 300.00, 300.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(4, 1, 4, 4, 2, 0, 200.00, 200.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(5, 1, 5, 5, 1, 0, 1000.00, 1000.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(6, 1, 6, 6, 1, 0, 600.00, 600.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14');
 
 -- --------------------------------------------------------
 
@@ -513,10 +613,19 @@ CREATE TABLE IF NOT EXISTS `tipos_entradas` (
   `nome` varchar(100) DEFAULT NULL,
   `descricao` text,
   `estado_id` bigint DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Extraindo dados da tabela `tipos_entradas`
+--
+
+INSERT INTO `tipos_entradas` (`id`, `nome`, `descricao`, `estado_id`, `created_at`, `updated_at`) VALUES
+(1, 'Compra', 'Entrada de produtos via compra', 1, NULL, NULL),
+(2, 'Transferência', 'Entrada de produtos via transferência', 1, NULL, NULL),
+(3, 'Inventário', 'Entrada via ajuste de inventário', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -530,10 +639,50 @@ CREATE TABLE IF NOT EXISTS `tipos_saidas` (
   `nome` varchar(100) DEFAULT NULL,
   `descricao` text,
   `estado_id` bigint DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Extraindo dados da tabela `tipos_saidas`
+--
+
+INSERT INTO `tipos_saidas` (`id`, `nome`, `descricao`, `estado_id`, `created_at`, `updated_at`) VALUES
+(1, 'Venda Normal', 'Venda direta a clientes', 1, NULL, NULL),
+(2, 'Venda a Crédito', 'Venda com pagamento posterior', 1, NULL, NULL),
+(3, 'Transferência', 'Saída via transferência', 1, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `unidades`
+--
+
+DROP TABLE IF EXISTS `unidades`;
+CREATE TABLE IF NOT EXISTS `unidades` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `nome` varchar(50) NOT NULL,
+  `sigla` varchar(10) NOT NULL,
+  `estado_id` bigint NOT NULL DEFAULT '1',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_unidades_estado` (`estado_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Extraindo dados da tabela `unidades`
+--
+
+INSERT INTO `unidades` (`id`, `nome`, `sigla`, `estado_id`, `created_at`, `updated_at`) VALUES
+(1, 'Metro', 'm', 1, '2025-08-26 09:06:02', '2025-08-26 09:06:02'),
+(2, 'Peça', 'pc', 1, '2025-08-26 09:06:02', '2025-08-26 09:06:02'),
+(3, 'Placa', 'pl', 1, '2025-08-26 09:06:02', '2025-08-26 09:06:02'),
+(4, 'Caixa', 'cx', 1, '2025-08-26 09:06:02', '2025-08-26 09:06:02'),
+(5, 'Litro', 'L', 1, '2025-08-26 09:06:02', '2025-08-26 09:06:02'),
+(6, 'Rolo', 'rl', 1, '2025-08-26 09:06:02', '2025-08-26 09:06:02'),
+(7, 'Saco', 'sc', 1, '2025-08-26 09:06:02', '2025-08-26 09:06:02');
 
 -- --------------------------------------------------------
 
@@ -552,8 +701,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `estado` enum('1','2') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -563,10 +712,10 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `username`, `contacto`, `email`, `email_verified_at`, `password`, `estado`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Administrador', 'admin', 12345, 'admin@admin.com', NULL, '$2y$10$mY.8mcRDvuWraXMbIMX6GOJjKMLH9sHapQrJCX7ae1NfuQIPDvPuW', '1', NULL, '2020-08-19 12:27:06', '2024-09-20 12:43:22'),
-(2, 'Gestor', 'gestor', NULL, 'gestor@gestor.com', NULL, '$2y$10$mY.8mcRDvuWraXMbIMX6GOJjKMLH9sHapQrJCX7ae1NfuQIPDvPuW', '1', NULL, '2020-08-18 12:27:06', '2024-12-16 01:08:23'),
-(3, 'Adelson Saguate', 'asaguate', 84556632, 'sonnylayson6@gmail.com', NULL, '$2y$10$mY.8mcRDvuWraXMbIMX6GOJjKMLH9sHapQrJCX7ae1NfuQIPDvPuW', '1', NULL, '2024-09-19 11:35:21', '2024-09-20 05:31:49'),
-(6, 'Isabel Guivalar', 'isabel', 87645454, 'isabelguivala1@gmail.com', NULL, '$2y$10$nMokZGKyfMu8oAquB6ecoedOslJir45e6hHkDTwq/8Ulh.Tqdiguu', '1', NULL, '2025-08-18 18:34:10', '2025-08-18 18:34:10');
+(1, 'Administrador', 'admin', 12345, 'admin@admin.com', NULL, '$2y$10$mY.8mcRDvuWraXMbIMX6GOJjKMLH9sHapQrJCX7ae1NfuQIPDvPuW', '1', NULL, '2020-08-19 14:27:06', '2024-09-20 14:43:22'),
+(2, 'Gestor', 'gestor', NULL, 'gestor@gestor.com', NULL, '$2y$10$mY.8mcRDvuWraXMbIMX6GOJjKMLH9sHapQrJCX7ae1NfuQIPDvPuW', '1', NULL, '2020-08-18 14:27:06', '2024-12-16 03:08:23'),
+(3, 'Adelson Saguate', 'asaguate', 84556632, 'sonnylayson6@gmail.com', NULL, '$2y$10$mY.8mcRDvuWraXMbIMX6GOJjKMLH9sHapQrJCX7ae1NfuQIPDvPuW', '1', NULL, '2024-09-19 13:35:21', '2024-09-20 07:31:49'),
+(6, 'Isabel Guivalar', 'isabel', 87645454, 'isabelguivala1@gmail.com', NULL, '$2y$10$nMokZGKyfMu8oAquB6ecoedOslJir45e6hHkDTwq/8Ulh.Tqdiguu', '1', NULL, '2025-08-18 20:34:10', '2025-08-18 20:34:10');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
