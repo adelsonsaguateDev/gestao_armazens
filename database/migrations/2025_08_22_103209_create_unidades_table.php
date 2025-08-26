@@ -17,11 +17,11 @@ class CreateTiposEntradasTable extends Migration
             $table->id();
             $table->string('nome', 50);
             $table->string('sigla', 10);
-            $table->unsignedBigInteger('estado_id')->default(1);
+            $table->unsignedBigInteger('estado')->default(1);
             $table->dateTime('created_at')->useCurrent();
             $table->dateTime('updated_at')->useCurrent()->useCurrentOnUpdate();
 
-            $table->foreign('estado_id')->references('id')->on('estados');
+            $table->foreign('estado')->references('id')->on('estados');
         });
     }
 

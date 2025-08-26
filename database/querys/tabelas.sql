@@ -3,10 +3,10 @@ CREATE TABLE estados (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     descricao TEXT,
-    estado_id BIGINT NOT NULL DEFAULT 1,
+    estado BIGINT NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (estado_id) REFERENCES estados(id)
+    FOREIGN KEY (estado) REFERENCES estados(id)
 
 );
 
@@ -15,10 +15,10 @@ CREATE TABLE tipos_entradas (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL, 
     descricao TEXT,
-    estado_id BIGINT NOT NULL DEFAULT 1,
+    estado BIGINT NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (estado_id) REFERENCES estados(id)
+    FOREIGN KEY (estado) REFERENCES estados(id)
 
 );
 
@@ -27,10 +27,10 @@ CREATE TABLE tipos_saidas (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     descricao TEXT,
-    estado_id BIGINT NOT NULL DEFAULT 1,
+    estado BIGINT NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (estado_id) REFERENCES estados(id)
+    FOREIGN KEY (estado) REFERENCES estados(id)
 
 );
 
@@ -42,10 +42,10 @@ CREATE TABLE fornecedores (
     email VARCHAR(100),
     endereco TEXT,
     user_id BIGINT NULL,
-    estado_id BIGINT NOT NULL DEFAULT 1,
+    estado BIGINT NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (estado_id) REFERENCES estados(id)
+    FOREIGN KEY (estado) REFERENCES estados(id)
 );
 
 -- Clientes
@@ -55,10 +55,10 @@ CREATE TABLE clientes (
     contacto VARCHAR(100),
     endereco TEXT,
     user_id BIGINT NULL,
-    estado_id BIGINT NOT NULL DEFAULT 1,
+    estado BIGINT NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (estado_id) REFERENCES estados(id)
+    FOREIGN KEY (estado) REFERENCES estados(id)
 );
 
 -- Produtos
@@ -71,10 +71,10 @@ CREATE TABLE produtos (
     stock_minimo INT DEFAULT 0,
     imagem VARCHAR(255),
     user_id BIGINT NULL,
-    estado_id BIGINT NOT NULL DEFAULT 1,
+    estado BIGINT NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (estado_id) REFERENCES estados(id)
+    FOREIGN KEY (estado) REFERENCES estados(id)
 );
 
 
@@ -94,12 +94,12 @@ CREATE TABLE entradas (
     valor_remanescente NUMERIC(12,2) DEFAULT 0, -- valor restante, se aplicável
     ficheiro_entrada TEXT,                   -- caminho do ficheiro da factura
     user_id BIGINT NULL,                     -- quem registou a entrada
-    estado_id BIGINT NOT NULL DEFAULT 1,     -- estado do registo (terminado, pendente, etc.)
+    estado BIGINT NOT NULL DEFAULT 1,     -- estado do registo (terminado, pendente, etc.)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (tipo_entrada_id) REFERENCES tipos_entradas(id),
     FOREIGN KEY (fornecedor_id) REFERENCES fornecedores(id),
-    FOREIGN KEY (estado_id) REFERENCES estados(id)
+    FOREIGN KEY (estado) REFERENCES estados(id)
 );
 
 
@@ -118,12 +118,12 @@ CREATE TABLE entradas_itens (
     data_validade DATE NULL,
     subtotal NUMERIC(12,2) GENERATED ALWAYS AS (qtd_caixas * preco_compra_caixa) STORED,
     user_id BIGINT NULL,
-    estado_id BIGINT NOT NULL DEFAULT 1,
+    estado BIGINT NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (entrada_id) REFERENCES entradas(id) ON DELETE CASCADE,
     FOREIGN KEY (produto_id) REFERENCES produtos(id),
-    FOREIGN KEY (estado_id) REFERENCES estados(id)
+    FOREIGN KEY (estado) REFERENCES estados(id)
 );
 
 -- Saídas
@@ -133,11 +133,11 @@ CREATE TABLE saidas (
     data_saida DATE NOT NULL,
     total NUMERIC(12,2) DEFAULT 0,
     user_id BIGINT NULL,
-    estado_id BIGINT NOT NULL DEFAULT 1,
+    estado BIGINT NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (tipo_saida_id) REFERENCES tipos_saidas(id),
-    FOREIGN KEY (estado_id) REFERENCES estados(id)
+    FOREIGN KEY (estado) REFERENCES estados(id)
 );
 
 -- Saídas Itens
@@ -154,11 +154,11 @@ CREATE TABLE saidas_itens (
         (qtd_caixas * COALESCE(preco_venda_caixa,0)) + (qtd_unidades * preco_venda_unitario)
     ) STORED,
     user_id BIGINT NULL,
-    estado_id BIGINT NOT NULL DEFAULT 1,
+    estado BIGINT NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (saida_id) REFERENCES saidas(id) ON DELETE CASCADE,
     FOREIGN KEY (entrada_item_id) REFERENCES entradas_itens(id),
     FOREIGN KEY (produto_id) REFERENCES produtos(id),
-    FOREIGN KEY (estado_id) REFERENCES estados(id)
+    FOREIGN KEY (estado) REFERENCES estados(id)
 );

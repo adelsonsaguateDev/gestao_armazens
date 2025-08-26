@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `contacto` varchar(100) DEFAULT NULL,
   `endereco` text,
   `user_id` bigint DEFAULT NULL,
-  `estado_id` bigint DEFAULT NULL,
+  `estado` bigint DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
 -- Extraindo dados da tabela `clientes`
 --
 
-INSERT INTO `clientes` (`id`, `nome`, `contacto`, `endereco`, `user_id`, `estado_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `clientes` (`id`, `nome`, `contacto`, `endereco`, `user_id`, `estado`, `created_at`, `updated_at`) VALUES
 (1, 'Cliente Exemplo 1', '841234569', 'Av. 1, Maputo', NULL, 1, NULL, NULL);
 
 -- --------------------------------------------------------
@@ -69,20 +69,20 @@ CREATE TABLE IF NOT EXISTS `entradas` (
   `valor_remanescente` decimal(12,2) DEFAULT '0.00',
   `ficheiro_entrada` text,
   `user_id` bigint DEFAULT NULL,
-  `estado_id` bigint NOT NULL DEFAULT '1',
+  `estado` bigint NOT NULL DEFAULT '1',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `tipo_entrada_id` (`tipo_entrada_id`),
   KEY `fornecedor_id` (`fornecedor_id`),
-  KEY `estado_id` (`estado_id`)
+  KEY `estado` (`estado`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Extraindo dados da tabela `entradas`
 --
 
-INSERT INTO `entradas` (`id`, `tipo_entrada_id`, `fornecedor_id`, `fornecedor_ref`, `numero_factura`, `data_aquisicao`, `data_factura`, `total`, `total_factura`, `total_desconto`, `total_iva`, `valor_remanescente`, `ficheiro_entrada`, `user_id`, `estado_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `entradas` (`id`, `tipo_entrada_id`, `fornecedor_id`, `fornecedor_ref`, `numero_factura`, `data_aquisicao`, `data_factura`, `total`, `total_factura`, `total_desconto`, `total_iva`, `valor_remanescente`, `ficheiro_entrada`, `user_id`, `estado`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, 'FENOMENAL COMERCIAL', 'FAC-001/2025', '2025-07-30', '2025-07-30', 5000.00, 5000.00, 0.00, 500.00, 0.00, 'entradas/fac001.pdf', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14');
 
 -- --------------------------------------------------------
@@ -106,20 +106,20 @@ CREATE TABLE IF NOT EXISTS `entradas_itens` (
   `data_validade` date DEFAULT NULL,
   `subtotal` decimal(12,2) GENERATED ALWAYS AS ((`qtd_caixas` * `preco_compra_caixa`)) STORED,
   `user_id` bigint DEFAULT NULL,
-  `estado_id` bigint NOT NULL DEFAULT '1',
+  `estado` bigint NOT NULL DEFAULT '1',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `entrada_id` (`entrada_id`),
   KEY `produto_id` (`produto_id`),
-  KEY `estado_id` (`estado_id`)
+  KEY `estado` (`estado`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Extraindo dados da tabela `entradas_itens`
 --
 
-INSERT INTO `entradas_itens` (`id`, `entrada_id`, `produto_id`, `codigo_barras_lote`, `qtd_caixas`, `qtd_por_caixa`, `preco_compra_caixa`, `preco_compra_unitario`, `preco_venda_caixa`, `preco_venda_unitario`, `data_validade`, `user_id`, `estado_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `entradas_itens` (`id`, `entrada_id`, `produto_id`, `codigo_barras_lote`, `qtd_caixas`, `qtd_por_caixa`, `preco_compra_caixa`, `preco_compra_unitario`, `preco_venda_caixa`, `preco_venda_unitario`, `data_validade`, `user_id`, `estado`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, 'PB001-L1', 10, 1, 220.00, 220.00, 300.00, 300.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
 (2, 1, 2, 'PB002-L1', 5, 1, 185.00, 185.00, 250.00, 250.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
 (3, 1, 3, 'PB003-L1', 8, 1, 220.00, 220.00, 300.00, 300.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `estados` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) DEFAULT NULL,
   `descricao` text,
-  `estado_id` bigint DEFAULT NULL,
+  `estado` bigint DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `estados` (
 -- Extraindo dados da tabela `estados`
 --
 
-INSERT INTO `estados` (`id`, `nome`, `descricao`, `estado_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `estados` (`id`, `nome`, `descricao`, `estado`, `created_at`, `updated_at`) VALUES
 (1, 'Activo', 'Registo activo no sistema', NULL, '2025-08-03 08:57:12', '2025-08-04 08:57:26'),
 (2, 'Inactivo', 'Registo inactivo no sistema', NULL, '2025-08-05 08:57:17', '2025-08-15 08:57:30'),
 (3, 'Pendente', 'Registo pendente', NULL, '2025-08-06 08:57:22', '2025-08-11 08:57:33');
@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `fornecedores` (
   `email` varchar(100) DEFAULT NULL,
   `endereco` text,
   `user_id` bigint DEFAULT NULL,
-  `estado_id` bigint DEFAULT NULL,
+  `estado` bigint DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -194,7 +194,7 @@ CREATE TABLE IF NOT EXISTS `fornecedores` (
 -- Extraindo dados da tabela `fornecedores`
 --
 
-INSERT INTO `fornecedores` (`id`, `nome`, `telefone`, `email`, `endereco`, `user_id`, `estado_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `fornecedores` (`id`, `nome`, `telefone`, `email`, `endereco`, `user_id`, `estado`, `created_at`, `updated_at`) VALUES
 (1, 'FENOMENAL COMERCIAL', '841234567', 'fenomenal@exemplo.com', 'Rua Comercial, Maputo', 1, 1, '2025-08-11 08:58:43', '2025-08-05 08:58:47');
 
 -- --------------------------------------------------------
@@ -432,12 +432,12 @@ CREATE TABLE IF NOT EXISTS `produtos` (
   `stock_minimo` int DEFAULT '0',
   `imagem` varchar(255) DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
-  `estado_id` bigint NOT NULL DEFAULT '1',
+  `estado` bigint NOT NULL DEFAULT '1',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `unidade_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `estado_id` (`estado_id`),
+  KEY `estado` (`estado`),
   KEY `fk_produtos_unidades` (`unidade_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -445,7 +445,7 @@ CREATE TABLE IF NOT EXISTS `produtos` (
 -- Extraindo dados da tabela `produtos`
 --
 
-INSERT INTO `produtos` (`id`, `codigo_barras`, `nome`, `descricao`, `stock_minimo`, `imagem`, `user_id`, `estado_id`, `created_at`, `updated_at`, `unidade_id`) VALUES
+INSERT INTO `produtos` (`id`, `codigo_barras`, `nome`, `descricao`, `stock_minimo`, `imagem`, `user_id`, `estado`, `created_at`, `updated_at`, `unidade_id`) VALUES
 (1, 'PB001', 'Napa', 'Napa', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
 (2, 'PB002', 'Veludo HL001', 'Veludo HL001', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
 (3, 'PB003', 'Linho', 'Linho', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
@@ -546,19 +546,19 @@ CREATE TABLE IF NOT EXISTS `saidas` (
   `data_saida` date NOT NULL,
   `total` decimal(12,2) DEFAULT '0.00',
   `user_id` bigint DEFAULT NULL,
-  `estado_id` bigint NOT NULL DEFAULT '1',
+  `estado` bigint NOT NULL DEFAULT '1',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `tipo_saida_id` (`tipo_saida_id`),
-  KEY `estado_id` (`estado_id`)
+  KEY `estado` (`estado`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Extraindo dados da tabela `saidas`
 --
 
-INSERT INTO `saidas` (`id`, `tipo_saida_id`, `data_saida`, `total`, `user_id`, `estado_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `saidas` (`id`, `tipo_saida_id`, `data_saida`, `total`, `user_id`, `estado`, `created_at`, `updated_at`) VALUES
 (1, 1, '2025-08-01', 2500.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14');
 
 -- --------------------------------------------------------
@@ -579,21 +579,21 @@ CREATE TABLE IF NOT EXISTS `saidas_itens` (
   `preco_venda_caixa` decimal(12,2) DEFAULT NULL,
   `subtotal` decimal(12,2) GENERATED ALWAYS AS (((`qtd_caixas` * coalesce(`preco_venda_caixa`,0)) + (`qtd_unidades` * `preco_venda_unitario`))) STORED,
   `user_id` bigint DEFAULT NULL,
-  `estado_id` bigint NOT NULL DEFAULT '1',
+  `estado` bigint NOT NULL DEFAULT '1',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `saida_id` (`saida_id`),
   KEY `entrada_item_id` (`entrada_item_id`),
   KEY `produto_id` (`produto_id`),
-  KEY `estado_id` (`estado_id`)
+  KEY `estado` (`estado`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Extraindo dados da tabela `saidas_itens`
 --
 
-INSERT INTO `saidas_itens` (`id`, `saida_id`, `entrada_item_id`, `produto_id`, `qtd_caixas`, `qtd_unidades`, `preco_venda_unitario`, `preco_venda_caixa`, `user_id`, `estado_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `saidas_itens` (`id`, `saida_id`, `entrada_item_id`, `produto_id`, `qtd_caixas`, `qtd_unidades`, `preco_venda_unitario`, `preco_venda_caixa`, `user_id`, `estado`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, 1, 2, 0, 300.00, 300.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
 (2, 1, 2, 2, 1, 0, 250.00, 250.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
 (3, 1, 3, 3, 1, 0, 300.00, 300.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
@@ -612,7 +612,7 @@ CREATE TABLE IF NOT EXISTS `tipos_entradas` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) DEFAULT NULL,
   `descricao` text,
-  `estado_id` bigint DEFAULT NULL,
+  `estado` bigint DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -622,7 +622,7 @@ CREATE TABLE IF NOT EXISTS `tipos_entradas` (
 -- Extraindo dados da tabela `tipos_entradas`
 --
 
-INSERT INTO `tipos_entradas` (`id`, `nome`, `descricao`, `estado_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `tipos_entradas` (`id`, `nome`, `descricao`, `estado`, `created_at`, `updated_at`) VALUES
 (1, 'Compra', 'Entrada de produtos via compra', 1, NULL, NULL),
 (2, 'Transferência', 'Entrada de produtos via transferência', 1, NULL, NULL),
 (3, 'Inventário', 'Entrada via ajuste de inventário', 1, NULL, NULL);
@@ -638,7 +638,7 @@ CREATE TABLE IF NOT EXISTS `tipos_saidas` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) DEFAULT NULL,
   `descricao` text,
-  `estado_id` bigint DEFAULT NULL,
+  `estado` bigint DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -648,7 +648,7 @@ CREATE TABLE IF NOT EXISTS `tipos_saidas` (
 -- Extraindo dados da tabela `tipos_saidas`
 --
 
-INSERT INTO `tipos_saidas` (`id`, `nome`, `descricao`, `estado_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `tipos_saidas` (`id`, `nome`, `descricao`, `estado`, `created_at`, `updated_at`) VALUES
 (1, 'Venda Normal', 'Venda direta a clientes', 1, NULL, NULL),
 (2, 'Venda a Crédito', 'Venda com pagamento posterior', 1, NULL, NULL),
 (3, 'Transferência', 'Saída via transferência', 1, NULL, NULL);
@@ -664,18 +664,18 @@ CREATE TABLE IF NOT EXISTS `unidades` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
   `sigla` varchar(10) NOT NULL,
-  `estado_id` bigint NOT NULL DEFAULT '1',
+  `estado` bigint NOT NULL DEFAULT '1',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `fk_unidades_estado` (`estado_id`)
+  KEY `fk_unidades_estado` (`estado`)
 ) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Extraindo dados da tabela `unidades`
 --
 
-INSERT INTO `unidades` (`id`, `nome`, `sigla`, `estado_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `unidades` (`id`, `nome`, `sigla`, `estado`, `created_at`, `updated_at`) VALUES
 (1, 'Metro', 'm', 1, '2025-08-26 09:06:02', '2025-08-26 09:06:02'),
 (2, 'Peça', 'pc', 1, '2025-08-26 09:06:02', '2025-08-26 09:06:02'),
 (3, 'Placa', 'pl', 1, '2025-08-26 09:06:02', '2025-08-26 09:06:02'),

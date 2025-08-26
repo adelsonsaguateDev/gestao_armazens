@@ -8,7 +8,7 @@ VALUES
 
 -- 2. Tipos de Entradas
 INSERT INTO
-    tipos_entradas (nome, descricao, estado_id)
+    tipos_entradas (nome, descricao, estado)
 VALUES
     ('Compra', 'Entrada de produtos via compra', 1),
     (
@@ -24,7 +24,7 @@ VALUES
 
 -- 3. Tipos de Saídas
 INSERT INTO
-    tipos_saidas (nome, descricao, estado_id)
+    tipos_saidas (nome, descricao, estado)
 VALUES
     ('Venda Normal', 'Venda direta a clientes', 1),
     (
@@ -36,7 +36,7 @@ VALUES
 
 -- 4. Fornecedores
 INSERT INTO
-    fornecedores (nome, telefone, email, endereco, estado_id)
+    fornecedores (nome, telefone, email, endereco, estado)
 VALUES
     (
         'FENOMENAL COMERCIAL',
@@ -48,7 +48,7 @@ VALUES
 
 -- 5. Clientes
 INSERT INTO
-    clientes (nome, contacto, endereco, estado_id)
+    clientes (nome, contacto, endereco, estado)
 VALUES
     (
         'Cliente Exemplo 1',
@@ -62,14 +62,14 @@ CREATE TABLE unidades (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
     sigla VARCHAR(10) NOT NULL,
-    estado_id BIGINT NOT NULL DEFAULT 1,
+    estado BIGINT NOT NULL DEFAULT 1,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_unidades_estado FOREIGN KEY (estado_id) REFERENCES estados(id)
+    CONSTRAINT fk_unidades_estado FOREIGN KEY (estado) REFERENCES estados(id)
 );
 
 INSERT INTO
-    unidades (id, nome, sigla, estado_id)
+    unidades (id, nome, sigla, estado)
 VALUES
     (1, 'Peça', 'pc', 1),
     (2, 'Metro', 'm', 1),
@@ -87,7 +87,7 @@ INSERT INTO
         descricao,
         unidade_id,
         stock_minimo,
-        estado_id
+        estado
     )
 VALUES
     ('PB001', 'Napa', 'Napa', 2, 0, 1),
@@ -262,7 +262,7 @@ INSERT INTO
         valor_remanescente,
         ficheiro_entrada,
         user_id,
-        estado_id
+        estado
     )
 VALUES
     (
@@ -296,7 +296,7 @@ INSERT INTO
         preco_venda_unitario,
         data_validade,
         user_id,
-        estado_id
+        estado
     )
 VALUES
     (
@@ -391,7 +391,7 @@ INSERT INTO
         data_saida,
         total,
         user_id,
-        estado_id
+        estado
     )
 VALUES
     (1, '2025-08-01', 2500, 1, 1);
@@ -407,7 +407,7 @@ INSERT INTO
         preco_venda_unitario,
         preco_venda_caixa,
         user_id,
-        estado_id
+        estado
     )
 VALUES
     (1, 1, 1, 2, 0, 300, 300, 1, 1),

@@ -32,7 +32,7 @@ class CreateTiposEntradasTable extends Migration
 
             $table->text('ficheiro_entrada')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('estado_id')->default(1);
+            $table->unsignedBigInteger('estado')->default(1);
 
             $table->dateTime('created_at')->useCurrent();
             $table->dateTime('updated_at')->useCurrent()->useCurrentOnUpdate();
@@ -40,7 +40,7 @@ class CreateTiposEntradasTable extends Migration
             // Chaves estrangeiras
             $table->foreign('tipo_entrada_id')->references('id')->on('tipos_entradas');
             $table->foreign('fornecedor_id')->references('id')->on('fornecedores');
-            $table->foreign('estado_id')->references('id')->on('estados');
+            $table->foreign('estado')->references('id')->on('estados');
         });
     }
 

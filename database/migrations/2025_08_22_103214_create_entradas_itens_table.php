@@ -27,7 +27,7 @@ class CreateTiposEntradasTable extends Migration
             $table->date('data_validade')->nullable();
             $table->decimal('subtotal', 12, 2)->storedAs('qtd_caixas * preco_compra_caixa');
             $table->foreignId('user_id')->nullable();
-            $table->foreignId('estado_id')->default(1)->constrained('estados');
+            $table->foreignId('estado')->default(1)->constrained('estados');
             $table->dateTime('created_at')->useCurrent();
             $table->dateTime('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

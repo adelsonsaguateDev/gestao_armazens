@@ -22,7 +22,7 @@ class CreateTiposEntradasTable extends Migration
             $table->integer('stock_minimo')->default(0);
             $table->string('imagem', 255)->nullable();
             $table->foreignId('user_id')->nullable();
-            $table->foreignId('estado_id')->default(1)->constrained('estados');
+            $table->foreignId('estado')->default(1)->constrained('estados');
             $table->dateTime('created_at')->useCurrent();
             $table->dateTime('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

@@ -17,7 +17,7 @@ class CreateEstadosTable extends Migration
             $table->bigIncrements('id');
             $table->string('nome', 100);
             $table->text('descricao')->nullable();
-            $table->foreignId('estado_id')->nullable()->constrained('estados')->default(1);
+            $table->foreignId('estado')->nullable()->constrained('estados')->default(1);
             $table->dateTime('created_at')->useCurrent();
             $table->dateTime('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
