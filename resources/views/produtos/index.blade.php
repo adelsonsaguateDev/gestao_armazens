@@ -355,7 +355,7 @@
             }
 
             $("#logo").fileinput({
-                'theme': 'explorer-fa5',
+                'theme': 'explorer-fa',
                 'uploadUrl': '#',
                 overwriteInitial: false,
                 initialPreviewAsData: true,

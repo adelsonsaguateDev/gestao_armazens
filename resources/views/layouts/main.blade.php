@@ -48,7 +48,7 @@
 
         {{-- fileinput css --}}
 
-        <link rel="stylesheet" href="{{asset('assets/bootstrap-fileinput/css/bootstrap-icons.min.css')}}" crossorigin="anonymous">
+        {{-- <link rel="stylesheet" href="{{asset('assets/bootstrap-fileinput/css/bootstrap-icons.min.css')}}" crossorigin="anonymous"> --}}
         <link href="{{asset('assets/bootstrap-fileinput/css/fileinput.css')}}" media="all" rel="stylesheet" type="text/css"/>
         <link href="{{asset('assets/bootstrap-fileinput/themes/explorer-fas/theme.css')}}" media="all" rel="stylesheet" type="text/css"/>
 
