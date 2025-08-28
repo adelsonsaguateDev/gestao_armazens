@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProdutosController;
 use App\Http\Controllers\RequisicoesController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EntradasController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\UtilizadorController;
 
@@ -46,6 +47,16 @@ Route::post('produto/add', [ProdutosController::class, 'add'])->name('create');
 Route::post('produto/delete', [ProdutosController::class, 'delete'])->name('delete');
 Route::post('produto/edit', [ProdutosController::class, 'edit'])->name('edit');
 Route::post('produto/requisicao', [ProdutosController::class, 'add_requisicao'])->name('requisicao');
+
+
+//Entradas
+Route::get('entrada', [EntradasController::class, 'index'])->name('entrada.list');
+Route::post('entradas', [EntradasController::class, 'list'])->name('entradas.list'); // Para listagem via AJAX
+Route::post('entrada/add', [EntradasController::class, 'add'])->name('entrada.add');
+Route::get('entrada/{id}', [EntradasController::class, 'show'])->name('entrada.show'); // Para formulário de edição/visualização
+Route::get('entrada_detalhes/{id}', [EntradasController::class, 'show_details'])->name('entrada.detalhes');
+Route::post('entrada/edit', [EntradasController::class, 'edit'])->name('entrada.edit');
+Route::post('entrada/delete', [EntradasController::class, 'delete'])->name('entrada.delete');
 
 
 

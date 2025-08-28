@@ -60,29 +60,11 @@
                 <ul class="metismenu" id="menu">
                     <li class="Ul_li--hover"><a href="{{ route('pagina_inicial')}}"><i class="i-Bar-Chart text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Dashboard</span></a></li>
                     
-                    <li class="Ul_li--hover">
-                        <a class="has-arrow" href="#"><i class="i-Shop-4 text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Vendas</span></a>
-                        <ul class="mm-collapse">
-                            <li class="Ul_li--hover"><a href="#"><span class="item-name text-15 text-white">Nova Venda</span></a></li>
-                            <li class="Ul_li--hover"><a href="#"><span class="item-name text-15 text-white">Listar Vendas</span></a></li>
-                        </ul>
-                    </li>
+                    <li class="Ul_li--hover"><a href="#"><i class="i-Shop-4 text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Vendas</span></a></li>
 
-                    <li class="Ul_li--hover">
-                        <a class="has-arrow" href="#"><i class="i-Full-Cart text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Entradas</span></a>
-                        <ul class="mm-collapse">
-                            <li class="Ul_li--hover"><a href="#"><span class="item-name text-15 text-white">Nova Entrada</span></a></li>
-                            <li class="Ul_li--hover"><a href="#"><span class="item-name text-15 text-white">Listar Entradas</span></a></li>
-                        </ul>
-                    </li>
+                    <li class="Ul_li--hover"><a href="{{ route('entrada.list') }}"><i class="i-Full-Cart text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Entradas</span></a></li>
 
-                    <li class="Ul_li--hover">
-                        <a class="has-arrow" href="#"><i class="i-Financial text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Pagamentos</span></a>
-                        <ul class="mm-collapse">
-                            <li class="Ul_li--hover"><a href="#"><span class="item-name text-15 text-white">Registar Pagamento</span></a></li>
-                            <li class="Ul_li--hover"><a href="#"><span class="item-name text-15 text-white">Listar Pagamentos</span></a></li>
-                        </ul>
-                    </li>
+                    <li class="Ul_li--hover"><a href="#"><i class="i-Financial text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Pagamentos</span></a></li>
 
                     <li class="Ul_li--hover"><a href="{{ route('produto.list') }}"><i class="i-Library text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Produtos</span></a></li>
                     <li class="Ul_li--hover"><a href="{{ route('requisicao.list') }}"><i class="i-Remove-Cart text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Requisições</span></a></li>
