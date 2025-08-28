@@ -37,11 +37,11 @@
 
                             </select>
                         </div>
-                        <div class="col-sm-6 form-group mt-3">
-                            <label class="">Logo:</label>
+                        <div class="col-sm-12 form-group mt-3">
+                            <label class=""><b>Imagem do Produto:</b></label>
 
                             <div class="file-loading">
-                                <input id="logo" name="logo[]" type="file">
+                                <input id="imagem" name="imagem" type="file">
                             </div>
                         </div>
                     </div>

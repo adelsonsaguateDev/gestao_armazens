@@ -354,7 +354,7 @@
                 });
             }
 
-            $("#logo").fileinput({
+            $("#imagem").fileinput({
                 'theme': 'explorer-fa',
                 'uploadUrl': '#',
                 overwriteInitial: false,

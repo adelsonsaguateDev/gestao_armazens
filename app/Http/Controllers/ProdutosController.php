@@ -109,11 +109,30 @@ class ProdutosController extends Controller
                 'descricao' => 'required|unique:produtos',
                 'codigo_barras' => 'required|unique:produtos',
                 'stock_minimo' => 'required',
-                'unidade_id' => 'nullable'
+                'unidade_id' => 'nullable',
+                'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
+
+            // Handle File Upload
+            if($request->hasFile('imagem')){
+                // Get filename with the extension
+                $filenameWithExt = $request->file('imagem')->getClientOriginalName();
+                // Get just filename
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                // Get just ext
+                $extension = $request->file('imagem')->getClientOriginalExtension();
+                // Filename to store
+                $fileNameToStore= $filename.'_'.time().'.'.$extension;
+                // Upload Image
+                $path = $request->file('imagem')->storeAs('public/produtosImg', $fileNameToStore);
+                $data['imagem'] = $fileNameToStore;
+            }
 
             $data['estado'] = 1;
             $data['user_id'] = auth()->user()->id;
+
+            // print_r($data);
+            // exit();
 
             $check = DB::selectOne("SELECT codigo_barras FROM produtos WHERE codigo_barras = '{$request->codigo}' ");
             if (empty($check)) {

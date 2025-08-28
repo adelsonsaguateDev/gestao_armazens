@@ -58,7 +58,6 @@
 
         <link rel="stylesheet" href="{{ asset('css\icons\font-awesome\css\font-awesome.css')}}">
         <link rel="stylesheet" href="{{ asset('css\icons\font-awesome\css\font-awesome.min.css')}}">
-        <link rel="stylesheet" href="{{ asset('css\icons\tabler-icons.css')}}">
 
     <!--   Javascript generico-->
 
