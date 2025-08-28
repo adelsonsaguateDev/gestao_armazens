@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Produto;
 use App\Models\Historico;
 use App\Models\Requisicoes;
+use App\Models\Unidade;
 use Illuminate\Support\Facades\DB;
 
 date_default_timezone_set('Africa/Maputo');
@@ -16,7 +17,8 @@ class ProdutosController extends Controller
 {
     public function index()
     {
-        return view('produtos.index');
+        $unidades = Unidade::where('estado', 1)->get();
+        return view('produtos.index', compact('unidades'));
     }
 
     public function list(Request $request)
@@ -70,7 +72,7 @@ class ProdutosController extends Controller
         if ($request->filled('stock_minimo_filtro')) {
             $query->where('p.stock_minimo', '=', $request->input('stock_minimo_filtro'));
         }
-        
+
         if ($request->filled('quantidade_filtro')) {
             $query->having('quantidade', '=', $request->input('quantidade_filtro'));
         }
@@ -105,15 +107,15 @@ class ProdutosController extends Controller
             $data = $request->validate([
                 'nome' => 'nullable',
                 'descricao' => 'required|unique:produtos',
-                'codigo' => 'required|unique:produtos',
+                'codigo_barras' => 'required|unique:produtos',
                 'stock_minimo' => 'required',
-                'quantidade' => 'required'
+                'unidade_id' => 'nullable'
             ]);
 
             $data['estado'] = 1;
             $data['user_id'] = auth()->user()->id;
 
-            $check = DB::selectOne("SELECT codigo FROM produtos WHERE codigo = '{$request->codigo}' ");
+            $check = DB::selectOne("SELECT codigo_barras FROM produtos WHERE codigo_barras = '{$request->codigo}' ");
             if (empty($check)) {
                 if ($produto = Produto::create($data)) {
 
@@ -130,7 +132,7 @@ class ProdutosController extends Controller
                 }
             } else {
                 $json['success'] = false;
-                $json['message'] = 'O codigo do produto já existe.';
+                $json['message'] = 'O codigo de barras do produto já existe.';
                 $json['code'] = 409;
             }
         } catch (\Illuminate\Validation\ValidationException $e) {

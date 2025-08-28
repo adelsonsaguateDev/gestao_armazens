@@ -12,7 +12,7 @@ class Produto extends Model
     protected $table = 'produtos';
 
     // Assuming 'unidade' column is replaced by 'unidade_id'
-    protected $fillable = ['nome', 'descricao', 'codigo', 'stock_minimo', 'estado', 'user_id', 'unidade_id'];
+    protected $fillable = ['nome', 'descricao', 'codigo_barras', 'stock_minimo', 'estado', 'user_id', 'unidade_id'];
 
     public function users()
     {
