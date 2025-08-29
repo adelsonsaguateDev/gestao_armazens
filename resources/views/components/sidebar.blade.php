@@ -7,24 +7,33 @@
     .icon-logo {
         display: none;
     }
+
     /* When sidebar is compact, hide the full logo */
     .sidebar-compact .full-logo {
         display: none;
     }
+
     /* When sidebar is compact, show the icon logo */
     .sidebar-compact .icon-logo {
         display: block !important;
+    }
+
+    .Ul_li--hover.active::before {
+        left: 0px;
+        z-index: -1;
     }
 </style>
 
 <div class="sidebar-panel">
     <div class="gull-brand pr-3 text-center mt-4 mb-2 d-flex justify-content-center align-items-center">
-        
+
         <!-- Full Logo -->
-        <img src="{{ asset('dist-assets/images/logo.png') }}" alt="Logo Fenomenal Comercial" class="full-logo" style="width: 180px; height: auto;">
-        
+        <img src="{{ asset('dist-assets/images/logo.png') }}" alt="Logo Fenomenal Comercial" class="full-logo"
+            style="width: 180px; height: auto;">
+
         <!-- Icon Logo for Compact Sidebar -->
-        <img src="{{ asset('dist-assets/images/logo.png') }}" alt="Icon Logo Fenomenal Comercial" class="icon-logo" style="width: 40px; height: auto; display: none;">
+        <img src="{{ asset('dist-assets/images/logo.png') }}" alt="Icon Logo Fenomenal Comercial" class="icon-logo"
+            style="width: 40px; height: auto; display: none;">
 
         {{-- 
         <!-- Full Logo -->
@@ -62,31 +71,43 @@
         <div class="sidebar-compact-switch ml-auto"><span></span></div>
     </div>
     <!--  user -->
-    <div class="scroll-nav ps ps--active-y" data-perfect-scrollbar="data-perfect-scrollbar" data-suppress-scroll-x="true">
+    <div class="scroll-nav ps ps--active-y" data-perfect-scrollbar="data-perfect-scrollbar"
+        data-suppress-scroll-x="true">
         <div class="side-nav">
             <div class="main-menu">
                 <ul class="metismenu" id="menu">
-                    <li class="Ul_li--hover"><a href="{{ route('pagina_inicial')}}"><i class="i-Bar-Chart text-20 mr-2"></i><span class="item-name text-15">Dashboard</span></a></li>
-                    
-                    <li class="Ul_li--hover"><a href="#"><i class="i-Shop-4 text-20 mr-2"></i><span class="item-name text-15">Vendas</span></a></li>
+                    <li class="Ul_li--hover {{ request()->is('home') ? 'active' : '' }}"><a href="{{ route('pagina_inicial') }}"><i
+                                class="i-Bar-Chart text-20 mr-2"></i><span
+                                class="item-name text-15">Dashboard</span></a></li>
 
-                    <li class="Ul_li--hover"><a href="{{ route('entrada.list') }}"><i class="i-Full-Cart text-20 mr-2"></i><span class="item-name text-15">Entradas</span></a></li>
-
-                    <li class="Ul_li--hover"><a href="#"><i class="i-Financial text-20 mr-2"></i><span class="item-name text-15">Pagamentos</span></a></li>
-
-                    <li class="Ul_li--hover"><a href="{{ route('produto.list') }}"><i class="i-Library text-20 mr-2"></i><span class="item-name text-15">Produtos</span></a></li>
-                    <li class="Ul_li--hover"><a href="{{ route('requisicao.list') }}"><i class="i-Remove-Cart text-20 mr-2"></i><span class="item-name text-15">Requisições</span></a></li>
-                    
-                    @if(session('permissao_nome') == 'admin' || session('permissao_nome') == 'gestor')
-                    <li class="Ul_li--hover">
-                        <a class="has-arrow" href="#"><i class="i-Gears text-20 mr-2"></i><span class="item-name text-15">Administração</span></a>
-                        <ul class="mm-collapse">
-                            <li class="Ul_li--hover"><a href="{{ route('utilizador.list') }}" ><i class="i-Administrator text-20 mr-2"></i><span class="item-name text-15">Funcionarios</span></a></li>
-                            <li class="Ul_li--hover"><a href="{{ route('relatorio.list') }}"><i class="i-Line-Chart-4 text-20 mr-2"></i><span class="item-name text-15">Relatórios</span></a></li>
-                        </ul>
+                    <li class="Ul_li--hover {{ request()->is('produto*') ? 'active' : '' }}"><a href="{{ route('produto.list') }}"><i
+                                class="i-Library text-20 mr-2"></i><span class="item-name text-15">Produtos</span></a>
                     </li>
+                    <li class="Ul_li--hover {{ request()->is('entrada*') ? 'active' : '' }}"><a href="{{ route('entrada.list') }}"><i
+                                class="i-Full-Cart text-20 mr-2"></i><span class="item-name text-15">Entradas</span></a>
+                    </li>
+                    <li class="Ul_li--hover"><a href="#"><i class="i-Shop-4 text-20 mr-2"></i><span
+                                class="item-name text-15">Vendas</span></a></li>
+                    <li class="Ul_li--hover"><a href="#"><i class="i-Financial text-20 mr-2"></i><span
+                                class="item-name text-15">Pagamentos</span></a></li>
+                    <li class="Ul_li--hover {{ request()->is('requisicao*') ? 'active' : '' }}"><a href="{{ route('requisicao.list') }}"><i
+                                class="i-Remove-Cart text-20 mr-2"></i><span
+                                class="item-name text-15">Requisições</span></a></li>
+                    @if (session('permissao_nome') == 'admin' || session('permissao_nome') == 'gestor')
+                        <li class="Ul_li--hover {{ (request()->is('utilizador*') || request()->is('relatorio*')) ? 'active' : '' }}">
+                            <a class="has-arrow" href="#"><i class="i-Gears text-20 mr-2"></i><span
+                                    class="item-name text-15">Administração</span></a>
+                            <ul class="mm-collapse">
+                                <li class="Ul_li--hover {{ request()->is('utilizador*') ? 'active' : '' }}"><a href="{{ route('utilizador.list') }}"><i
+                                            class="i-Administrator text-20 mr-2"></i><span
+                                            class="item-name text-15">Funcionarios</span></a></li>
+                                <li class="Ul_li--hover {{ request()->is('relatorio*') ? 'active' : '' }}"><a href="{{ route('relatorio.list') }}"><i
+                                            class="i-Line-Chart-4 text-20 mr-2"></i><span
+                                            class="item-name text-15">Relatórios</span></a></li>
+                            </ul>
+                        </li>
                     @endif
-                    
+
                 </ul>
             </div>
         </div>
