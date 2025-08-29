@@ -3,11 +3,10 @@
 @section('title', 'Lista de Entradas | Gestão de Armazens')
 
 @section('content')
-
     <div class="app-admin-wrap layout-sidebar-vertical sidebar-full">
 
         @include('components.sidebar')
-        @include('entradas.modal.AddEntrada')
+        {{-- @include('entradas.modal.AddEntrada') --}}
         @include('entradas.modal.form_edit')
 
         <div class="switch-overlay"></div>
@@ -34,9 +33,9 @@
                                             class="fa fa-info-circle"></i>
                                     </div>
                                     <div class="col-md-12 text-right ">
-                                        <button title="Adicionar nova entrada" class="btn btn-success" type="button"
-                                            data-toggle="modal" data-target="#rg_entrada" id="btn_registar"><i
-                                                class="fa fa-plus"></i> REGISTAR ENTRADA</button>
+                                        <a href="{{ route('entrada.create') }}" title="Adicionar nova entrada"
+                                            class="btn btn-success" type="button"><i class="fa fa-plus"></i> REGISTAR
+                                            ENTRADA</a>
                                         <button title="Imprimir um pdf" class="btn btn-info" type="button"
                                             id="print"><i class="fa fa-print"></i> PDF</button>
                                     </div>
@@ -44,14 +43,16 @@
                                 <div class="row mt-4">
                                     <div class="col-md-3 mb-3">
                                         <label for="numero_factura_filtro"
-                                            style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Nº Factura</label>
+                                            style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Nº
+                                            Factura</label>
                                         <input type="text" class="form-control" name="numero_factura_filtro"
                                             id="numero_factura_filtro" />
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <label for="fornecedor_filtro"
                                             style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Fornecedor</label>
-                                        <select name="fornecedor_filtro" id="fornecedor_filtro" class="form-control select2">
+                                        <select name="fornecedor_filtro" id="fornecedor_filtro"
+                                            class="form-control select2">
                                             <option value="">Selecione...</option>
                                             @foreach ($fornecedores as $fornecedor)
                                                 <option value="{{ $fornecedor->id }}">{{ $fornecedor->nome }}</option>
@@ -60,8 +61,10 @@
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <label for="tipo_entrada_filtro"
-                                            style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Tipo de Entrada</label>
-                                        <select name="tipo_entrada_filtro" id="tipo_entrada_filtro" class="form-control select2">
+                                            style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Tipo
+                                            de Entrada</label>
+                                        <select name="tipo_entrada_filtro" id="tipo_entrada_filtro"
+                                            class="form-control select2">
                                             <option value="">Selecione...</option>
                                             @foreach ($tipos_entrada as $tipo)
                                                 <option value="{{ $tipo->id }}">{{ $tipo->nome }}</option>
@@ -70,13 +73,15 @@
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <label for="data_inicio_filtro"
-                                            style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Data Início</label>
+                                            style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Data
+                                            Início</label>
                                         <input type="date" class="form-control" name="data_inicio_filtro"
                                             id="data_inicio_filtro" />
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <label for="data_fim_filtro"
-                                            style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Data Fim</label>
+                                            style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Data
+                                            Fim</label>
                                         <input type="date" class="form-control" name="data_fim_filtro"
                                             id="data_fim_filtro" />
                                     </div>
@@ -129,7 +134,6 @@
         </div>
 
     </div>
-
 @endsection
 
 @section('scripts')

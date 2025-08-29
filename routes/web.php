@@ -51,6 +51,7 @@ Route::post('produto/requisicao', [ProdutosController::class, 'add_requisicao'])
 
 //Entradas
 Route::get('entrada', [EntradasController::class, 'index'])->name('entrada.list');
+Route::get('entrada/create', [EntradasController::class, 'create'])->name('entrada.create');
 Route::post('entradas', [EntradasController::class, 'list'])->name('entradas.list'); // Para listagem via AJAX
 Route::post('entrada/add', [EntradasController::class, 'add'])->name('entrada.add');
 Route::get('entrada/{id}', [EntradasController::class, 'show'])->name('entrada.show'); // Para formulário de edição/visualização

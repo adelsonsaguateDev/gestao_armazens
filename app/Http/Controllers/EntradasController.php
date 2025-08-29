@@ -24,6 +24,14 @@ class EntradasController extends Controller
         return view('entradas.index', compact('produtos', 'fornecedores', 'tipos_entrada'));
     }
 
+    public function create()
+    {
+        $produtos = Produto::where('estado', 1)->get();
+        $fornecedores = Fornecedor::where('estado', 1)->get();
+        $tipos_entrada = TipoEntrada::where('estado', 1)->get();
+        return view('entradas.create', compact('produtos', 'fornecedores', 'tipos_entrada'));
+    }
+
     public function list(Request $request)
     {
         $query = Entrada::with(['tipoEntrada', 'fornecedor', 'user', 'estadoObj']);
