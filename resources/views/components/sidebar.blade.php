@@ -17,9 +17,16 @@
     }
 </style>
 
-<div class="sidebar-panel" style="background-color: #2c3e50;">
+<div class="sidebar-panel" style="background-color: #2c3e50 ;">
     <div class="gull-brand pr-3 text-center mt-4 mb-2 d-flex justify-content-center align-items-center">
         
+        <!-- Full Logo -->
+        <img src="{{ asset('dist-assets/images/logo.png') }}" alt="Logo Fenomenal Comercial" class="full-logo" style="width: 180px; height: auto;">
+        
+        <!-- Icon Logo for Compact Sidebar -->
+        <img src="{{ asset('dist-assets/images/logo.png') }}" alt="Icon Logo Fenomenal Comercial" class="icon-logo" style="width: 40px; height: auto; display: none;">
+
+        {{-- 
         <!-- Full Logo -->
         <svg class="full-logo" width="180" height="40" viewBox="0 0 340 60" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -50,6 +57,7 @@
                 <path d="M25 0 L45 0 Q50 0 50 5 L50 45 Q50 50 45 50 L25 50 Z M35 10 A15 15 0 0 0 35 40 A15 15 0 0 0 35 10" fill="url(#grad1_icon)"/>
             </g>
         </svg>
+        --}}
 
         <div class="sidebar-compact-switch ml-auto"><span></span></div>
     </div>

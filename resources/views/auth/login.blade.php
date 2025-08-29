@@ -72,23 +72,7 @@
         <div class="col-sm-5 form-section">
             <div class="login-wrapper">
                 <div class="logo-container mb-4 text-center">
-                    <svg width="340" height="60" viewBox="0 0 340 60" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" style="stop-color:#0056b3;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#007bff;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <!-- Icon -->
-                        <g transform="translate(5, 5)">
-                            <path d="M20 0 L0 0 L0 50 L20 50 L20 30 L10 30 L10 20 L20 20 Z" fill="url(#grad1)"/>
-                            <path d="M25 0 L45 0 Q50 0 50 5 L50 45 Q50 50 45 50 L25 50 Z M35 10 A15 15 0 0 0 35 40 A15 15 0 0 0 35 10" fill="url(#grad1)"/>
-                        </g>
-                        <!-- Text -->
-                        <text x="65" y="40" font-family="'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif" font-size="28" font-weight="600" fill="#333">
-                            Fenomenal <tspan font-weight="400">Comercial</tspan>
-                        </text>
-                    </svg>
+                    <img src="{{ asset('dist-assets/images/logo.png') }}" alt="Logo Fenomenal Comercial" style="width: 250px;">
                 </div>
                 <h3 class="text-center">Bem-vindo de volta!</h3>
                 <p class="text-center text-muted mb-4">Faça login para continuar</p>
