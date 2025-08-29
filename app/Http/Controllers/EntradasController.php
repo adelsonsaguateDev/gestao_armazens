@@ -123,7 +123,6 @@ class EntradasController extends Controller
             $json['success'] = true;
             $json['message'] = 'Entrada registada com sucesso.';
             $json['code'] = 200;
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
             $errors = $e->validator->errors()->all();
@@ -225,7 +224,6 @@ class EntradasController extends Controller
             $json['success'] = true;
             $json['message'] = 'Entrada atualizada com sucesso.';
             $json['code'] = 200;
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
             $errors = $e->validator->errors()->all();
@@ -268,10 +266,6 @@ class EntradasController extends Controller
                 $json['message'] = 'Ocorreu um erro ao remover a entrada.';
                 $json['code'] = 500;
             }
-        }
-        echo json_encode($json);
-    }
-}   }
         }
         echo json_encode($json);
     }
