@@ -34,7 +34,7 @@
                                         <i style="color:crimson; font-size:large" title="Estes campos permitem realizar filtros, pelos diversos paramêtros." class="fa fa-info-circle"></i>
                                     </div>
                                     <div class="col-md-12 text-right ">
-                                        <button  title="Adicionar novo produto" class="btn btn-success" type="button" data-toggle="modal" data-target="#rg_utilizador" id="btn_registar"><i class="fa fa-plus"></i> REGISTRAR FUNCIONARIO</button> 
+                                        <button  title="Adicionar novo produto" class="btn btn-success" type="button" data-toggle="modal" data-target="#rg_utilizador" id="btn_registar"><i class="fa fa-plus"></i> REGISTAR FUNCIONARIO</button> 
                                         <button  title="Imprimir um pdf" class="btn btn-info" type="button" id="print"><i class="fa fa-print"></i> PDF</button> 
                                     </div>
                                 </div>
