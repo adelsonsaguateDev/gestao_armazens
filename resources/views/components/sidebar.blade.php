@@ -17,7 +17,7 @@
     }
 </style>
 
-<div class="sidebar-panel" style="background-color: #2c3e50 ;">
+<div class="sidebar-panel">
     <div class="gull-brand pr-3 text-center mt-4 mb-2 d-flex justify-content-center align-items-center">
         
         <!-- Full Logo -->
@@ -66,23 +66,23 @@
         <div class="side-nav">
             <div class="main-menu">
                 <ul class="metismenu" id="menu">
-                    <li class="Ul_li--hover"><a href="{{ route('pagina_inicial')}}"><i class="i-Bar-Chart text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Dashboard</span></a></li>
+                    <li class="Ul_li--hover"><a href="{{ route('pagina_inicial')}}"><i class="i-Bar-Chart text-20 mr-2"></i><span class="item-name text-15">Dashboard</span></a></li>
                     
-                    <li class="Ul_li--hover"><a href="#"><i class="i-Shop-4 text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Vendas</span></a></li>
+                    <li class="Ul_li--hover"><a href="#"><i class="i-Shop-4 text-20 mr-2"></i><span class="item-name text-15">Vendas</span></a></li>
 
-                    <li class="Ul_li--hover"><a href="{{ route('entrada.list') }}"><i class="i-Full-Cart text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Entradas</span></a></li>
+                    <li class="Ul_li--hover"><a href="{{ route('entrada.list') }}"><i class="i-Full-Cart text-20 mr-2"></i><span class="item-name text-15">Entradas</span></a></li>
 
-                    <li class="Ul_li--hover"><a href="#"><i class="i-Financial text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Pagamentos</span></a></li>
+                    <li class="Ul_li--hover"><a href="#"><i class="i-Financial text-20 mr-2"></i><span class="item-name text-15">Pagamentos</span></a></li>
 
-                    <li class="Ul_li--hover"><a href="{{ route('produto.list') }}"><i class="i-Library text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Produtos</span></a></li>
-                    <li class="Ul_li--hover"><a href="{{ route('requisicao.list') }}"><i class="i-Remove-Cart text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Requisições</span></a></li>
+                    <li class="Ul_li--hover"><a href="{{ route('produto.list') }}"><i class="i-Library text-20 mr-2"></i><span class="item-name text-15">Produtos</span></a></li>
+                    <li class="Ul_li--hover"><a href="{{ route('requisicao.list') }}"><i class="i-Remove-Cart text-20 mr-2"></i><span class="item-name text-15">Requisições</span></a></li>
                     
                     @if(session('permissao_nome') == 'admin' || session('permissao_nome') == 'gestor')
                     <li class="Ul_li--hover">
-                        <a class="has-arrow" href="#"><i class="i-Gears text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Administração</span></a>
+                        <a class="has-arrow" href="#"><i class="i-Gears text-20 mr-2"></i><span class="item-name text-15">Administração</span></a>
                         <ul class="mm-collapse">
-                            <li class="Ul_li--hover"><a href="{{ route('utilizador.list') }}" ><i class="i-Administrator text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Funcionarios</span></a></li>
-                            <li class="Ul_li--hover"><a href="{{ route('relatorio.list') }}"><i class="i-Line-Chart-4 text-20 mr-2 text-white"></i><span class="item-name text-15 text-white">Relatórios</span></a></li>
+                            <li class="Ul_li--hover"><a href="{{ route('utilizador.list') }}" ><i class="i-Administrator text-20 mr-2"></i><span class="item-name text-15">Funcionarios</span></a></li>
+                            <li class="Ul_li--hover"><a href="{{ route('relatorio.list') }}"><i class="i-Line-Chart-4 text-20 mr-2"></i><span class="item-name text-15">Relatórios</span></a></li>
                         </ul>
                     </li>
                     @endif
