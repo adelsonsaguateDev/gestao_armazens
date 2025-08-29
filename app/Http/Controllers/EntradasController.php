@@ -87,8 +87,16 @@ class EntradasController extends Controller
                 'total_desconto' => 'nullable|numeric|min:0',
                 'total_iva' => 'nullable|numeric|min:0',
                 'valor_remanescente' => 'nullable|numeric|min:0',
-                'ficheiro_entrada' => 'nullable|string|max:255', // Assuming file path is stored as string
+                'ficheiro_entrada' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048', // Validar ficheiro
             ]);
+
+            if ($request->hasFile('ficheiro_entrada')) {
+                $file = $request->file('ficheiro_entrada');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                // Guardar o ficheiro em 'storage/app/public/entradas_ficheiros'
+                $file->storeAs('entradas_ficheiros', $fileName, 'public');
+                $dataEntrada['ficheiro_entrada'] = $fileName; // Guardar o nome do ficheiro na BD
+            }
 
             $dataEntrada['user_id'] = auth()->user()->id;
             $dataEntrada['estado'] = 1;
@@ -260,6 +268,10 @@ class EntradasController extends Controller
                 $json['message'] = 'Ocorreu um erro ao remover a entrada.';
                 $json['code'] = 500;
             }
+        }
+        echo json_encode($json);
+    }
+}   }
         }
         echo json_encode($json);
     }

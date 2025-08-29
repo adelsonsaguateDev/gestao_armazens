@@ -38,7 +38,7 @@
                         </div>
                         <div class="col-md-4 form-group">
                             <label for="ficheiro_entrada"><b>Ficheiro da Entrada</b></label>
-                            <input type="text" name="ficheiro_entrada" class="form-control" id="ficheiro_entrada" placeholder="Caminho do Ficheiro">
+                            <input type="file" name="ficheiro_entrada" class="form-control-file" id="ficheiro_entrada">
                         </div>
                     </div>
                 </div>

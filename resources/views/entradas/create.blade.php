@@ -92,20 +92,23 @@
         $('#registrar_entrada').click(function() {
             showLoader();
 
-            var formData = {
-                _token: '{{ csrf_token() }}',
-                tipo_entrada_id: $('#tipo_entrada_id').val(),
-                fornecedor_id: $('#fornecedor_id').val(),
-                numero_factura: $('#numero_factura').val(),
-                data_aquisicao: $('#data_aquisicao').val(),
-                data_factura: $('#data_factura').val(),
-                ficheiro_entrada: $('#ficheiro_entrada').val(),
-                total: $('#total').val(),
-                total_factura: $('#total_factura').val(),
-                total_desconto: $('#total_desconto').val(),
-                total_iva: $('#total_iva').val(),
-                valor_remanescente: $('#valor_remanescente').val()
-            };
+            var formData = new FormData();
+            formData.append('_token', '{{ csrf_token() }}');
+            formData.append('tipo_entrada_id', $('#tipo_entrada_id').val());
+            formData.append('fornecedor_id', $('#fornecedor_id').val());
+            formData.append('numero_factura', $('#numero_factura').val());
+            formData.append('data_aquisicao', $('#data_aquisicao').val());
+            formData.append('data_factura', $('#data_factura').val());
+            formData.append('total', $('#total').val());
+            formData.append('total_factura', $('#total_factura').val());
+            formData.append('total_desconto', $('#total_desconto').val());
+            formData.append('total_iva', $('#total_iva').val());
+            formData.append('valor_remanescente', $('#valor_remanescente').val());
+
+            // Anexar o ficheiro
+            if ($('#ficheiro_entrada')[0].files.length > 0) {
+                formData.append('ficheiro_entrada', $('#ficheiro_entrada')[0].files[0]);
+            }
 
             var itens = [];
             $('#itens_entrada_table tbody tr').each(function() {
@@ -122,12 +125,14 @@
                 itens.push(item);
             });
 
-            formData.itens = JSON.stringify(itens);
+            formData.append('itens', JSON.stringify(itens));
 
             $.ajax({
                 url: '{{ route('entrada.add') }}',
                 method: 'POST',
                 data: formData,
+                processData: false,  // Importante!
+                contentType: false,  // Importante!
                 dataType: 'json',
                 success: function(response) {
                     if (response.success == true) {

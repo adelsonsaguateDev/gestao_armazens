@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 26-Ago-2025 às 07:19
+-- Tempo de geração: 29-Ago-2025 às 15:05
 -- Versão do servidor: 8.3.0
 -- versão do PHP: 8.2.18
 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `contacto` varchar(100) DEFAULT NULL,
   `endereco` text,
   `user_id` bigint DEFAULT NULL,
-  `estado` bigint DEFAULT NULL,
+  `estado` bigint DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -69,21 +69,31 @@ CREATE TABLE IF NOT EXISTS `entradas` (
   `valor_remanescente` decimal(12,2) DEFAULT '0.00',
   `ficheiro_entrada` text,
   `user_id` bigint DEFAULT NULL,
-  `estado` bigint NOT NULL DEFAULT '1',
+  `estado` bigint DEFAULT '1',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `tipo_entrada_id` (`tipo_entrada_id`),
   KEY `fornecedor_id` (`fornecedor_id`),
-  KEY `estado` (`estado`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `estado_id` (`estado`)
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Extraindo dados da tabela `entradas`
 --
 
 INSERT INTO `entradas` (`id`, `tipo_entrada_id`, `fornecedor_id`, `fornecedor_ref`, `numero_factura`, `data_aquisicao`, `data_factura`, `total`, `total_factura`, `total_desconto`, `total_iva`, `valor_remanescente`, `ficheiro_entrada`, `user_id`, `estado`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'FENOMENAL COMERCIAL', 'FAC-001/2025', '2025-07-30', '2025-07-30', 5000.00, 5000.00, 0.00, 500.00, 0.00, 'entradas/fac001.pdf', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14');
+(1, 1, 1, 'FENOMENAL COMERCIAL', 'FAC-001/2025', '2025-07-30', '2025-07-30', 5000.00, 5000.00, 0.00, 500.00, 0.00, 'entradas/fac001.pdf', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(2, 1, 1, NULL, '123415', '2025-07-31', '2025-08-20', 100000.00, 25000.00, 45800.00, 5200.00, 6500.00, 'ahhhhhh', 1, 1, '2025-08-29 14:44:08', '2025-08-29 14:44:08'),
+(3, 1, 1, NULL, '123415', '2025-07-31', '2025-08-20', 100000.00, 25000.00, 45800.00, 5200.00, 6500.00, 'ahhhhhh', 1, 1, '2025-08-29 14:44:35', '2025-08-29 14:44:35'),
+(4, 1, 1, NULL, '123415', '2025-07-31', '2025-08-20', 100000.00, 25000.00, 45800.00, 5200.00, 6500.00, 'ahhhhhh', 1, 1, '2025-08-29 14:46:28', '2025-08-29 14:46:28'),
+(5, 1, 1, NULL, '123415', '2025-07-31', '2025-08-20', 100000.00, 25000.00, 45800.00, 5200.00, 6500.00, 'ahhhhhh', 1, 1, '2025-08-29 14:55:34', '2025-08-29 14:55:34'),
+(6, 1, 1, NULL, '6545644', '2025-07-29', '2025-08-27', 500000.00, 3500000.00, 0.00, 3000.00, 65000.00, '6544654', 1, 1, '2025-08-29 15:58:22', '2025-08-29 15:58:22'),
+(7, 1, 1, NULL, '6545644', '2025-07-29', '2025-08-27', 500000.00, 3500000.00, 0.00, 3000.00, 65000.00, '6544654', 1, 1, '2025-08-29 16:01:31', '2025-08-29 16:01:31'),
+(8, 1, 1, NULL, '6545644', '2025-07-29', '2025-08-27', 500000.00, 3500000.00, 0.00, 3000.00, 65000.00, '6544654', 1, 1, '2025-08-29 16:04:21', '2025-08-29 16:04:21'),
+(9, 1, 1, NULL, '64565465', '2025-08-20', '2025-08-30', 150000.00, 2500.00, 2000.00, 4000.00, NULL, '564645', 1, 1, '2025-08-29 16:27:06', '2025-08-29 16:27:06'),
+(10, 1, 1, NULL, '64565465', '2025-08-20', '2025-08-30', 150000.00, 2500.00, 2000.00, 4000.00, NULL, '564645', 1, 1, '2025-08-29 16:27:36', '2025-08-29 16:27:36'),
+(11, 1, 1, NULL, '64565465', '2025-08-20', '2025-08-30', 150000.00, 2500.00, 2000.00, 4000.00, NULL, '564645', 1, 1, '2025-08-29 16:27:49', '2025-08-29 16:27:49');
 
 -- --------------------------------------------------------
 
@@ -106,14 +116,14 @@ CREATE TABLE IF NOT EXISTS `entradas_itens` (
   `data_validade` date DEFAULT NULL,
   `subtotal` decimal(12,2) GENERATED ALWAYS AS ((`qtd_caixas` * `preco_compra_caixa`)) STORED,
   `user_id` bigint DEFAULT NULL,
-  `estado` bigint NOT NULL DEFAULT '1',
+  `estado` bigint DEFAULT '1',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `entrada_id` (`entrada_id`),
   KEY `produto_id` (`produto_id`),
-  KEY `estado` (`estado`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `estado_id` (`estado`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Extraindo dados da tabela `entradas_itens`
@@ -125,7 +135,8 @@ INSERT INTO `entradas_itens` (`id`, `entrada_id`, `produto_id`, `codigo_barras_l
 (3, 1, 3, 'PB003-L1', 8, 1, 220.00, 220.00, 300.00, 300.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
 (4, 1, 4, 'PB004-L1', 12, 1, 145.00, 145.00, 200.00, 200.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
 (5, 1, 5, 'PB005-L1', 2, 1, 800.00, 800.00, 1000.00, 1000.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
-(6, 1, 6, 'PB006-L1', 3, 1, 450.00, 450.00, 600.00, 600.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14');
+(6, 1, 6, 'PB006-L1', 3, 1, 450.00, 450.00, 600.00, 600.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(7, 11, 4, NULL, 100, 3, 254.00, 150.00, 290.00, 189.00, '2027-10-26', 1, 1, '2025-08-29 16:27:49', '2025-08-29 16:27:49');
 
 -- --------------------------------------------------------
 
@@ -138,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `estados` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) DEFAULT NULL,
   `descricao` text,
-  `estado` bigint DEFAULT NULL,
+  `estado_id` bigint DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -148,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `estados` (
 -- Extraindo dados da tabela `estados`
 --
 
-INSERT INTO `estados` (`id`, `nome`, `descricao`, `estado`, `created_at`, `updated_at`) VALUES
+INSERT INTO `estados` (`id`, `nome`, `descricao`, `estado_id`, `created_at`, `updated_at`) VALUES
 (1, 'Activo', 'Registo activo no sistema', NULL, '2025-08-03 08:57:12', '2025-08-04 08:57:26'),
 (2, 'Inactivo', 'Registo inactivo no sistema', NULL, '2025-08-05 08:57:17', '2025-08-15 08:57:30'),
 (3, 'Pendente', 'Registo pendente', NULL, '2025-08-06 08:57:22', '2025-08-11 08:57:33');
@@ -184,7 +195,7 @@ CREATE TABLE IF NOT EXISTS `fornecedores` (
   `email` varchar(100) DEFAULT NULL,
   `endereco` text,
   `user_id` bigint DEFAULT NULL,
-  `estado` bigint DEFAULT NULL,
+  `estado` bigint DEFAULT '1',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -213,7 +224,7 @@ CREATE TABLE IF NOT EXISTS `historico` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `historico`
@@ -313,7 +324,17 @@ INSERT INTO `historico` (`id`, `descricao`, `tabela`, `row_id`, `user_id`, `crea
 (91, 'Registou o utilizador Isabel Guivalar.', 'users', 6, 1, '2025-08-18 20:34:10', '2025-08-18 20:34:10'),
 (92, 'Actualizou o funcionario Isabel Guivalar', 'users', 6, 6, '2025-08-18 20:38:01', '2025-08-18 20:38:01'),
 (93, 'Activou o produto BUSKOLAMIN (BUTILBROMETO DE HIOSCINA) 10MG CX. 20COMP..', 'produtos', 1, 1, '2025-08-20 21:08:15', '2025-08-20 21:08:15'),
-(94, 'Registou a requisição 25.', 'requisicoes', 25, 1, '2025-08-22 10:26:04', '2025-08-22 10:26:04');
+(94, 'Registou a requisição 25.', 'requisicoes', 25, 1, '2025-08-22 10:26:04', '2025-08-22 10:26:04'),
+(95, 'Actualizou o produto Agrafo 80/12', 'produtos', 12, 1, '2025-08-26 11:46:24', '2025-08-26 11:46:24'),
+(96, 'Registou o produto teste.', 'produtos', 33, 1, '2025-08-28 09:42:27', '2025-08-28 09:42:27'),
+(97, 'Registou o produto Água Namaacha 500 ML.', 'produtos', 34, 1, '2025-08-28 10:42:34', '2025-08-28 10:42:34'),
+(98, 'Registou o produto acqcqqc.', 'produtos', 35, 1, '2025-08-28 10:44:49', '2025-08-28 10:44:49'),
+(99, 'Registou o produto Cola de Sapatos 4l Azever.', 'produtos', 36, 1, '2025-08-28 10:45:30', '2025-08-28 10:45:30'),
+(100, 'Registou o produto Tecido de Linho Castanho.', 'produtos', 37, 1, '2025-08-28 15:08:22', '2025-08-28 15:08:22'),
+(101, 'Registou o produto Tecido de Linho Castanho.', 'produtos', 38, 1, '2025-08-28 15:15:44', '2025-08-28 15:15:44'),
+(102, 'Registou o produto Tecido de Linho Castanho.', 'produtos', 39, 1, '2025-08-28 15:21:28', '2025-08-28 15:21:28'),
+(103, 'Registou o produto Tecido de Lingo Creme.', 'produtos', 40, 1, '2025-08-28 15:22:52', '2025-08-28 15:22:52'),
+(104, 'Registou a entrada Nº 11 com 1 itens.', 'entradas', 11, 1, '2025-08-29 16:27:49', '2025-08-29 16:27:49');
 
 -- --------------------------------------------------------
 
@@ -432,14 +453,14 @@ CREATE TABLE IF NOT EXISTS `produtos` (
   `stock_minimo` int DEFAULT '0',
   `imagem` varchar(255) DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
-  `estado` bigint NOT NULL DEFAULT '1',
+  `estado` bigint DEFAULT '1',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `unidade_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `estado` (`estado`),
+  KEY `estado_id` (`estado`),
   KEY `fk_produtos_unidades` (`unidade_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Extraindo dados da tabela `produtos`
@@ -457,7 +478,7 @@ INSERT INTO `produtos` (`id`, `codigo_barras`, `nome`, `descricao`, `stock_minim
 (9, 'PB009', 'Cinta elástica grande', 'Cinta elástica grande', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
 (10, 'PB010', 'Cinta elástica pequena', 'Cinta elástica pequena', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
 (11, 'PB011', 'Agrafo 10/13', 'Agrafo 10/13', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 4),
-(12, 'PB012', 'Agrafo 80/12', 'Agrafo 80/12', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 4),
+(12, 'PB012', 'Agrafo 80/12', 'Agrafo 80/12', 25, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 11:46:24', 4),
 (13, 'PB013', 'Caixinha de Agrafo montagem N-21', 'Caixinha de Agrafo montagem N-21', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 4),
 (14, 'PB014', 'Encaixo', 'Encaixo', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
 (15, 'PB015', 'Cola (contato, Spray) 1L', 'Cola 1L', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 5),
@@ -477,7 +498,10 @@ INSERT INTO `produtos` (`id`, `codigo_barras`, `nome`, `descricao`, `stock_minim
 (29, 'PB029', 'Placa Cinzenta 5cm x 75', 'Placa Cinzenta 5cm x 75', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 3),
 (30, 'PB030', 'Enchimento', 'Enchimento', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 7),
 (31, 'PB031', 'Flocos', 'Flocos', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 7),
-(32, 'PB032', 'Placa 10 cm', 'Placa 10 cm', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 3);
+(32, 'PB032', 'Placa 10 cm', 'Placa 10 cm', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 3),
+(40, '4564654', 'Tecido de Linho', 'Tecido de Lingo Creme', 150, 'Captura de ecrã 2025-08-28 150708_1756387372.png', 1, 1, '2025-08-28 15:22:52', '2025-08-28 15:22:52', 1),
+(34, 'PB994', 'Agua Namacha', 'Água Namaacha 500 ML', 150, NULL, 1, 1, '2025-08-28 10:42:34', '2025-08-28 10:42:34', NULL),
+(39, '946546532', 'Tecido de Linho', 'Tecido de Linho Castanho', 45, 'Outubro_Rosa_1756387288.png', 1, 1, '2025-08-28 15:21:28', '2025-08-28 15:21:28', 1);
 
 -- --------------------------------------------------------
 
@@ -546,12 +570,12 @@ CREATE TABLE IF NOT EXISTS `saidas` (
   `data_saida` date NOT NULL,
   `total` decimal(12,2) DEFAULT '0.00',
   `user_id` bigint DEFAULT NULL,
-  `estado` bigint NOT NULL DEFAULT '1',
+  `estado` bigint DEFAULT '1',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `tipo_saida_id` (`tipo_saida_id`),
-  KEY `estado` (`estado`)
+  KEY `estado_id` (`estado`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -579,14 +603,14 @@ CREATE TABLE IF NOT EXISTS `saidas_itens` (
   `preco_venda_caixa` decimal(12,2) DEFAULT NULL,
   `subtotal` decimal(12,2) GENERATED ALWAYS AS (((`qtd_caixas` * coalesce(`preco_venda_caixa`,0)) + (`qtd_unidades` * `preco_venda_unitario`))) STORED,
   `user_id` bigint DEFAULT NULL,
-  `estado` bigint NOT NULL DEFAULT '1',
+  `estado` bigint DEFAULT '1',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `saida_id` (`saida_id`),
   KEY `entrada_item_id` (`entrada_item_id`),
   KEY `produto_id` (`produto_id`),
-  KEY `estado` (`estado`)
+  KEY `estado_id` (`estado`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -612,7 +636,7 @@ CREATE TABLE IF NOT EXISTS `tipos_entradas` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) DEFAULT NULL,
   `descricao` text,
-  `estado` bigint DEFAULT NULL,
+  `estado` bigint DEFAULT '1',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -638,7 +662,7 @@ CREATE TABLE IF NOT EXISTS `tipos_saidas` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) DEFAULT NULL,
   `descricao` text,
-  `estado` bigint DEFAULT NULL,
+  `estado` bigint DEFAULT '1',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -664,7 +688,7 @@ CREATE TABLE IF NOT EXISTS `unidades` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
   `sigla` varchar(10) NOT NULL,
-  `estado` bigint NOT NULL DEFAULT '1',
+  `estado` bigint DEFAULT '1',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
