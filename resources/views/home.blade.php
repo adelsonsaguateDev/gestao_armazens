@@ -21,7 +21,7 @@
                 <div class="col-lg-6 col-md-12">
                     {{-- Assuming user is authenticated and you can get their name --}}
                     <h2>Olá, {{ Auth::user()->name ?? 'Utilizador' }}!</h2>
-                    <p>Bem-vindo de volta ao seu painel de controlo.</p>
+                    <p>Bem-vindo de volta ao seu painel de controle.</p>
                 </div>
                 <div class="col-lg-6 col-md-12 text-lg-right">
                     <a href="#" class="btn btn-primary mb-2">Nova Venda</a>
@@ -99,7 +99,7 @@
 
             <!-- Row 3: Charts -->
             <div class="row">
-                <div class="col-lg-8 col-md-12">
+                <div class="col-lg-6 col-md-6">
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="card-title">Requisições nos Últimos 6 Meses</div>
@@ -107,10 +107,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-12">
+                <div class="col-lg-6 col-md-12">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <div class="card-title">Status das Requisições</div>
+                            <div class="card-title">Estado das Requisições</div>
                             <div id="echartPie" style="height: 300px;"></div>
                             {{-- NOTE: You need to update the data source for this pie chart in your JS file --}}
                             {{-- to show stats like {value:335, name:'Aprovadas'}, {value:10, name:'Pendentes'}, etc. --}}
@@ -131,7 +131,7 @@
                                         <tr>
                                             <th scope="col">Produto</th>
                                             <th scope="col">Qtd.</th>
-                                            <th scope="col">Ação</th>
+                                            <th scope="col">Acção</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -156,7 +156,7 @@
                 <div class="col-lg-6 col-md-12">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <div class="card-title">Atividade Recente</div>
+                            <div class="card-title">Actividade Recente</div>
                             <div class="ul-activity">
                                 {{-- Loop through $atividades_recentes from your controller --}}
                                 {{-- Example: $atividade->icon = 'i-Add-User', $atividade->descricao = 'Novo funcionário adicionado' --}}
@@ -169,7 +169,7 @@
                                         </div>
                                     </div>
                                 @empty
-                                    <p class="text-center">Nenhuma atividade recente para mostrar.</p>
+                                    <p class="text-center">Nenhuma actividade recente para mostrar.</p>
                                 @endforelse
                             </div>
                         </div>
