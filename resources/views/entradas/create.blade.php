@@ -53,6 +53,18 @@
 
         hideLoader();
 
+        function calculateTotals() {
+            var total_iva = 0;
+            $('#itens_entrada_table tbody tr').each(function() {
+                var preco_compra_caixa = parseFloat($(this).find('.preco_compra_caixa').val()) || 0;
+                var qtd_caixas = parseInt($(this).find('.qtd_caixas').val()) || 0;
+                var iva = parseFloat($(this).find('.iva').val()) || 0;
+                var subtotal = preco_compra_caixa * qtd_caixas;
+                total_iva += subtotal * (iva / 100);
+            });
+            $('#total_iva_sum').text(total_iva.toFixed(2));
+        }
+
         // Adicionar item
         $('#add_item_entrada').click(function() {
             var rowIndex = $('#itens_entrada_table tbody tr').length;
@@ -72,6 +84,7 @@
                     <td><input type="number" class="form-control preco_compra_unitario" name="itens[${rowIndex}][preco_compra_unitario]" step="0.01" required></td>
                     <td><input type="number" class="form-control preco_venda_caixa" name="itens[${rowIndex}][preco_venda_caixa]" step="0.01" required></td>
                     <td><input type="number" class="form-control preco_venda_unitario" name="itens[${rowIndex}][preco_venda_unitario]" step="0.01" required></td>
+                    <td><input type="number" class="form-control iva" name="itens[${rowIndex}][iva]" step="0.01"></td>
                     <td><input type="date" class="form-control data_validade" name="itens[${rowIndex}][data_validade]"></td>
                     <td><button type="button" class="btn btn-danger btn-sm remove_item_entrada">Remover</button></td>
                 </tr>
@@ -81,11 +94,18 @@
             $(`select[name="itens[${rowIndex}][produto_id]"]`).select2({
                 allowClear: true
             });
+            calculateTotals();
         });
 
         // Remover item
         $(document).on('click', '.remove_item_entrada', function() {
             $(this).closest('tr').remove();
+            calculateTotals();
+        });
+
+        // Calcular totais ao alterar valores
+        $(document).on('input', '.qtd_caixas, .preco_compra_caixa, .iva', function() {
+            calculateTotals();
         });
 
         // Submeter formulário com AJAX
@@ -120,6 +140,7 @@
                     preco_compra_unitario: $(this).find('.preco_compra_unitario').val(),
                     preco_venda_caixa: $(this).find('.preco_venda_caixa').val(),
                     preco_venda_unitario: $(this).find('.preco_venda_unitario').val(),
+                    iva: $(this).find('.iva').val(),
                     data_validade: $(this).find('.data_validade').val()
                 };
                 itens.push(item);

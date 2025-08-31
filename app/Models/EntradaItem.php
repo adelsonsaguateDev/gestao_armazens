@@ -21,6 +21,7 @@ class EntradaItem extends Model
         'preco_compra_unitario',
         'preco_venda_caixa',
         'preco_venda_unitario',
+        'iva',
         'data_validade',
         'subtotal',
         'user_id',

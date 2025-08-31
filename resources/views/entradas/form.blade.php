@@ -62,6 +62,7 @@
                         <th>Preço Compra Unitário<span class="obrigatorio">*</span></th>
                         <th>Preço Venda Caixa<span class="obrigatorio">*</span></th>
                         <th>Preço Venda Unitário<span class="obrigatorio">*</span></th>
+                        <th>IVA (%)</th>
                         <th>Data Validade</th>
                         <th>Ações</th>
                     </tr>
@@ -69,6 +70,13 @@
                 <tbody>
                     <!-- Linhas de item serão adicionadas aqui via JS -->
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="7" style="text-align: right;">Total:</th>
+                        <th id="total_iva_sum">0.00</th>
+                        <th colspan="2"></th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
         <div class="row mt-3">
