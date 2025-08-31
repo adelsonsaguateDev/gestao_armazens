@@ -42,7 +42,6 @@
                                 </p>
                             </div>
                             <div class="col-md-6">
-                                <p><strong>Total Geral:</strong> {{ number_format($entrada->total, 2, ',', '.') }}</p>
                                 <p><strong>Total Factura:</strong> {{ number_format($entrada->total_factura, 2, ',', '.') }}
                                 </p>
                                 <p><strong>Total Desconto:</strong>

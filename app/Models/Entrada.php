@@ -18,7 +18,6 @@ class Entrada extends Model
         'numero_factura',
         'data_aquisicao',
         'data_factura',
-        'total',
         'total_factura',
         'total_desconto',
         'total_iva',

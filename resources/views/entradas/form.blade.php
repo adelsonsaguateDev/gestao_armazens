@@ -26,19 +26,42 @@
                         </div>
                         <div class="col-md-4 form-group">
                             <label for="numero_factura"><b>Nº da Factura</b></label>
-                            <input type="text" name="numero_factura" class="form-control" id="numero_factura" placeholder="Número da Factura">
+                            <input type="text" name="numero_factura" class="form-control" id="numero_factura"
+                                placeholder="Número da Factura">
                         </div>
                         <div class="col-md-4 form-group">
-                            <label for="data_aquisicao"><b>Data de Aquisição</b><span class="obrigatorio">*</span></label>
-                            <input type="date" name="data_aquisicao" class="form-control" id="data_aquisicao" required>
+                            <label for="data_aquisicao"><b>Data de Aquisição</b><span
+                                    class="obrigatorio">*</span></label>
+                            <input type="date" name="data_aquisicao" class="form-control" id="data_aquisicao"
+                                required>
                         </div>
                         <div class="col-md-4 form-group">
                             <label for="data_factura"><b>Data da Factura</b><span class="obrigatorio">*</span></label>
                             <input type="date" name="data_factura" class="form-control" id="data_factura" required>
                         </div>
                         <div class="col-md-4 form-group">
+                            <label for="total_factura"><b>Total Factura</b><span class="obrigatorio">*</span></label>
+                            <input type="number" name="total_factura" class="form-control" id="total_factura"
+                                step="0.01" required>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="total_desconto"><b>Total Desconto</b></label>
+                            <input type="number" name="total_desconto" class="form-control" id="total_desconto"
+                                step="0.01">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="total_iva"><b>Total IVA</b></label>
+                            <input type="number" name="total_iva" class="form-control" id="total_iva" step="0.01">
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label for="valor_remanescente"><b>Valor Remanescente</b></label>
+                            <input type="number" name="valor_remanescente" class="form-control" id="valor_remanescente"
+                                step="0.01">
+                        </div>
+                        <div class="col-md-4 form-group">
                             <label for="ficheiro_entrada"><b>Ficheiro da Entrada</b></label>
-                            <input type="file" name="ficheiro_entrada" class="form-control-file" id="ficheiro_entrada">
+                            <input type="file" name="ficheiro_entrada" class="form-control-file"
+                                id="ficheiro_entrada">
                         </div>
                     </div>
                 </div>
@@ -78,28 +101,6 @@
                     </tr>
                 </tfoot>
             </table>
-        </div>
-        <div class="row mt-3">
-            <div class="col-md-4 form-group">
-                <label for="total"><b>Total Geral</b><span class="obrigatorio">*</span></label>
-                <input type="number" name="total" class="form-control" id="total" step="0.01" required>
-            </div>
-            <div class="col-md-4 form-group">
-                <label for="total_factura"><b>Total Factura</b><span class="obrigatorio">*</span></label>
-                <input type="number" name="total_factura" class="form-control" id="total_factura" step="0.01" required>
-            </div>
-            <div class="col-md-4 form-group">
-                <label for="total_desconto"><b>Total Desconto</b></label>
-                <input type="number" name="total_desconto" class="form-control" id="total_desconto" step="0.01">
-            </div>
-            <div class="col-md-4 form-group">
-                <label for="total_iva"><b>Total IVA</b></label>
-                <input type="number" name="total_iva" class="form-control" id="total_iva" step="0.01">
-            </div>
-            <div class="col-md-4 form-group">
-                <label for="valor_remanescente"><b>Valor Remanescente</b></label>
-                <input type="number" name="valor_remanescente" class="form-control" id="valor_remanescente" step="0.01">
-            </div>
         </div>
     </div>
 </div>

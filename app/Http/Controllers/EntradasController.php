@@ -82,7 +82,6 @@ class EntradasController extends Controller
                 'numero_factura' => 'nullable|string|max:45',
                 'data_aquisicao' => 'required|date',
                 'data_factura' => 'required|date',
-                'total' => 'required|numeric|min:0',
                 'total_factura' => 'required|numeric|min:0',
                 'total_desconto' => 'nullable|numeric|min:0',
                 'total_iva' => 'nullable|numeric|min:0',
