@@ -7,19 +7,17 @@ CREATE TABLE estados (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (estado) REFERENCES estados(id)
-
 );
 
 -- Tipos de Entradas
 CREATE TABLE tipos_entradas (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL, 
+    nome VARCHAR(100) NOT NULL,
     descricao TEXT,
     estado BIGINT NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (estado) REFERENCES estados(id)
-
 );
 
 -- Tipos de Saídas
@@ -31,7 +29,6 @@ CREATE TABLE tipos_saidas (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (estado) REFERENCES estados(id)
-
 );
 
 -- Fornecedores
@@ -77,31 +74,42 @@ CREATE TABLE produtos (
     FOREIGN KEY (estado) REFERENCES estados(id)
 );
 
-
-
 CREATE TABLE entradas (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    tipo_entrada_id BIGINT NOT NULL,         -- tipo de entrada (compra, transferência, inventário)
-    fornecedor_id BIGINT NULL,               -- fornecedor, se houver
-    fornecedor_ref VARCHAR(100),             -- referência do fornecedor (nome ou código)
-    numero_factura VARCHAR(45),              -- número da factura física
-    data_aquisicao DATE NOT NULL,            -- data em que o produto foi adquirido
-    data_factura DATE NOT NULL,              -- data da factura
-    total NUMERIC(12,2) DEFAULT 0,          -- total do registo
-    total_factura NUMERIC(12,2) DEFAULT 0,  -- total da factura
-    total_desconto NUMERIC(12,2) DEFAULT 0, -- total de descontos aplicados
-    total_iva NUMERIC(12,2) DEFAULT 0,      -- total do imposto aplicado
-    valor_remanescente NUMERIC(12,2) DEFAULT 0, -- valor restante, se aplicável
-    ficheiro_entrada TEXT,                   -- caminho do ficheiro da factura
-    user_id BIGINT NULL,                     -- quem registou a entrada
-    estado BIGINT NOT NULL DEFAULT 1,     -- estado do registo (terminado, pendente, etc.)
+    tipo_entrada_id BIGINT NOT NULL,
+    -- tipo de entrada (compra, transferência, inventário)
+    fornecedor_id BIGINT NULL,
+    -- fornecedor, se houver
+    fornecedor_ref VARCHAR(100),
+    -- referência do fornecedor (nome ou código)
+    numero_factura VARCHAR(45),
+    -- número da factura física
+    data_aquisicao DATE NOT NULL,
+    -- data em que o produto foi adquirido
+    data_factura DATE NOT NULL,
+    -- data da factura
+    total NUMERIC(12, 2) DEFAULT 0,
+    -- total do registo
+    total_factura NUMERIC(12, 2) DEFAULT 0,
+    -- total da factura
+    total_desconto NUMERIC(12, 2) DEFAULT 0,
+    -- total de descontos aplicados
+    total_iva NUMERIC(12, 2) DEFAULT 0,
+    -- total do imposto aplicado
+    valor_remanescente NUMERIC(12, 2) DEFAULT 0,
+    -- valor restante, se aplicável
+    ficheiro_entrada TEXT,
+    -- caminho do ficheiro da factura
+    user_id BIGINT NULL,
+    -- quem registou a entrada
+    estado BIGINT NOT NULL DEFAULT 1,
+    -- estado do registo (terminado, pendente, etc.)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (tipo_entrada_id) REFERENCES tipos_entradas(id),
     FOREIGN KEY (fornecedor_id) REFERENCES fornecedores(id),
     FOREIGN KEY (estado) REFERENCES estados(id)
 );
-
 
 -- Entradas Itens (Lotes)
 CREATE TABLE entradas_itens (
@@ -111,12 +119,12 @@ CREATE TABLE entradas_itens (
     codigo_barras_lote VARCHAR(100),
     qtd_caixas INT DEFAULT 0,
     qtd_por_caixa INT DEFAULT 1,
-    preco_compra_caixa NUMERIC(12,2) NOT NULL,
-    preco_compra_unitario NUMERIC(12,2) NOT NULL,
-    preco_venda_caixa NUMERIC(12,2) NOT NULL,
-    preco_venda_unitario NUMERIC(12,2) NOT NULL,
+    preco_compra_caixa NUMERIC(12, 2) NOT NULL,
+    preco_compra_unitario NUMERIC(12, 2) NOT NULL,
+    preco_venda_caixa NUMERIC(12, 2) NOT NULL,
+    preco_venda_unitario NUMERIC(12, 2) NOT NULL,
     data_validade DATE NULL,
-    subtotal NUMERIC(12,2) GENERATED ALWAYS AS (qtd_caixas * preco_compra_caixa) STORED,
+    subtotal NUMERIC(12, 2) GENERATED ALWAYS AS (qtd_caixas * preco_compra_caixa) STORED,
     user_id BIGINT NULL,
     estado BIGINT NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -127,38 +135,71 @@ CREATE TABLE entradas_itens (
 );
 
 -- Saídas
-CREATE TABLE saidas (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    tipo_saida_id BIGINT NOT NULL,
-    data_saida DATE NOT NULL,
-    total NUMERIC(12,2) DEFAULT 0,
-    user_id BIGINT NULL,
-    estado BIGINT NOT NULL DEFAULT 1,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (tipo_saida_id) REFERENCES tipos_saidas(id),
-    FOREIGN KEY (estado) REFERENCES estados(id)
-);
+DROP TABLE IF EXISTS `saidas`;
+
+CREATE TABLE IF NOT EXISTS `saidas` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `cliente_id` BIGINT UNSIGNED DEFAULT NULL,
+    `tipo_saida_id` BIGINT UNSIGNED NOT NULL,
+    `data` DATE NOT NULL,
+    `valor_total` DECIMAL(12, 2) DEFAULT NULL,
+    `valor_total_iva` DECIMAL(12, 2) NOT NULL DEFAULT '0.00',
+    `valor_pago` DECIMAL(12, 2) DEFAULT NULL,
+    `valor_remanescente` DECIMAL(12, 2) DEFAULT NULL,
+    `desconto` DECIMAL(12, 2) DEFAULT NULL,
+    `valor_entregue` DECIMAL(12, 2) DEFAULT NULL,
+    `trocos` DECIMAL(12, 2) DEFAULT NULL,
+    `tipo_pagamento_id` BIGINT UNSIGNED DEFAULT NULL,
+    `numero` INT DEFAULT NULL,
+    `numero_cotacao` VARCHAR(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `validade_cotacao` DATE DEFAULT NULL,
+    `slip` VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `numero_factura` VARCHAR(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `estado_pagamento` ENUM('pago', 'nao_pago', 'parcial') COLLATE utf8mb4_unicode_ci DEFAULT 'pago',
+    `activo` ENUM('1', '0', '2', '3') COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '1 => activo, 0 => eliminado, 2 => ..., 3 => devolvida',
+    `user_id` BIGINT UNSIGNED DEFAULT NULL,
+    `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `saidas_user_id_foreign` (`user_id`),
+    KEY `saidas_cliente_id_foreign` (`cliente_id`),
+    KEY `saidas_tipo_saida_id_foreign` (`tipo_saida_id`),
+    KEY `saidas_tipo_pagamento_id_foreign` (`tipo_pagamento_id`),
+    KEY `idx_data` (`data`),
+    KEY `idx_activo` (`activo`),
+    KEY `idx_estado_pagamento` (`estado_pagamento`),
+    KEY `idx_saidas_id` (`id`),
+    KEY `idx_saidas_tipo_saida_id` (`tipo_saida_id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 -- Saídas Itens
-CREATE TABLE saidas_itens (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    saida_id BIGINT NOT NULL,
-    entrada_item_id BIGINT NOT NULL,
-    produto_id BIGINT NOT NULL,
-    qtd_caixas INT DEFAULT 0,
-    qtd_unidades INT DEFAULT 0,
-    preco_venda_unitario NUMERIC(12,2) NOT NULL,
-    preco_venda_caixa NUMERIC(12,2),
-    subtotal NUMERIC(12,2) GENERATED ALWAYS AS (
-        (qtd_caixas * COALESCE(preco_venda_caixa,0)) + (qtd_unidades * preco_venda_unitario)
-    ) STORED,
-    user_id BIGINT NULL,
-    estado BIGINT NOT NULL DEFAULT 1,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (saida_id) REFERENCES saidas(id) ON DELETE CASCADE,
-    FOREIGN KEY (entrada_item_id) REFERENCES entradas_itens(id),
-    FOREIGN KEY (produto_id) REFERENCES produtos(id),
-    FOREIGN KEY (estado) REFERENCES estados(id)
-);
+DROP TABLE IF EXISTS `saida_itens`;
+
+CREATE TABLE IF NOT EXISTS `saida_itens` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `saida_id` BIGINT UNSIGNED NOT NULL,
+    `produto_id` BIGINT UNSIGNED NOT NULL,
+    `entrada_item_id` BIGINT UNSIGNED DEFAULT NULL,
+    `quantidade` DECIMAL(10, 3) NOT NULL,
+    `preco_unitario` DECIMAL(12, 2) NOT NULL,
+    `preco_compra` DECIMAL(12, 2) NOT NULL,
+    `iva` DECIMAL(12, 2) NOT NULL DEFAULT '0.00',
+    `valor_iva` DECIMAL(12, 2) NOT NULL DEFAULT '0.00',
+    `custo` DECIMAL(12, 2) NOT NULL,
+    `desconto_percentual` DECIMAL(5, 2) DEFAULT NULL,
+    `desconto_valor` DECIMAL(12, 2) NOT NULL DEFAULT '0.00',
+    `tipo_motivo` INT DEFAULT NULL COMMENT '2=>fora_do_prazo, 5=>danificado, 1=>saida_armazem, 4=>oferta, 3=>outro',
+    `motivo` TEXT COLLATE utf8mb4_unicode_ci,
+    `user_id` BIGINT UNSIGNED DEFAULT NULL,
+    `activo` ENUM('1', '0', '2', '3') COLLATE utf8mb4_unicode_ci NOT NULL,
+    `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `saida_itens_user_id_foreign` (`user_id`),
+    KEY `saida_itens_saida_id_foreign` (`saida_id`),
+    KEY `saida_itens_entrada_item_id_foreign` (`entrada_item_id`),
+    KEY `idx_produto_id` (`produto_id`),
+    KEY `idx_activo` (`activo`),
+    KEY `idx_tipo_motivo` (`tipo_motivo`),
+    KEY `idx_saida_itens_saida_id` (`saida_id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
