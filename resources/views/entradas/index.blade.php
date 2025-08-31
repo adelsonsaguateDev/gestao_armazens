@@ -74,14 +74,14 @@
                                     <div class="col-md-3 mb-3">
                                         <label for="data_inicio_filtro"
                                             style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Data
-                                            Início</label>
+                                            Início Aquisição</label>
                                         <input type="date" class="form-control" name="data_inicio_filtro"
                                             id="data_inicio_filtro" />
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <label for="data_fim_filtro"
                                             style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Data
-                                            Fim</label>
+                                            Fim Aquisição</label>
                                         <input type="date" class="form-control" name="data_fim_filtro"
                                             id="data_fim_filtro" />
                                     </div>

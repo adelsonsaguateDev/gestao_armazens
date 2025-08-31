@@ -48,10 +48,13 @@ $parametro4 = isset($_SESSION['parametro4'] ) ? $_SESSION['parametro4'] : "";
         <tr>
             <td style="width: 100%;text-align: center; color: #444444;" class="text-center">
                 <div class="invoice-desc" style="text-align: center; padding-top: 0; margin-top: 0">
-                    <img style="width: 80px" src="./img/logo.png" alt="Logo"><br><br>
+                    <img style="width: 150px" src="./img/logo.png" alt="Logo"><br><br>
 
-                    SISTEMA DE GESTÃO DE ARMAZENS<br/>
-                    Email: gestao_armazens@gmail.com
+                    <p style="font-size: large;">Vendas de Material de Mobiliário, Napas e Veludos<br/>
+                    Bairro de Mavalane A, Maputo<br/>
+                    Rua Matchedje nº 4039<br/>
+                    Cel: +258 84 531 5759 / +258 84 445 6170<br/>
+                    NUIT: 400934088</p>
                 </div>
             </td>
         </tr>
