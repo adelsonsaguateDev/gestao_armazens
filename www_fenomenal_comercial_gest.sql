@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 29-Ago-2025 às 15:05
+-- Tempo de geração: 31-Ago-2025 às 18:29
 -- Versão do servidor: 8.3.0
 -- versão do PHP: 8.2.18
 
@@ -62,7 +62,6 @@ CREATE TABLE IF NOT EXISTS `entradas` (
   `numero_factura` varchar(45) DEFAULT NULL,
   `data_aquisicao` date NOT NULL,
   `data_factura` date NOT NULL,
-  `total` decimal(12,2) DEFAULT '0.00',
   `total_factura` decimal(12,2) DEFAULT '0.00',
   `total_desconto` decimal(12,2) DEFAULT '0.00',
   `total_iva` decimal(12,2) DEFAULT '0.00',
@@ -76,24 +75,39 @@ CREATE TABLE IF NOT EXISTS `entradas` (
   KEY `tipo_entrada_id` (`tipo_entrada_id`),
   KEY `fornecedor_id` (`fornecedor_id`),
   KEY `estado_id` (`estado`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Extraindo dados da tabela `entradas`
 --
 
-INSERT INTO `entradas` (`id`, `tipo_entrada_id`, `fornecedor_id`, `fornecedor_ref`, `numero_factura`, `data_aquisicao`, `data_factura`, `total`, `total_factura`, `total_desconto`, `total_iva`, `valor_remanescente`, `ficheiro_entrada`, `user_id`, `estado`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'FENOMENAL COMERCIAL', 'FAC-001/2025', '2025-07-30', '2025-07-30', 5000.00, 5000.00, 0.00, 500.00, 0.00, 'entradas/fac001.pdf', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
-(2, 1, 1, NULL, '123415', '2025-07-31', '2025-08-20', 100000.00, 25000.00, 45800.00, 5200.00, 6500.00, 'ahhhhhh', 1, 1, '2025-08-29 14:44:08', '2025-08-29 14:44:08'),
-(3, 1, 1, NULL, '123415', '2025-07-31', '2025-08-20', 100000.00, 25000.00, 45800.00, 5200.00, 6500.00, 'ahhhhhh', 1, 1, '2025-08-29 14:44:35', '2025-08-29 14:44:35'),
-(4, 1, 1, NULL, '123415', '2025-07-31', '2025-08-20', 100000.00, 25000.00, 45800.00, 5200.00, 6500.00, 'ahhhhhh', 1, 1, '2025-08-29 14:46:28', '2025-08-29 14:46:28'),
-(5, 1, 1, NULL, '123415', '2025-07-31', '2025-08-20', 100000.00, 25000.00, 45800.00, 5200.00, 6500.00, 'ahhhhhh', 1, 1, '2025-08-29 14:55:34', '2025-08-29 14:55:34'),
-(6, 1, 1, NULL, '6545644', '2025-07-29', '2025-08-27', 500000.00, 3500000.00, 0.00, 3000.00, 65000.00, '6544654', 1, 1, '2025-08-29 15:58:22', '2025-08-29 15:58:22'),
-(7, 1, 1, NULL, '6545644', '2025-07-29', '2025-08-27', 500000.00, 3500000.00, 0.00, 3000.00, 65000.00, '6544654', 1, 1, '2025-08-29 16:01:31', '2025-08-29 16:01:31'),
-(8, 1, 1, NULL, '6545644', '2025-07-29', '2025-08-27', 500000.00, 3500000.00, 0.00, 3000.00, 65000.00, '6544654', 1, 1, '2025-08-29 16:04:21', '2025-08-29 16:04:21'),
-(9, 1, 1, NULL, '64565465', '2025-08-20', '2025-08-30', 150000.00, 2500.00, 2000.00, 4000.00, NULL, '564645', 1, 1, '2025-08-29 16:27:06', '2025-08-29 16:27:06'),
-(10, 1, 1, NULL, '64565465', '2025-08-20', '2025-08-30', 150000.00, 2500.00, 2000.00, 4000.00, NULL, '564645', 1, 1, '2025-08-29 16:27:36', '2025-08-29 16:27:36'),
-(11, 1, 1, NULL, '64565465', '2025-08-20', '2025-08-30', 150000.00, 2500.00, 2000.00, 4000.00, NULL, '564645', 1, 1, '2025-08-29 16:27:49', '2025-08-29 16:27:49');
+INSERT INTO `entradas` (`id`, `tipo_entrada_id`, `fornecedor_id`, `fornecedor_ref`, `numero_factura`, `data_aquisicao`, `data_factura`, `total_factura`, `total_desconto`, `total_iva`, `valor_remanescente`, `ficheiro_entrada`, `user_id`, `estado`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'FENOMENAL COMERCIAL', 'FAC-001/2025', '2025-07-30', '2025-07-30', 5000.00, 0.00, 500.00, 0.00, 'entradas/fac001.pdf', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(2, 1, 1, NULL, '123415', '2025-07-31', '2025-08-20', 25000.00, 45800.00, 5200.00, 6500.00, 'ahhhhhh', 1, 1, '2025-08-29 14:44:08', '2025-08-29 14:44:08'),
+(3, 1, 1, NULL, '123415', '2025-07-31', '2025-08-20', 25000.00, 45800.00, 5200.00, 6500.00, 'ahhhhhh', 1, 1, '2025-08-29 14:44:35', '2025-08-29 14:44:35'),
+(4, 1, 1, NULL, '123415', '2025-07-31', '2025-08-20', 25000.00, 45800.00, 5200.00, 6500.00, 'ahhhhhh', 1, 1, '2025-08-29 14:46:28', '2025-08-29 14:46:28'),
+(5, 1, 1, NULL, '123415', '2025-07-31', '2025-08-20', 25000.00, 45800.00, 5200.00, 6500.00, 'ahhhhhh', 1, 1, '2025-08-29 14:55:34', '2025-08-29 14:55:34'),
+(6, 1, 1, NULL, '6545644', '2025-07-29', '2025-08-27', 3500000.00, 0.00, 3000.00, 65000.00, '6544654', 1, 1, '2025-08-29 15:58:22', '2025-08-29 15:58:22'),
+(7, 1, 1, NULL, '6545644', '2025-07-29', '2025-08-27', 3500000.00, 0.00, 3000.00, 65000.00, '6544654', 1, 1, '2025-08-29 16:01:31', '2025-08-29 16:01:31'),
+(8, 1, 1, NULL, '6545644', '2025-07-29', '2025-08-27', 3500000.00, 0.00, 3000.00, 65000.00, '6544654', 1, 1, '2025-08-29 16:04:21', '2025-08-29 16:04:21'),
+(9, 1, 1, NULL, '64565465', '2025-08-20', '2025-08-30', 2500.00, 2000.00, 4000.00, NULL, '564645', 1, 1, '2025-08-29 16:27:06', '2025-08-29 16:27:06'),
+(10, 1, 1, NULL, '64565465', '2025-08-20', '2025-08-30', 2500.00, 2000.00, 4000.00, NULL, '564645', 1, 1, '2025-08-29 16:27:36', '2025-08-29 16:27:36'),
+(11, 1, 1, NULL, '64565465', '2025-08-20', '2025-08-30', 2500.00, 2000.00, 4000.00, NULL, '564645', 1, 1, '2025-08-29 16:27:49', '2025-08-29 16:27:49'),
+(12, 1, 1, NULL, '3211654', '2025-07-29', '2025-08-14', 5000.00, 500.00, 250.00, 6500.00, '1756480759_Imagem WhatsApp 2025-08-28 às 10.48.37_c5bab748.jpg', 1, 1, '2025-08-29 17:19:20', '2025-08-29 17:19:20'),
+(13, 1, 1, NULL, '12312', '2025-08-12', '2025-08-31', 450000.00, 0.00, 0.00, 5400.00, '1756637770_Fenomenal DB (2).pdf', 3, 1, '2025-08-31 12:56:10', '2025-08-31 12:56:10'),
+(14, 1, 1, NULL, '12312', '2025-08-12', '2025-08-31', 450000.00, 0.00, 0.00, 5400.00, '1756637781_Fenomenal DB (2).pdf', 3, 1, '2025-08-31 12:56:21', '2025-08-31 12:56:21'),
+(15, 2, 1, NULL, '53145', '2025-06-11', '2025-08-11', 1000.00, 0.00, 0.00, 1000.00, NULL, 3, 1, '2025-08-31 16:26:34', '2025-08-31 16:26:34'),
+(16, 2, 1, NULL, '6545', '2025-08-06', '2027-11-21', 0.00, 0.00, 0.00, 0.00, NULL, 3, 1, '2025-08-31 17:50:27', '2025-08-31 17:50:27'),
+(17, 2, 1, NULL, '6545', '2025-08-06', '2027-11-21', 0.00, 0.00, 0.00, 0.00, NULL, 3, 1, '2025-08-31 17:55:09', '2025-08-31 17:55:09'),
+(18, 2, 1, NULL, '6545', '2025-08-06', '2027-11-21', 0.00, 0.00, 0.00, 0.00, NULL, 3, 1, '2025-08-31 17:56:05', '2025-08-31 17:56:05'),
+(19, 2, 1, NULL, '6545', '2025-08-06', '2027-11-21', 0.00, 0.00, 0.00, 0.00, NULL, 3, 1, '2025-08-31 17:56:19', '2025-08-31 17:56:19'),
+(20, 2, 1, NULL, '6545', '2025-08-06', '2027-11-21', 0.00, 0.00, 0.00, 0.00, NULL, 3, 1, '2025-08-31 17:58:43', '2025-08-31 17:58:43'),
+(21, 2, 1, NULL, '465454', '2025-02-06', '2025-12-08', 50000.00, 0.00, 0.00, 0.00, NULL, 3, 1, '2025-08-31 17:59:54', '2025-08-31 17:59:54'),
+(22, 2, 1, NULL, '465454', '2025-02-06', '2025-12-08', 50000.00, 0.00, 0.00, 0.00, NULL, 3, 1, '2025-08-31 18:05:01', '2025-08-31 18:05:01'),
+(23, 2, 1, NULL, '645465', '2025-05-19', '2025-08-31', 0.00, 0.00, 0.00, 0.00, NULL, 3, 1, '2025-08-31 18:06:23', '2025-08-31 18:06:23'),
+(24, 2, 1, NULL, '897879', '2025-08-20', '2025-08-31', 0.00, NULL, 0.00, 0.00, NULL, 3, 1, '2025-08-31 18:08:56', '2025-08-31 18:08:56'),
+(25, 1, 1, NULL, '5645', '2025-08-14', '2025-08-20', 1000.00, 0.00, 0.00, 1000.00, NULL, 3, 1, '2025-08-31 18:19:31', '2025-08-31 18:19:31'),
+(26, 1, 1, NULL, NULL, '2025-08-21', '2025-08-22', 1000.00, NULL, 0.00, 1000.00, NULL, 3, 1, '2025-08-31 18:33:29', '2025-08-31 18:33:29');
 
 -- --------------------------------------------------------
 
@@ -109,10 +123,11 @@ CREATE TABLE IF NOT EXISTS `entradas_itens` (
   `codigo_barras_lote` varchar(100) DEFAULT NULL,
   `qtd_caixas` int DEFAULT '0',
   `qtd_por_caixa` int DEFAULT '1',
-  `preco_compra_caixa` decimal(12,2) NOT NULL,
-  `preco_compra_unitario` decimal(12,2) NOT NULL,
-  `preco_venda_caixa` decimal(12,2) NOT NULL,
-  `preco_venda_unitario` decimal(12,2) NOT NULL,
+  `preco_compra_caixa` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `preco_compra_unitario` decimal(12,2) DEFAULT NULL,
+  `preco_venda_caixa` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `preco_venda_unitario` decimal(12,2) DEFAULT NULL,
+  `iva` decimal(8,2) DEFAULT '0.00',
   `data_validade` date DEFAULT NULL,
   `subtotal` decimal(12,2) GENERATED ALWAYS AS ((`qtd_caixas` * `preco_compra_caixa`)) STORED,
   `user_id` bigint DEFAULT NULL,
@@ -123,20 +138,30 @@ CREATE TABLE IF NOT EXISTS `entradas_itens` (
   KEY `entrada_id` (`entrada_id`),
   KEY `produto_id` (`produto_id`),
   KEY `estado_id` (`estado`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Extraindo dados da tabela `entradas_itens`
 --
 
-INSERT INTO `entradas_itens` (`id`, `entrada_id`, `produto_id`, `codigo_barras_lote`, `qtd_caixas`, `qtd_por_caixa`, `preco_compra_caixa`, `preco_compra_unitario`, `preco_venda_caixa`, `preco_venda_unitario`, `data_validade`, `user_id`, `estado`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'PB001-L1', 10, 1, 220.00, 220.00, 300.00, 300.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
-(2, 1, 2, 'PB002-L1', 5, 1, 185.00, 185.00, 250.00, 250.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
-(3, 1, 3, 'PB003-L1', 8, 1, 220.00, 220.00, 300.00, 300.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
-(4, 1, 4, 'PB004-L1', 12, 1, 145.00, 145.00, 200.00, 200.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
-(5, 1, 5, 'PB005-L1', 2, 1, 800.00, 800.00, 1000.00, 1000.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
-(6, 1, 6, 'PB006-L1', 3, 1, 450.00, 450.00, 600.00, 600.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
-(7, 11, 4, NULL, 100, 3, 254.00, 150.00, 290.00, 189.00, '2027-10-26', 1, 1, '2025-08-29 16:27:49', '2025-08-29 16:27:49');
+INSERT INTO `entradas_itens` (`id`, `entrada_id`, `produto_id`, `codigo_barras_lote`, `qtd_caixas`, `qtd_por_caixa`, `preco_compra_caixa`, `preco_compra_unitario`, `preco_venda_caixa`, `preco_venda_unitario`, `iva`, `data_validade`, `user_id`, `estado`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'PB001-L1', 10, 1, 220.00, 220.00, 300.00, 300.00, 0.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(2, 1, 2, 'PB002-L1', 5, 1, 185.00, 185.00, 250.00, 250.00, 0.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(3, 1, 3, 'PB003-L1', 8, 1, 220.00, 220.00, 300.00, 300.00, 0.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(4, 1, 4, 'PB004-L1', 12, 1, 145.00, 145.00, 200.00, 200.00, 0.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(5, 1, 5, 'PB005-L1', 2, 1, 800.00, 800.00, 1000.00, 1000.00, 0.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(6, 1, 6, 'PB006-L1', 3, 1, 450.00, 450.00, 600.00, 600.00, 0.00, '2026-07-30', 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
+(7, 11, 4, NULL, 100, 3, 254.00, 150.00, 290.00, 189.00, 0.00, '2027-10-26', 1, 1, '2025-08-29 16:27:49', '2025-08-29 16:27:49'),
+(8, 12, 1, NULL, 100, 20, 7500.00, 250.00, 7900.00, 280.00, 0.00, '2026-10-29', 1, 1, '2025-08-29 17:19:20', '2025-08-29 17:19:20'),
+(9, 13, 1, NULL, 150, 50, 540.00, 658.00, 510.00, 481.00, 0.00, '2026-05-15', 3, 1, '2025-08-31 12:56:10', '2025-08-31 12:56:10'),
+(10, 14, 1, NULL, 150, 50, 540.00, 658.00, 510.00, 481.00, 0.00, '2026-05-15', 3, 1, '2025-08-31 12:56:21', '2025-08-31 12:56:21'),
+(11, 14, 2, NULL, 100, 20, 2580.00, 150.00, 3500.00, 290.00, 0.00, '2025-08-31', 3, 1, '2025-08-31 12:56:21', '2025-08-31 12:56:21'),
+(12, 15, 5, NULL, 1, 1, 450.00, 250.00, 650.00, 5800.00, 16.00, '2025-08-26', 3, 1, '2025-08-31 16:26:34', '2025-08-31 16:26:34'),
+(13, 23, 5, NULL, 400, 1, 0.00, 580.00, 0.00, 680.00, 0.00, '2027-08-05', 3, 1, '2025-08-31 18:06:23', '2025-08-31 18:06:23'),
+(14, 24, 1, NULL, 10, 1, 0.00, 150.00, 0.00, 250.00, 0.00, '2025-09-18', 3, 1, '2025-08-31 18:08:56', '2025-08-31 18:08:56'),
+(15, 24, 16, NULL, 20, 1, 0.00, 520.00, 0.00, 650.00, 0.00, '2025-10-07', 3, 1, '2025-08-31 18:08:56', '2025-08-31 18:08:56'),
+(16, 25, 3, NULL, 10, 1, 0.00, 100.00, 0.00, 150.00, 0.00, '2025-12-16', 3, 1, '2025-08-31 18:19:31', '2025-08-31 18:19:31'),
+(17, 26, 2, NULL, 1000, 1, 0.00, 100.00, 0.00, 150.00, 0.00, '2026-06-06', 3, 1, '2025-08-31 18:33:29', '2025-08-31 18:33:29');
 
 -- --------------------------------------------------------
 
@@ -224,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `historico` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `historico`
@@ -334,7 +359,14 @@ INSERT INTO `historico` (`id`, `descricao`, `tabela`, `row_id`, `user_id`, `crea
 (101, 'Registou o produto Tecido de Linho Castanho.', 'produtos', 38, 1, '2025-08-28 15:15:44', '2025-08-28 15:15:44'),
 (102, 'Registou o produto Tecido de Linho Castanho.', 'produtos', 39, 1, '2025-08-28 15:21:28', '2025-08-28 15:21:28'),
 (103, 'Registou o produto Tecido de Lingo Creme.', 'produtos', 40, 1, '2025-08-28 15:22:52', '2025-08-28 15:22:52'),
-(104, 'Registou a entrada Nº 11 com 1 itens.', 'entradas', 11, 1, '2025-08-29 16:27:49', '2025-08-29 16:27:49');
+(104, 'Registou a entrada Nº 11 com 1 itens.', 'entradas', 11, 1, '2025-08-29 16:27:49', '2025-08-29 16:27:49'),
+(105, 'Registou a entrada Nº 12 com 1 itens.', 'entradas', 12, 1, '2025-08-29 17:19:20', '2025-08-29 17:19:20'),
+(106, 'Registou a entrada Nº 14 com 2 itens.', 'entradas', 14, 3, '2025-08-31 12:56:21', '2025-08-31 12:56:21'),
+(107, 'Registou a entrada Nº 15 com 1 itens.', 'entradas', 15, 3, '2025-08-31 16:26:34', '2025-08-31 16:26:34'),
+(108, 'Registou a entrada Nº 23 com 1 itens.', 'entradas', 23, 3, '2025-08-31 18:06:23', '2025-08-31 18:06:23'),
+(109, 'Registou a entrada Nº 24 com 2 itens.', 'entradas', 24, 3, '2025-08-31 18:08:56', '2025-08-31 18:08:56'),
+(110, 'Registou a entrada Nº 25 com 1 itens.', 'entradas', 25, 3, '2025-08-31 18:19:31', '2025-08-31 18:19:31'),
+(111, 'Registou a entrada Nº 26 com 1 itens.', 'entradas', 26, 3, '2025-08-31 18:33:29', '2025-08-31 18:33:29');
 
 -- --------------------------------------------------------
 
@@ -565,65 +597,75 @@ INSERT INTO `requisicoes` (`id`, `produto_id`, `quantidade`, `estado_requisicao`
 
 DROP TABLE IF EXISTS `saidas`;
 CREATE TABLE IF NOT EXISTS `saidas` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `tipo_saida_id` bigint NOT NULL,
-  `data_saida` date NOT NULL,
-  `total` decimal(12,2) DEFAULT '0.00',
-  `user_id` bigint DEFAULT NULL,
-  `estado` bigint DEFAULT '1',
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `cliente_id` bigint UNSIGNED DEFAULT NULL,
+  `tipo_saida_id` bigint UNSIGNED NOT NULL,
+  `data` date NOT NULL,
+  `valor_total` decimal(12,2) DEFAULT NULL,
+  `valor_total_iva` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `valor_pago` decimal(12,2) DEFAULT NULL,
+  `valor_remanescente` decimal(12,2) DEFAULT NULL,
+  `desconto` decimal(12,2) DEFAULT NULL,
+  `valor_entregue` decimal(12,2) DEFAULT NULL,
+  `trocos` decimal(12,2) DEFAULT NULL,
+  `tipo_pagamento_id` bigint UNSIGNED DEFAULT NULL,
+  `numero` int DEFAULT NULL,
+  `numero_cotacao` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `validade_cotacao` date DEFAULT NULL,
+  `slip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `numero_factura` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `estado_pagamento` enum('pago','nao_pago','parcial') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'pago',
+  `activo` enum('1','0','2','3') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '1 => activo, 0 => eliminado, 2 => ..., 3 => devolvida',
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `tipo_saida_id` (`tipo_saida_id`),
-  KEY `estado_id` (`estado`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Extraindo dados da tabela `saidas`
---
-
-INSERT INTO `saidas` (`id`, `tipo_saida_id`, `data_saida`, `total`, `user_id`, `estado`, `created_at`, `updated_at`) VALUES
-(1, 1, '2025-08-01', 2500.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14');
+  KEY `saidas_user_id_foreign` (`user_id`),
+  KEY `saidas_cliente_id_foreign` (`cliente_id`),
+  KEY `saidas_tipo_saida_id_foreign` (`tipo_saida_id`),
+  KEY `saidas_tipo_pagamento_id_foreign` (`tipo_pagamento_id`),
+  KEY `idx_data` (`data`),
+  KEY `idx_activo` (`activo`),
+  KEY `idx_estado_pagamento` (`estado_pagamento`),
+  KEY `idx_saidas_id` (`id`),
+  KEY `idx_saidas_tipo_saida_id` (`tipo_saida_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `saidas_itens`
+-- Estrutura da tabela `saida_itens`
 --
 
-DROP TABLE IF EXISTS `saidas_itens`;
-CREATE TABLE IF NOT EXISTS `saidas_itens` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `saida_id` bigint NOT NULL,
-  `entrada_item_id` bigint NOT NULL,
-  `produto_id` bigint NOT NULL,
-  `qtd_caixas` int DEFAULT '0',
-  `qtd_unidades` int DEFAULT '0',
-  `preco_venda_unitario` decimal(12,2) NOT NULL,
-  `preco_venda_caixa` decimal(12,2) DEFAULT NULL,
-  `subtotal` decimal(12,2) GENERATED ALWAYS AS (((`qtd_caixas` * coalesce(`preco_venda_caixa`,0)) + (`qtd_unidades` * `preco_venda_unitario`))) STORED,
-  `user_id` bigint DEFAULT NULL,
-  `estado` bigint DEFAULT '1',
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP,
+DROP TABLE IF EXISTS `saida_itens`;
+CREATE TABLE IF NOT EXISTS `saida_itens` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `saida_id` bigint UNSIGNED NOT NULL,
+  `produto_id` bigint UNSIGNED NOT NULL,
+  `entrada_item_id` bigint UNSIGNED DEFAULT NULL,
+  `quantidade` decimal(10,3) NOT NULL,
+  `preco_unitario` decimal(12,2) NOT NULL,
+  `preco_compra` decimal(12,2) NOT NULL,
+  `iva` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `valor_iva` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `custo` decimal(12,2) NOT NULL,
+  `desconto_percentual` decimal(5,2) DEFAULT NULL,
+  `desconto_valor` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `tipo_motivo` int DEFAULT NULL COMMENT '2=>fora_do_prazo, 5=>danificado, 1=>saida_armazem, 4=>oferta, 3=>outro',
+  `motivo` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `activo` enum('1','0','2','3') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `saida_id` (`saida_id`),
-  KEY `entrada_item_id` (`entrada_item_id`),
-  KEY `produto_id` (`produto_id`),
-  KEY `estado_id` (`estado`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Extraindo dados da tabela `saidas_itens`
---
-
-INSERT INTO `saidas_itens` (`id`, `saida_id`, `entrada_item_id`, `produto_id`, `qtd_caixas`, `qtd_unidades`, `preco_venda_unitario`, `preco_venda_caixa`, `user_id`, `estado`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 1, 2, 0, 300.00, 300.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
-(2, 1, 2, 2, 1, 0, 250.00, 250.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
-(3, 1, 3, 3, 1, 0, 300.00, 300.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
-(4, 1, 4, 4, 2, 0, 200.00, 200.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
-(5, 1, 5, 5, 1, 0, 1000.00, 1000.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14'),
-(6, 1, 6, 6, 1, 0, 600.00, 600.00, 1, 1, '2025-08-26 08:49:14', '2025-08-26 08:49:14');
+  KEY `saida_itens_user_id_foreign` (`user_id`),
+  KEY `saida_itens_saida_id_foreign` (`saida_id`),
+  KEY `saida_itens_entrada_item_id_foreign` (`entrada_item_id`),
+  KEY `idx_produto_id` (`produto_id`),
+  KEY `idx_activo` (`activo`),
+  KEY `idx_tipo_motivo` (`tipo_motivo`),
+  KEY `idx_saida_itens_saida_id` (`saida_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
