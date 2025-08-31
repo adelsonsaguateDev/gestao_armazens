@@ -70,14 +70,14 @@
         $('#add_item_to_cart').click(function() {
             var produto_id = $('#item_produto_id').val();
             var produto_text = $('#item_produto_id option:selected').text();
-            var qtd = $('#item_qtd').val();
+            var qtd = parseFloat($('#item_qtd').val()) || 0; // Quantity of boxes
             var tem_iva = $('#item_tem_iva').val();
             var preco_por_caixa = $('#item_preco_por_caixa').val();
-            var preco_compra_caixa = $('#item_preco_compra_caixa').val();
-            var preco_venda_caixa = $('#item_preco_venda_caixa').val();
-            var qtd_por_caixa = $('#item_qtd_por_caixa').val();
-            var preco_compra = $('#item_preco_compra').val();
-            var preco_venda = $('#item_preco_venda').val();
+            var preco_compra_caixa = parseFloat($('#item_preco_compra_caixa').val()) || 0;
+            var preco_venda_caixa = parseFloat($('#item_preco_venda_caixa').val()) || 0;
+            var qtd_por_caixa = parseFloat($('#item_qtd_por_caixa').val()) || 1; // Quantity per box
+            var preco_compra = parseFloat($('#item_preco_compra').val()) || 0; // Unit purchase price
+            var preco_venda = parseFloat($('#item_preco_venda').val()) || 0; // Unit selling price
             var data_validade = $('#item_data_validade').val();
             var iva = (tem_iva === 'sim') ? 16 : 0;
 
@@ -118,26 +118,32 @@
                 return;
             }
 
+            // Calculate final prices and quantities based on 'preco_por_caixa'
             var preco_compra_final = (preco_por_caixa === 'sim') ? preco_compra_caixa : preco_compra;
             var preco_venda_final = (preco_por_caixa === 'sim') ? preco_venda_caixa : preco_venda;
             var qtd_final = (preco_por_caixa === 'sim') ? qtd * qtd_por_caixa : qtd;
-            var preco_compra_unitario = (preco_por_caixa === 'sim') ? preco_compra_caixa / qtd_por_caixa : preco_compra;
-            var preco_venda_unitario = (preco_por_caixa === 'sim') ? preco_venda_caixa / qtd_por_caixa : preco_venda;
 
-            var total_compra = qtd * preco_compra_final;
-            var total_venda = qtd * preco_venda_final;
+            // Calculate actual unit prices for footer totals
+            var preco_compra_unitario_calculated = (preco_por_caixa === 'sim') ? preco_compra_caixa / qtd_por_caixa : preco_compra;
+            var preco_venda_unitario_calculated = (preco_por_caixa === 'sim') ? preco_venda_caixa / qtd_por_caixa : preco_venda;
+
+            var total_compra_item = qtd * preco_compra_final; // Total for the item (boxes * price per box OR quantity * unit price)
+            var total_venda_item = qtd * preco_venda_final; // Total for the item (boxes * price per box OR quantity * unit price)
+
+            // Calculate IVA value for the item
+            var iva_item_value = total_compra_item * (iva / 100);
 
             var rowIndex = $('#itens_entrada_table tbody tr').length;
             var newRow = `
                 <tr>
                     <td>${rowIndex + 1}</td>
                     <td>${produto_text}<input type="hidden" name="itens[${rowIndex}][produto_id]" value="${produto_id}"></td>
-                    <td>${qtd_final}<input type="hidden" name="itens[${rowIndex}][qtd_caixas]" value="${qtd}"><input type="hidden" name="itens[${rowIndex}][qtd_por_caixa]" value="${qtd_por_caixa || 1}"></td>
-                    <td>${preco_compra_final}<input type="hidden" name="itens[${rowIndex}][preco_compra_caixa]" value="${preco_compra_caixa}"><input type="hidden" name="itens[${rowIndex}][preco_compra_unitario]" value="${preco_compra_unitario}"></td>
-                    <td>${total_compra.toFixed(2)}</td>
-                    <td>${preco_venda_final}<input type="hidden" name="itens[${rowIndex}][preco_venda_caixa]" value="${preco_venda_caixa}"><input type="hidden" name="itens[${rowIndex}][preco_venda_unitario]" value="${preco_venda_unitario}"></td>
-                    <td>${total_venda.toFixed(2)}</td>
-                    <td>${iva}%<input type="hidden" name="itens[${rowIndex}][iva]" value="${iva}"></td>
+                    <td>${qtd_final}<input type="hidden" name="itens[${rowIndex}][qtd_caixas]" value="${qtd}"><input type="hidden" name="itens[${rowIndex}][qtd_por_caixa]" value="${qtd_por_caixa}"></td>
+                    <td>${preco_compra_final}<input type="hidden" name="itens[${rowIndex}][preco_compra_caixa]" value="${preco_compra_caixa}"><input type="hidden" name="itens[${rowIndex}][preco_compra_unitario]" value="${preco_compra_unitario_calculated}"></td>
+                    <td>${total_compra_item.toFixed(2)}</td>
+                    <td>${preco_venda_final}<input type="hidden" name="itens[${rowIndex}][preco_venda_caixa]" value="${preco_venda_caixa}"><input type="hidden" name="itens[${rowIndex}][preco_venda_unitario]" value="${preco_venda_unitario_calculated}"></td>
+                    <td>${total_venda_item.toFixed(2)}</td>
+                    <td>${iva_item_value.toFixed(2)}<input type="hidden" name="itens[${rowIndex}][iva]" value="${iva}"></td>
                     <td>${data_validade}<input type="hidden" name="itens[${rowIndex}][data_validade]" value="${data_validade}"></td>
                     <td><button type="button" class="btn btn-danger btn-sm remove_item_entrada">Remover</button></td>
                 </tr>
@@ -164,30 +170,68 @@
             calculateTotals();
         });
 
+        // Update remanescente when total_factura changes
+        $('#total_factura').on('input', function() {
+            calculateTotals();
+        });
+
         function calculateTotals() {
             var total_compra_sum = 0;
             var total_venda_sum = 0;
             var total_iva_sum = 0;
 
             $('#itens_entrada_table tbody tr').each(function() {
+                // Use qtd_caixas (quantity of boxes) and preco_compra_unitario (actual unit price) for calculations
                 var qtd_caixas = parseFloat($(this).find('input[name$="[qtd_caixas]"]').val()) || 0;
-                var preco_compra_caixa = parseFloat($(this).find('input[name$="[preco_compra_caixa]"]').val()) || 0;
-                var preco_venda_caixa = parseFloat($(this).find('input[name$="[preco_venda_caixa]"]').val()) || 0;
+                var qtd_por_caixa = parseFloat($(this).find('input[name$="[qtd_por_caixa]"]').val()) || 1;
+                var preco_compra_unitario = parseFloat($(this).find('input[name$="[preco_compra_unitario]"]').val()) || 0;
+                var preco_venda_unitario = parseFloat($(this).find('input[name$="[preco_venda_unitario]"]').val()) || 0;
                 var iva = parseFloat($(this).find('input[name$="[iva]"]').val()) || 0;
 
-                total_compra_sum += qtd_caixas * preco_compra_caixa;
-                total_venda_sum += qtd_caixas * preco_venda_caixa;
-                total_iva_sum += (qtd_caixas * preco_compra_caixa) * (iva / 100);
+                // Total items = qtd_caixas * qtd_por_caixa
+                var total_items = qtd_caixas * qtd_por_caixa;
+
+                total_compra_sum += total_items * preco_compra_unitario;
+                total_venda_sum += total_items * preco_venda_unitario;
+                total_iva_sum += (total_items * preco_compra_unitario) * (iva / 100);
             });
 
             $('#total_compra_sum').text(total_compra_sum.toFixed(2));
             $('#total_venda_sum').text(total_venda_sum.toFixed(2));
             $('#total_iva_sum').text(total_iva_sum.toFixed(2));
+
+            $('#total_iva').val(total_iva_sum.toFixed(2));
+            
+            var total_factura_input = parseFloat($('#total_factura').val()) || 0;
+            var valor_remanescente = total_factura_input - total_compra_sum;
+            $('#valor_remanescente').val(valor_remanescente.toFixed(2));
         }
 
         // Submeter formulário com AJAX
         $('#registrar_entrada').click(function() {
             showLoader();
+
+            var total_compra_sum_calculated = 0;
+            $('#itens_entrada_table tbody tr').each(function() {
+                var qtd_caixas = parseFloat($(this).find('input[name$="[qtd_caixas]"]').val()) || 0;
+                var qtd_por_caixa = parseFloat($(this).find('input[name$="[qtd_por_caixa]"]').val()) || 1;
+                var preco_compra_unitario = parseFloat($(this).find('input[name$="[preco_compra_unitario]"]').val()) || 0;
+                
+                var total_items = qtd_caixas * qtd_por_caixa;
+                total_compra_sum_calculated += total_items * preco_compra_unitario;
+            });
+
+            var total_factura_input = parseFloat($('#total_factura').val()) || 0;
+
+            if (total_factura_input < total_compra_sum_calculated) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Erro de Validação",
+                    html: "O Total da Factura não pode ser menor que o Total de Compras dos itens.",
+                });
+                hideLoader();
+                return;
+            }
 
             var formData = new FormData();
             formData.append('_token', '{{ csrf_token() }}');
@@ -196,7 +240,11 @@
             formData.append('numero_factura', $('#numero_factura').val());
             formData.append('data_aquisicao', $('#data_aquisicao').val());
             formData.append('data_factura', $('#data_factura').val());
-            
+            formData.append('total_factura', $('#total_factura').val());
+            formData.append('total_desconto', $('#total_desconto').val());
+            formData.append('total_iva', $('#total_iva').val());
+            formData.append('valor_remanescente', $('#valor_remanescente').val());
+
             // Anexar o ficheiro
             if ($('#ficheiro_entrada')[0].files.length > 0) {
                 formData.append('ficheiro_entrada', $('#ficheiro_entrada')[0].files[0]);

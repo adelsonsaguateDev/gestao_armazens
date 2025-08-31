@@ -100,13 +100,22 @@ class EntradasController extends Controller
             $dataEntrada['user_id'] = auth()->user()->id;
             $dataEntrada['estado'] = 1;
 
-            $entrada = Entrada::create($dataEntrada);
-
             // Handle Entrada Items
             $itens = json_decode($request->input('itens'), true); // Assuming items come as a JSON string
             if (empty($itens)) {
                 throw new \Exception('Nenhum item de entrada foi fornecido.');
             }
+
+            $total_compra_calculated = 0;
+            foreach ($itens as $itemData) {
+                $total_compra_calculated += ($itemData['qtd_caixas'] * $itemData['qtd_por_caixa']) * $itemData['preco_compra_unitario'];
+            }
+
+            if ($dataEntrada['total_factura'] < $total_compra_calculated) {
+                throw new \Exception('O Total da Factura não pode ser menor que o Total de Compras dos itens.');
+            }
+
+            $entrada = Entrada::create($dataEntrada);
 
             foreach ($itens as $itemData) {
                 $itemData['entrada_id'] = $entrada->id;
@@ -188,7 +197,6 @@ class EntradasController extends Controller
                 'numero_factura' => 'nullable|string|max:45',
                 'data_aquisicao' => 'required|date',
                 'data_factura' => 'required|date',
-                'total' => 'required|numeric|min:0',
                 'total_factura' => 'required|numeric|min:0',
                 'total_desconto' => 'nullable|numeric|min:0',
                 'total_iva' => 'nullable|numeric|min:0',
@@ -199,15 +207,25 @@ class EntradasController extends Controller
             $dataEntrada['user_id'] = auth()->user()->id;
             $dataEntrada['estado'] = 1;
 
+            // Handle Entrada Items
+            $itens = json_decode($request->input('itens'), true); // Assuming items come as a JSON string
+            if (empty($itens)) {
+                throw new \Exception('Nenhum item de entrada foi fornecido.');
+            }
+
+            $total_compra_calculated = 0;
+            foreach ($itens as $itemData) {
+                $total_compra_calculated += ($itemData['qtd_caixas'] * $itemData['qtd_por_caixa']) * $itemData['preco_compra_unitario'];
+            }
+
+            if ($dataEntrada['total_factura'] < $total_compra_calculated) {
+                throw new \Exception('O Total da Factura não pode ser menor que o Total de Compras dos itens.');
+            }
+
             $entrada->update($dataEntrada);
 
             // Handle Entrada Items - Delete existing and re-create
             EntradaItem::where('entrada_id', $entrada->id)->delete();
-
-            $itens = json_decode($request->input('itens'), true);
-            if (empty($itens)) {
-                throw new \Exception('Nenhum item de entrada foi fornecido.');
-            }
 
             foreach ($itens as $itemData) {
                 $itemData['entrada_id'] = $entrada->id;

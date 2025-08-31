@@ -66,8 +66,8 @@
                                 <thead>
                                     <tr>
                                         <th>Produto</th>
-                                        <th>Qtd. Caixas</th>
-                                        <th>Qtd. por Caixa</th>
+                                        <th>Qtd</th>
+                                        <th>Qtd.Caixa</th>
                                         <th>Preço Compra Caixa</th>
                                         <th>Preço Compra Unitário</th>
                                         <th>Preço Venda Caixa</th>
