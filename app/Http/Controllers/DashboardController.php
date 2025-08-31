@@ -34,10 +34,9 @@ class DashboardController extends Controller
             ->groupBy('produto_id');
 
         // Subquery for total saidas (in units)
-        $saidas = DB::table('saidas_itens as si')
-            ->join('entradas_itens as ei', 'si.entrada_item_id', '=', 'ei.id')
-            ->select('si.produto_id', DB::raw('SUM((si.qtd_caixas * ei.qtd_por_caixa) + si.qtd_unidades) as total_saidas'))
-            ->where('si.estado', 1)
+        $saidas = DB::table('saida_itens as si')
+            ->select('si.produto_id', DB::raw('SUM(si.quantidade) as total_saidas'))
+            ->where('si.activo', 1)
             ->groupBy('si.produto_id');
 
         // Main query to get products with their current stock

@@ -5,6 +5,7 @@ use App\Http\Controllers\ProdutosController;
 use App\Http\Controllers\RequisicoesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EntradasController;
+use App\Http\Controllers\SaidasController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\UtilizadorController;
 
@@ -60,6 +61,45 @@ Route::post('entrada/edit', [EntradasController::class, 'edit'])->name('entrada.
 Route::post('entrada/delete', [EntradasController::class, 'delete'])->name('entrada.delete');
 
 
+//Saidas
+Route::get('saida', [SaidasController::class, 'index'])->name('saida.list');
+Route::get('saida/create', [SaidasController::class, 'create'])->name('saida.create');
+Route::post('saidas', [SaidasController::class, 'list'])->name('saidas.list'); // Para listagem via AJAX
+Route::post('saida/add', [SaidasController::class, 'add'])->name('saida.add');
+Route::get('saida/{id}', [SaidasController::class, 'show'])->name('saida.show'); // Para formulário de edição/visualização
+Route::get('saida_detalhes/{id}', [SaidasController::class, 'show_details'])->name('saida.detalhes');
+Route::post('saida/edit', [SaidasController::class, 'edit'])->name('saida.edit');
+Route::post('saida/delete', [SaidasController::class, 'delete'])->name('saida.delete');
+
+
+
+// Saida routes
+Route::prefix('saida')->name('saida.')->group(function () {
+    Route::get('/', [SaidasController::class, 'index'])->name('list'); //
+
+    Route::post('/', [SaidasController::class, 'list'])->name('list'); // For
+
+
+    Route::get('/create', [SaidasController::class, 'create'])->name(
+        'create'
+    ); // Show create form
+    Route::post('/add', [SaidasController::class, 'add'])->name('add'); //
+
+
+    Route::get('/detalhes/{id}', [SaidasController::class, 'show_details'])->name('detalhes'); // Show details
+    Route::get('/show/{id}', [SaidasController::class, 'show'])->name(
+        'show'
+    ); // Show edit form (used by modal)
+    Route::post('/edit', [SaidasController::class, 'edit'])->name('edit'); //
+
+    Route::post('/delete', [SaidasController::class, 'delete'])->name(
+        'delete'
+    ); // Delete/deactivate saida
+
+    Route::get('/recibo/{id}', [SaidasController::class, 'recibo'])->name(
+        'recibo'
+    ); // Generate receipt
+});
 
 //Utilizador
 Route::get('utilizador', [UtilizadorController::class, 'index'])->name('utilizador.list');
