@@ -33,7 +33,7 @@
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <div class="row">
-                                                    <div class="col-md-4 form-group">
+                                                    <div class="col-md-3 form-group">
                                                         <label for="cliente_id"><b>Cliente</b></label>
                                                         <select class="form-control select2" name="cliente_id"
                                                             id="cliente_id">
@@ -47,7 +47,7 @@
 
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-4 form-group">
+                                                    <div class="col-md-3 form-group">
                                                         <label for="item_produto_id"><b>Produto</b><span
                                                                 class="obrigatorio">*</span></label>
                                                         <select class="form-control select2" name="item_produto_id" id="item_produto_id">
@@ -57,7 +57,7 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-4 form-group">
+                                                    <div class="col-md-3 form-group">
                                                         <label for="item_lote_id"><b>Lote</b><span
                                                                 class="obrigatorio">*</span></label>
                                                         <select class="form-control select2" id="item_lote_id" disabled>
@@ -77,12 +77,12 @@
                                                             step="0.01" required min="0.01">
                                                     </div>
                                                     <div class="col-md-2 form-group">
-                                                        <label for="item_total"><b>Total do Item</b></label>
+                                                        <label for="item_total"><b>Total</b></label>
                                                         <input type="number" class="form-control" id="item_total"
                                                             step="0.01" readonly>
                                                     </div>
                                                 </div>
-                                                <div class="text-right">
+                                                <div class="text-right mt-4 mb-2">
                                                     <button type="button" class="btn btn-primary btn-lg"
                                                         id="add_item_to_cart"> <i class="fas fa-cart-plus"></i> </button>
                                                 </div>
@@ -104,7 +104,7 @@
                                                     <th>Produto</th>
                                                     <th>Qtd</th>
                                                     <th>Preço Unitário</th>
-                                                    <th>Total do Item</th>
+                                                    <th>Total</th>
                                                     <th>Acções</th>
                                                 </tr>
                                             </thead>

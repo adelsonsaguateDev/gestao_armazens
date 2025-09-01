@@ -22,46 +22,124 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="row">
+                            <!-- Sale Information -->
                             <div class="col-md-6">
-                                <p><strong>Tipo de Saída:</strong> {{ $saida->tipoSaida->nome ?? 'N/A' }}</p>
-                                <p><strong>Cliente:</strong> {{ $saida->cliente->nome ?? 'N/A' }}</p>
-                                <p><strong>Nº da Factura:</strong> {{ $saida->numero_factura ?? 'N/A' }}</p>
-                                <p><strong>Data da Saída:</strong>
-                                    {{ $saida->data ? \Carbon\Carbon::parse($saida->data)->format('d/m/Y') : 'N/A' }}
-                                </p>
-                                <p><strong>Valor Total:</strong> {{ number_format($saida->valor_total, 2, ',', '.') }}
-                                </p>
-                                <p><strong>Valor Total IVA:</strong> {{ number_format($saida->valor_total_iva, 2, ',', '.') }}</p>
-                                <p><strong>Valor Pago:</strong> {{ number_format($saida->valor_pago, 2, ',', '.') }}</p>
-                                <p><strong>Valor Remanescente:</strong>
-                                    {{ number_format($saida->valor_remanescente, 2, ',', '.') }}</p>
-                                <p><strong>Desconto:</strong> {{ number_format($saida->desconto, 2, ',', '.') }}</p>
-                                <p><strong>Valor Entregue:</strong> {{ number_format($saida->valor_entregue, 2, ',', '.') }}</p>
-                                <p><strong>Trocos:</strong> {{ number_format($saida->trocos, 2, ',', '.') }}</p>
-                                <p><strong>Tipo de Pagamento:</strong> {{ $saida->tipo_pagamento_id ?? 'N/A' }}</p>
-                                <p><strong>Número:</strong> {{ $saida->numero ?? 'N/A' }}</p>
-                                <p><strong>Número Cotação:</strong> {{ $saida->numero_cotacao ?? 'N/A' }}</p>
-                                <p><strong>Validade Cotação:</strong>
-                                    {{ $saida->validade_cotacao ? \Carbon\Carbon::parse($saida->validade_cotacao)->format('d/m/Y') : 'N/A' }}
-                                </p>
-                                <p><strong>Slip:</strong> {{ $saida->slip ?? 'N/A' }}</p>
-                                <p><strong>Estado Pagamento:</strong> {{ $saida->estado_pagamento ?? 'N/A' }}</p>
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Informações da Saída</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <p class="mb-1"><strong>Tipo de Saída:</strong>
+                                                    {{ $saida->tipoSaida->nome ?? 'N/A' }}</p>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <p class="mb-1"><strong>Cliente:</strong>
+                                                    {{ $saida->cliente->nome ?? 'N/A' }}</p>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <p class="mb-1"><strong>Nº da Factura:</strong>
+                                                    {{ $saida->numero_factura ?? 'N/A' }}</p>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <p class="mb-1"><strong>Data da Saída:</strong>
+                                                    {{ $saida->data ? \Carbon\Carbon::parse($saida->data)->format('d/m/Y') : 'N/A' }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
+                            <!-- System Information -->
                             <div class="col-md-6">
-                                <p><strong>Registado por:</strong> {{ $saida->user->name ?? 'N/A' }}</p>
-                                <p><strong>Estado:</strong>
-                                    @if ($saida->activo == '1')
-                                        <span class="badge badge-success">Activo</span>
-                                    @elseif ($saida->activo == '0')
-                                        <span class="badge badge-danger">Eliminado</span>
-                                    @elseif ($saida->activo == '2')
-                                        <span class="badge badge-warning">...</span>
-                                    @elseif ($saida->activo == '3')
-                                        <span class="badge badge-info">Devolvida</span>
-                                    @endif
-                                </p>
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Informações do Sistema</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <p class="mb-1"><strong>Registado por:</strong>
+                                                    {{ $saida->user->name ?? 'N/A' }}</p>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <p class="mb-1"><strong>Estado:</strong>
+                                                    @if ($saida->activo == '1')
+                                                        <span class="badge badge-success">Activo</span>
+                                                    @elseif ($saida->activo == '0')
+                                                        <span class="badge badge-danger">Eliminado</span>
+                                                    @elseif ($saida->activo == '2')
+                                                        <span class="badge badge-warning">...</span>
+                                                    @elseif ($saida->activo == '3')
+                                                        <span class="badge badge-info">Devolvida</span>
+                                                    @endif
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- Financial Details -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Detalhes Financeiros</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <p class="mb-1"><strong>Valor Total:</strong>
+                                            {{ number_format($saida->valor_total, 2, ',', '.') }}</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <p class="mb-1"><strong>Valor Total IVA:</strong>
+                                            {{ number_format($saida->valor_total_iva, 2, ',', '.') }}</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <p class="mb-1"><strong>Desconto:</strong>
+                                            {{ number_format($saida->desconto, 2, ',', '.') }}</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <p class="mb-1"><strong>Valor Entregue:</strong>
+                                            {{ number_format($saida->valor_entregue, 2, ',', '.') }}</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <p class="mb-1"><strong>Trocos:</strong>
+                                            {{ number_format($saida->trocos, 2, ',', '.') }}</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <p class="mb-1"><strong>Valor Pago:</strong>
+                                            {{ number_format($saida->valor_pago, 2, ',', '.') }}</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <p class="mb-1"><strong>Valor Remanescente:</strong>
+                                            {{ number_format($saida->valor_remanescente, 2, ',', '.') }}</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <p class="mb-1"><strong>Tipo de Pagamento:</strong>
+                                            {{ $saida->tipoPagamento->designacao ?? 'N/A' }}</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <p class="mb-1"><strong>Estado Pagamento:</strong>
+                                            @if ($saida->estado_pagamento == 'pago')
+                                                <span class="badge badge-success">Pago</span>
+                                            @elseif ($saida->estado_pagamento == 'nao_pago')
+                                                <span class="badge badge-danger">Não Pago</span>
+                                            @elseif ($saida->estado_pagamento == 'parcial')
+                                                <span class="badge badge-warning">Parcial</span>
+                                            @else
+                                                <span class="badge badge-info">N/A</span>
+                                            @endif
+
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <hr>
                         <h4>Itens da Saída</h4>
                         <div class="table-responsive">
@@ -77,8 +155,6 @@
                                         <th>Custo</th>
                                         <th>Desconto (%)</th>
                                         <th>Desconto (Valor)</th>
-                                        <th>Tipo Motivo</th>
-                                        <th>Motivo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -93,8 +169,6 @@
                                             <td>{{ number_format($item->custo, 2, ',', '.') }}</td>
                                             <td>{{ number_format($item->desconto_percentual, 2, ',', '.') }}</td>
                                             <td>{{ number_format($item->desconto_valor, 2, ',', '.') }}</td>
-                                            <td>{{ $item->tipo_motivo ?? 'N/A' }}</td>
-                                            <td>{{ $item->motivo ?? 'N/A' }}</td>
                                         </tr>
                                     @empty
                                         <tr>

@@ -205,81 +205,94 @@ CREATE TABLE IF NOT EXISTS `saida_itens` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `tipo_pagamentos`;
+
 CREATE TABLE IF NOT EXISTS `tipo_pagamentos` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `designacao` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` bigint UNSIGNED DEFAULT NULL,
-  `is_active` enum('1','0') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `tipo_pagamentos_user_id_foreign` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+    `designacao` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+    `user_id` bigint UNSIGNED DEFAULT NULL,
+    `is_active` enum('1', '0') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+    `created_at` timestamp NULL DEFAULT NULL,
+    `updated_at` timestamp NULL DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `tipo_pagamentos_user_id_foreign` (`user_id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 9 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `tipo_pagamentos`
 --
-
-INSERT INTO `tipo_pagamentos` (`id`, `designacao`, `user_id`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'Numerário', NULL, '1', '2020-08-19 12:27:02', '2020-08-19 12:27:02'),
-(2, 'MPesa', NULL, '1', '2020-08-19 12:27:03', '2020-08-19 12:27:03'),
-(3, 'POS MBim', NULL, '1', '2020-08-19 12:27:03', '2020-08-19 12:27:03'),
-(4, 'Cheque', NULL, '1', '2020-08-19 12:27:03', '2020-08-19 12:27:03'),
-(5, 'Paga Fácil', NULL, '1', '2020-08-19 12:27:04', '2020-08-19 12:27:04'),
-(6, 'POS Moza Banco', NULL, '1', '2020-08-19 12:27:03', '2020-08-19 12:27:03'),
-(7, 'POS BCI', NULL, '1', '2020-08-19 12:27:03', '2020-08-19 12:27:03'),
-(8, 'Transferência Bancária', NULL, '1', '2020-08-19 12:27:03', '2020-08-19 12:27:03');
-COMMIT;
-
-
 DROP TABLE IF EXISTS `tipo_motivo`;
+
 CREATE TABLE IF NOT EXISTS `tipo_motivo` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `descricao` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
-  `estado` enum('1','0') COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Extraindo dados da tabela `tipo_motivo`
---
-
-INSERT INTO `tipo_motivo` (`id`, `descricao`, `estado`, `created_at`, `updated_at`) VALUES
-(1, 'Transferência', '1', '2024-05-02 13:32:57', '2024-05-02 13:32:57'),
-(2, 'Fora do prazo', '1', '2024-05-02 13:36:02', '2024-05-02 13:36:02'),
-(3, 'Outros', '1', '2024-05-02 13:36:02', '2024-05-02 13:36:02'),
-(4, 'Oferta', '1', '2024-05-02 13:36:02', '2024-05-02 13:36:02'),
-(5, 'Danificado', '1', '2024-05-02 13:36:02', '2024-05-02 13:36:02');
-COMMIT;
-
+    `id` int NOT NULL AUTO_INCREMENT,
+    `descricao` varchar(40) COLLATE utf8mb4_general_ci NOT NULL,
+    `estado` enum('1', '0') COLLATE utf8mb4_general_ci NOT NULL,
+    `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 6 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `numeracao`;
+
 CREATE TABLE IF NOT EXISTS `numeracao` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `numero` int NOT NULL,
-  `ano` year NOT NULL,
-  `tipo` enum('venda_dinheiro','venda_credito','cotacao','fornecedor','nota_credito_fornecedor','inventario','devolucao','nota_credito','abate','cliente','sessao') COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `tipo` (`tipo`),
-  KEY `ano` (`ano`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    `id` int NOT NULL AUTO_INCREMENT,
+    `numero` int NOT NULL,
+    `ano` year NOT NULL,
+    `tipo` enum(
+        'venda_dinheiro',
+        'venda_credito',
+        'cotacao',
+        'fornecedor',
+        'nota_credito_fornecedor',
+        'inventario',
+        'devolucao',
+        'nota_credito',
+        'abate',
+        'cliente',
+        'sessao'
+    ) COLLATE utf8mb4_general_ci NOT NULL,
+    `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `tipo` (`tipo`),
+    KEY `ano` (`ano`)
+) ENGINE = InnoDB AUTO_INCREMENT = 4 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
- CREATE TABLE config (
-         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-         nome VARCHAR(255) NOT NULL,
-         endereco VARCHAR(255) NOT NULL,
-         nuit VARCHAR(255) NOT NULL,
-         contacto VARCHAR(255) NOT NULL,
-         contacto2 VARCHAR(255) NULL,
-         email VARCHAR(255) NULL,
-        slogan VARCHAR(255) NULL,
-       iva DECIMAL(8, 2) NOT NULL DEFAULT 1.23,
-        fonte VARCHAR(255) NOT NULL DEFAULT '0',
-        created_at TIMESTAMP NULL,
-        updated_at TIMESTAMP NULL
-    );
+CREATE TABLE config (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    endereco VARCHAR(255) NOT NULL,
+    nuit VARCHAR(255) NOT NULL,
+    contacto VARCHAR(255) NOT NULL,
+    contacto2 VARCHAR(255) NULL,
+    email VARCHAR(255) NULL,
+    slogan VARCHAR(255) NULL,
+    iva DECIMAL(8, 2) NOT NULL DEFAULT 1.23,
+    fonte VARCHAR(255) NOT NULL DEFAULT '0',
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
+);
 
+DROP TABLE IF EXISTS `pagamentos`;
+
+CREATE TABLE IF NOT EXISTS `pagamentos` (
+    `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+    `valor_pago` double(12, 2) NOT NULL,
+    `valor_pago2` double(12, 2) DEFAULT NULL,
+    `cambio` float DEFAULT NULL,
+    `numero_recibo` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+    `data_pagamento` datetime NOT NULL,
+    `numero` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `tipo_pagamento_id` bigint UNSIGNED NOT NULL,
+    `cliente_id` bigint UNSIGNED NOT NULL,
+    `saida_id` bigint UNSIGNED NOT NULL,
+    `user_id` bigint UNSIGNED NOT NULL,
+    `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `cliente_id` (`cliente_id`),
+    KEY `saida_id` (`saida_id`),
+    KEY `user_id` (`user_id`),
+    KEY `tipo_pagamento_id` (`tipo_pagamento_id`),
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
+COMMIT;

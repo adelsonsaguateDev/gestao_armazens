@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\TipoPagamento; // Add this line
 
 class Saida extends Model
 {
@@ -56,5 +57,10 @@ class Saida extends Model
     public function itens()
     {
         return $this->hasMany(SaidaItem::class, 'saida_id');
+    }
+
+    public function tipoPagamento()
+    {
+        return $this->belongsTo(TipoPagamento::class, 'tipo_pagamento_id');
     }
 }

@@ -198,7 +198,7 @@ class SaidasController extends Controller
 
     public function show_details($id)
     {
-        $saida = Saida::with(['tipoSaida', 'cliente', 'user', 'estadoObj', 'itens.produto'])->find($id);
+        $saida = Saida::with(['tipoSaida', 'cliente', 'user', 'estadoObj', 'itens.produto', 'tipoPagamento'])->find($id);
 
         if (!$saida) {
             return response()->json(['error' => 'Saida não encontrada'], 404);
