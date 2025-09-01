@@ -79,6 +79,7 @@ class SaidasController extends Controller
 
     public function add(Request $request)
     {
+        
         DB::beginTransaction();
         try {
             $json['success'] = null;
@@ -91,7 +92,7 @@ class SaidasController extends Controller
             $dataSaida = $request->validate([
                 'tipo_saida_id' => 'required|exists:tipos_saidas,id',
                 'cliente_id' => 'nullable|exists:clientes,id',
-                'data' => 'required|date',
+                'data' => 'nullable|date',
                 'valor_total' => 'required|numeric|min:0',
                 'valor_total_iva' => 'nullable|numeric|min:0',
                 'valor_pago' => 'nullable|numeric|min:0',
@@ -107,6 +108,10 @@ class SaidasController extends Controller
                 'estado_pagamento' => 'nullable|in:pago,nao_pago,parcial',
                 'activo' => 'nullable|in:1,0,2,3',
             ]);
+
+            if (empty($dataSaida['data'])) {
+                $dataSaida['data'] = date('Y-m-d');
+            }
 
             // Invoice Numbering
             $ano = date("Y");

@@ -320,7 +320,6 @@
             var formData = new FormData();
             formData.append('_token', '{{ csrf_token() }}');
             formData.append('cliente_id', $('#cliente_id').val());
-            formData.append('data', $('#data').val());
             formData.append('tipo_saida_id', 1); // Default to 1 for normal sale
 
             // Get totals from the cart summary (which are updated by calculateTotals)

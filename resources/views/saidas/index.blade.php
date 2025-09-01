@@ -15,7 +15,7 @@
             <!-- ============ Body content start ============= -->
             <div class="main-content pt-4">
                 <div class="breadcrumb">
-                    <h1 class="mr-2">Lista de Saídas</h1>
+                    <h1 class="mr-2">Lista de Vendas</h1>
                     <ul>
                         <!-- <li><a href="#">Saídas</a></li> -->
                     </ul>
