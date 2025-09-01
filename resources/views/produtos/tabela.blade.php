@@ -49,15 +49,15 @@
                         @php
                         if($item->stock_minimo > 0 && $item->quantidade <= $item->stock_minimo) :
                        @endphp
-                        <div class="badge bg-danger text-white">{{ $item->quantidade }}</div>
+                        <div class="badge bg-danger text-white">{{ number_format($item->quantidade, 2, ',', '.') }}</div>
                        @php
                         elseif($item->stock_minimo > 0 && $item->quantidade > $item->stock_minimo && $item->quantidade <= ($item->stock_minimo * 1.2)) :
                        @endphp
-                        <div class="badge bg-warning text-white">{{ $item->quantidade }}</div>
+                        <div class="badge bg-warning text-white">{{ number_format($item->quantidade, 2, ',', '.') }}</div>
                        @php
                         else :
                        @endphp
-                        <div class="badge bg-success text-white">{{ $item->quantidade }}</div>
+                        <div class="badge bg-success text-white">{{ number_format($item->quantidade, 2, ',', '.') }}</div>
                        @php
                         endif
                        @endphp

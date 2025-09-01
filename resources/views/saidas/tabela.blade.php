@@ -18,12 +18,13 @@
         <thead>
             <tr style="font-weight: bold; color:black">
                 <th style="width: 1%">#</th>
-                <th class="text-center col-2">Nº Factura</th>
-                <th class="text-center col-2">Cliente</th>
-                <th class="text-center col-1">Tipo Saída</th>
-                <th class="text-center col-1">Data Saída</th>
-                <th class="text-center col-1">Valor Total</th>
-                <th class="text-center col-2">Estado</th>
+                <th class="text-center ">Nº Factura</th>
+                <th class="text-center">Cliente</th>
+                <th class="text-center ">Tipo Saída</th>
+                <th class="text-center ">Data Saída</th>
+                <th class="text-center ">Valor Total</th>
+                <th class="text-center ">Estado</th>
+                <th class="text-center">Estado.Pagamento</th>
     @php
         $content .= ob_get_contents();
     @endphp
@@ -37,8 +38,11 @@
         <tbody>
             @php
             $cont = 1;
+            $total = 0;
             @endphp
             @foreach ($saidas as $item)
+            @php $total += $item->valor_total @endphp
+              
                 <tr>
                     <th scope="row">{{ $cont++ }}</th>
                     <td class="text-center">{{ $item->numero_factura ?? 'N/A' }}</td>
@@ -67,6 +71,27 @@
                         endif
                         @endphp
                     </td>
+                    <td class="text-center">
+                        @php
+                        if($item->estado_pagamento == 'pago') :
+                        @endphp
+                        <div class="badge bg-success text-white">Pago</div>
+                        @php
+                        elseif($item->estado_pagamento == 'nao_pago'):
+                        @endphp
+                        <div class="badge bg-danger text-white">Não Pago</div>
+                        @php
+                        elseif($item->estado_pagamento == 'parcial'):
+                        @endphp
+                        <div class="badge bg-warning text-white">Parcial</div>
+                        @php
+                        else:
+                        @endphp
+                        <div class="badge bg-info text-white">N/A</div>
+                        @php
+                        endif
+                        @endphp
+                    </td>
                     @php
                         $content .= ob_get_contents();
                     @endphp
@@ -91,7 +116,10 @@
                 </tr>
             @endforeach
         </tbody>
-        <tfoot></tfoot>
+        <tfoot>
+            <td colspan="5"><b>Total</b></td>
+            <td class="text-right"><b>{{number_format($total, 2, ',', '.')}}</b></td>
+        </tfoot>
     </table>
     @php
         $content .= ob_get_contents();

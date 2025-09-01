@@ -22,7 +22,7 @@
                 <th class="text-center col-2">Fornecedor</th>
                 <th class="text-center col-1">Tipo Entrada</th>
                 <th class="text-center col-1">Data Aquisição</th>
-                <th class="text-center col-1">Total</th>
+                <th class="text-center col-1">Total da Factura</th>
                 <th class="text-center col-2">Estado</th>
     @php
         $content .= ob_get_contents();
@@ -45,7 +45,7 @@
                     <td class="text-center">{{ $item->fornecedor->nome ?? 'N/A' }}</td>
                     <td class="text-center">{{ $item->tipoEntrada->nome ?? 'N/A' }}</td>
                     <td class="text-center">{{ $item->data_aquisicao }}</td>
-                    <td class="text-center">{{ number_format($item->total, 2, ',', '.') }}</td>
+                    <td class="text-right">{{ number_format($item->total_factura, 2, ',', '.') }}</td>
                     <td class="text-center">
                         @php
                         if($item->estado == '1') :

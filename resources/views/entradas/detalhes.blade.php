@@ -22,43 +22,97 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="row">
+                            <!-- Entry Information -->
                             <div class="col-md-6">
-                                <p><strong>Tipo de Entrada:</strong> {{ $entrada->tipoEntrada->nome ?? 'N/A' }}</p>
-                                <p><strong>Fornecedor:</strong> {{ $entrada->fornecedor->nome ?? 'N/A' }}</p>
-                                <p><strong>Nº da Factura:</strong> {{ $entrada->numero_factura ?? 'N/A' }}</p>
-                                <p><strong>Data de Aquisição:</strong>
-                                    {{ $entrada->data_aquisicao ? \Carbon\Carbon::parse($entrada->data_aquisicao)->format('d/m/Y') : 'N/A' }}
-                                </p>
-                                <p><strong>Data da Factura:</strong>
-                                    {{ $entrada->data_factura ? \Carbon\Carbon::parse($entrada->data_factura)->format('d/m/Y') : 'N/A' }}
-                                </p>
-                                <p><strong>Ficheiro da Entrada:</strong>
-                                    @if ($entrada->ficheiro_entrada)
-                                        <a href="{{ asset('storage/entradas_ficheiros/' . $entrada->ficheiro_entrada) }}"
-                                            target="_blank">Ver Ficheiro</a>
-                                    @else
-                                        N/A
-                                    @endif
-                                </p>
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Informações da Entrada</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <p class="mb-1"><strong>Tipo de Entrada:</strong> {{ $entrada->tipoEntrada->nome ?? 'N/A' }}</p>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <p class="mb-1"><strong>Fornecedor:</strong> {{ $entrada->fornecedor->nome ?? 'N/A' }}</p>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <p class="mb-1"><strong>Nº da Factura:</strong> {{ $entrada->numero_factura ?? 'N/A' }}</p>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <p class="mb-1"><strong>Data de Aquisição:</strong>
+                                                    {{ $entrada->data_aquisicao ? \Carbon\Carbon::parse($entrada->data_aquisicao)->format('d/m/Y') : 'N/A' }}
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <p class="mb-1"><strong>Data da Factura:</strong>
+                                                    {{ $entrada->data_factura ? \Carbon\Carbon::parse($entrada->data_factura)->format('d/m/Y') : 'N/A' }}
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <p class="mb-1"><strong>Ficheiro da Entrada:</strong>
+                                                    @if ($entrada->ficheiro_entrada)
+                                                        <a href="{{ asset('storage/entradas_ficheiros/' . $entrada->ficheiro_entrada) }}"
+                                                            target="_blank">Ver Ficheiro</a>
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
+                            <!-- System Information -->
                             <div class="col-md-6">
-                                <p><strong>Total Factura:</strong> {{ number_format($entrada->total_factura, 2, ',', '.') }}
-                                </p>
-                                <p><strong>Total Desconto:</strong>
-                                    {{ number_format($entrada->total_desconto, 2, ',', '.') }}</p>
-                                <p><strong>Total IVA:</strong> {{ number_format($entrada->total_iva, 2, ',', '.') }}</p>
-                                <p><strong>Valor Remanescente:</strong>
-                                    {{ number_format($entrada->valor_remanescente, 2, ',', '.') }}</p>
-                                <p><strong>Registado por:</strong> {{ $entrada->user->name ?? 'N/A' }}</p>
-                                <p><strong>Estado:</strong>
-                                    @if ($entrada->estado == '1')
-                                        <span class="badge badge-success">Activo</span>
-                                    @else
-                                        <span class="badge badge-danger">Inactivo</span>
-                                    @endif
-                                </p>
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Informações do Sistema</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <p class="mb-1"><strong>Registado por:</strong> {{ $entrada->user->name ?? 'N/A' }}</p>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <p class="mb-1"><strong>Estado:</strong>
+                                                    @if ($entrada->estado == '1')
+                                                        <span class="badge badge-success">Activo</span>
+                                                    @else
+                                                        <span class="badge badge-danger">Inactivo</span>
+                                                    @endif
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- Financial Details -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Detalhes Financeiros</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <p class="mb-1"><strong>Total Factura:</strong> {{ number_format($entrada->total_factura, 2, ',', '.') }}</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <p class="mb-1"><strong>Total Desconto:</strong> {{ number_format($entrada->total_desconto, 2, ',', '.') }}</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <p class="mb-1"><strong>Total IVA:</strong> {{ number_format($entrada->total_iva, 2, ',', '.') }}</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <p class="mb-1"><strong>Valor Remanescente:</strong> {{ number_format($entrada->valor_remanescente, 2, ',', '.') }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <hr>
                         <h4>Itens da Entrada</h4>
                         <div class="table-responsive">

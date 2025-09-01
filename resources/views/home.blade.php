@@ -24,8 +24,8 @@
                     <p>Bem-vindo de volta ao seu painel de controle.</p>
                 </div>
                 <div class="col-lg-6 col-md-12 text-lg-right">
-                    <a href="#" class="btn btn-primary mb-2">Nova Venda</a>
-                    <a href="#" class="btn btn-success mb-2">Nova Entrada</a>
+                    <a href="{{ route('saida.create') }}" class="btn btn-primary mb-2">Nova Venda</a>
+                    <a href="{{ route('entrada.create') }}" class="btn btn-success mb-2">Nova Entrada</a>
                     <a href="{{ route('produto.list') }}" class="btn btn-info mb-2">Adicionar Produto</a>
                 </div>
             </div>
