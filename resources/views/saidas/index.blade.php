@@ -38,9 +38,6 @@
                                         <a type="button" href="#" class="btn btn-info mb-3" data-toggle="tooltip" title="Venda à Crédito">
                                             <span style="font-weight: bold"><i class="fas fa-plus-circle"></i> V. CRÉDITO</span>
                                         </a>
-                                        <a type="button" href="#" class="btn btn-secondary mb-3" data-toggle="tooltip" title="Cotação">
-                                            <span style="font-weight: bold"><i class="fas fa-plus-circle"></i> COTAÇÃO</span>
-                                        </a>
                                         <button class="btn btn-danger mb-3" id="print" data-toggle="tooltip" title="Exportar lista de produtos para PDF">
                                             <span style="font-weight: bold"><i class="far fa-file-pdf"></i> EXPORTAR PDF</span>
                                         </button>
