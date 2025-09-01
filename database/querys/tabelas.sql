@@ -268,3 +268,18 @@ CREATE TABLE IF NOT EXISTS `numeracao` (
   KEY `ano` (`ano`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+ CREATE TABLE config (
+         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+         nome VARCHAR(255) NOT NULL,
+         endereco VARCHAR(255) NOT NULL,
+         nuit VARCHAR(255) NOT NULL,
+         contacto VARCHAR(255) NOT NULL,
+         contacto2 VARCHAR(255) NULL,
+         email VARCHAR(255) NULL,
+        slogan VARCHAR(255) NULL,
+       iva DECIMAL(8, 2) NOT NULL DEFAULT 1.23,
+        fonte VARCHAR(255) NOT NULL DEFAULT '0',
+        created_at TIMESTAMP NULL,
+        updated_at TIMESTAMP NULL
+    );
+
