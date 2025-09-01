@@ -11,6 +11,7 @@ use App\Models\TipoSaida;
 use App\Models\Historico;
 use App\Models\TipoPagamento;
 use Illuminate\Support\Facades\DB;
+use App\Models\Config; // Add this line
 
 date_default_timezone_set('Africa/Maputo');
 setlocale(LC_ALL, 'pt', 'pt.utf-8', 'pt.utf-8', 'portuguese');
@@ -178,6 +179,7 @@ class SaidasController extends Controller
             $json['success'] = true;
             $json['message'] = 'Saída registada com sucesso.';
             $json['code'] = 200;
+            $json['saida_id'] = $saida->id; // Add saida_id to the response
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
             $errors = $e->validator->errors()->all();
@@ -334,7 +336,71 @@ class SaidasController extends Controller
     public function recibo($id)
     {
         $saida = Saida::with(['cliente', 'tipoSaida', 'user', 'itens.produto'])->findOrFail($id);
-        return view('saidas.recibo', compact('saida'));
+
+        // Assuming 'Config' model holds company details and 'TipoPagamento' for payment types
+        $empresa = Config::first();
+        // Fetch only the payment method used in this sale
+        $tipoPagamentoUsado = TipoPagamento::find($saida->tipo_pagamento_id);
+
+        // Prepare data for the receipt view, similar to ver_htmlRecibo.php
+        $saidaData = [
+            'id' => $saida->id,
+            'numero_factura' => $saida->numero_factura,
+            'data' => $saida->data,
+            'created_at' => $saida->created_at,
+            'cliente_nome' => $saida->cliente->nome ?? 'N/A',
+            'cliente_endereco' => $saida->cliente->endereco ?? '',
+            'cliente_nuit' => $saida->cliente->nuit ?? '',
+            'cliente_contacto' => $saida->cliente->contacto ?? '',
+            'tipo_saida_id' => $saida->tipo_saida_id,
+            'valor_pago' => $saida->valor_pago,
+            'valor_entregue' => $saida->valor_entregue,
+            'trocos' => $saida->trocos,
+            'desconto' => $saida->desconto,
+            'valor_total' => $saida->valor_total,
+            'valor_total_iva' => $saida->valor_total_iva,
+            'userName' => $saida->user->name ?? 'N/A',
+            'numero_membro' => $saida->numero_membro ?? '',
+            'codigo_autorizacao' => $saida->codigo_autorizacao ?? '',
+        ];
+
+        $saidaItemsData = [];
+        foreach ($saida->itens as $item) {
+            $saidaItemsData[] = [
+                'produto_descricao' => $item->produto->descricao ?? 'N/A',
+                'quantidade' => $item->quantidade,
+                'preco_unitario' => $item->preco_unitario,
+                'preco_compra' => $item->preco_compra,
+                'iva' => $item->iva,
+                'valor_iva' => $item->valor_iva,
+                'custo' => $item->custo,
+                'desconto_percentual' => $item->desconto_percentual,
+                'desconto_valor' => $item->desconto_valor,
+                'taxa' => $item->iva,
+                'activo' => $item->activo,
+            ];
+        }
+
+        // Start PDF generation
+        $mpdf = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'format' => [72.1, 350], // Specific size for receipt
+            'orientation' => 'P',
+            'margin_left' => 5,
+            'margin_right' => 5,
+            'margin_top' => 5,
+            'margin_bottom' => 5,
+            'simpleTables' => true
+        ]);
+
+        // Render the Blade view to HTML
+        $html = view('saidas.recibo_pdf_content', compact('saidaData', 'saidaItemsData', 'empresa', 'tipoPagamentoUsado'))->render();
+
+        $mpdf->writeHTML($html);
+
+        $outputName = 'Recibo.pdf';
+        return response($mpdf->Output($outputName, 'I'))
+            ->header('Content-Type', 'application/pdf');
     }
 
     public function getBatchesByProduct(Request $request)

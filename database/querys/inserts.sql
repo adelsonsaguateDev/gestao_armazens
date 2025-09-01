@@ -423,3 +423,33 @@ VALUES
     (1, 6, 6, 1, 0, 600, 600, 1, 1);
 
 -- Molas pequenas
+INSERT INTO
+    `config` (
+        `id`,
+        `nome`,
+        `endereco`,
+        `nuit`,
+        `contacto`,
+        `contacto2`,
+        `email`,
+        `slogan`,
+        `iva`,
+        `fonte`,
+        `created_at`,
+        `updated_at`
+    )
+VALUES
+    (
+        NULL,
+        'Fenomenal Comercial',
+        'Bairro de Mavalane A, Maputo\r\nRua Matchedje nº 4039',
+        '400934088',
+        '+258 84 531 5759',
+        '+258 84 445 6170',
+        NULL,
+        'Vendas de Material de Mobiliário, Napas e Veludos',
+        '1.16',
+        '0',
+        NULL,
+        NULL
+    )

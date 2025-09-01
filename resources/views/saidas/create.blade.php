@@ -458,7 +458,8 @@
                             showConfirmButton: false,
                             timer: 2000,
                         }).then(() => {
-                            window.location.href = "{{ route('saida.list') }}";
+                            window.open("{{ route('saida.recibo', ['id' => '__saida_id__']) }}".replace('__saida_id__', response.saida_id), '_blank');
+                            window.location.href = "{{ route('saida.list') }}"; // Redirect to list after opening receipt
                         });
                     } else {
                         var errorMessages = response.message;
