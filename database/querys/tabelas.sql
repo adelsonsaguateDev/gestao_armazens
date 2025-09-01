@@ -292,7 +292,6 @@ CREATE TABLE IF NOT EXISTS `pagamentos` (
     KEY `cliente_id` (`cliente_id`),
     KEY `saida_id` (`saida_id`),
     KEY `user_id` (`user_id`),
-    KEY `tipo_pagamento_id` (`tipo_pagamento_id`),
+    KEY `tipo_pagamento_id` (`tipo_pagamento_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
-COMMIT;
