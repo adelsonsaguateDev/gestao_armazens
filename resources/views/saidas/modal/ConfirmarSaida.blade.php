@@ -32,6 +32,16 @@
             </div>
           </div>
           <div class="row">
+              <div class="form-group col col-md-6">
+                  <label for="modal_valor_entregue">Valor Entregue</label>
+                  <input type="number" step="0.01" name="modal_valor_entregue" id="modal_valor_entregue" class="form-control" value="0.00">
+              </div>
+              <div class="form-group col col-md-6">
+                  <label for="modal_trocos">Trocos</label>
+                  <input readonly type="text" name="modal_trocos" id="modal_trocos" class="form-control" value="0.00">
+              </div>
+          </div>
+          <div class="row">
             <div class="col col-md-12">
               <label for="">Método de pagamento</label>
               <select name="modal_forma_pagamento" id="modal_forma_pagamento" class="form-control ">

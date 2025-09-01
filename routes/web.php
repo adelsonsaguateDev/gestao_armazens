@@ -99,6 +99,8 @@ Route::prefix('saida')->name('saida.')->group(function () {
     Route::get('/recibo/{id}', [SaidasController::class, 'recibo'])->name(
         'recibo'
     ); // Generate receipt
+
+    Route::post('/getBatchesByProduct', [SaidasController::class, 'getBatchesByProduct'])->name('getBatchesByProduct');
 });
 
 //Utilizador

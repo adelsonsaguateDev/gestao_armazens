@@ -27,15 +27,7 @@ class SaidasController extends Controller
 
     public function create()
     {
-        $produtos = DB::select("SELECT p.id, p.descricao, p.nome, p.codigo_barras,
-                                SUM(COALESCE(ei.qtd_caixas * ei.qtd_por_caixa, 0)) - SUM(COALESCE(si.quantidade, 0)) as qnt_actual,
-                                MAX(ei.preco_venda_unitario) as preco_actual
-                                FROM produtos p
-                                LEFT JOIN entradas_itens ei ON p.id = ei.produto_id AND ei.estado = 1
-                                LEFT JOIN saida_itens si ON p.id = si.produto_id AND si.activo = 1
-                                WHERE p.estado = 1
-                                GROUP BY p.id, p.descricao, p.nome, p.codigo_barras
-                                HAVING qnt_actual > 0");
+        $produtos = Produto::where('estado', 1)->get();
 
         $clientes = Cliente::where('estado', 1)->get();
         $tipos_saida = TipoSaida::where('estado', 1)->get();
@@ -164,6 +156,7 @@ class SaidasController extends Controller
                     'desconto_valor' => 'nullable|numeric|min:0',
                     'tipo_motivo' => 'nullable|numeric',
                     'motivo' => 'nullable|string|max:255',
+                    'entrada_item_id' => 'required|exists:entradas_itens,id', // Add this
                 ])->validate();
 
                 $itemDataValidated['saida_id'] = $saida->id;
@@ -173,9 +166,9 @@ class SaidasController extends Controller
                 SaidaItem::create($itemDataValidated);
 
                 // Stock reduction
-                DB::table('produtos')
-                    ->where('id', $itemDataValidated['produto_id'])
-                    ->decrement('stock_minimo', $itemDataValidated['quantidade']);
+                // DB::table('produtos')
+                //     ->where('id', $itemDataValidated['produto_id'])
+                //     ->decrement('stock_minimo', $itemDataValidated['quantidade']);
             }
 
             $descricao = 'Registou a saída Nº ' . $saida->numero_factura . ' com ' . count($itens) . ' itens.';
@@ -342,6 +335,30 @@ class SaidasController extends Controller
     {
         $saida = Saida::with(['cliente', 'tipoSaida', 'user', 'itens.produto'])->findOrFail($id);
         return view('saidas.recibo', compact('saida'));
+    }
+
+    public function getBatchesByProduct(Request $request)
+    {
+        $productId = $request->input('product_id');
+
+        $batches = DB::select("SELECT
+                                    ei.id AS entrada_item_id,
+                                    ei.preco_venda_unitario AS preco_actual,
+                                    (ei.qtd_caixas * ei.qtd_por_caixa) - COALESCE(SUM(si.quantidade), 0) AS qnt_actual_entrada_item
+                                FROM
+                                    entradas_itens ei
+                                LEFT JOIN
+                                    saida_itens si ON ei.id = si.entrada_item_id AND si.activo = 1
+                                WHERE
+                                    ei.produto_id = ? AND ei.estado = 1
+                                GROUP BY
+                                    ei.id, ei.preco_venda_unitario, ei.qtd_caixas, ei.qtd_por_caixa
+                                HAVING
+                                    qnt_actual_entrada_item > 0
+                                ORDER BY
+                                    ei.id", [$productId]);
+
+        return response()->json($batches);
     }
 
     private function getInvoiceNumber($ano, $tipo)

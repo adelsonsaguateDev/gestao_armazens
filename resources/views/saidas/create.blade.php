@@ -50,15 +50,18 @@
                                                     <div class="col-md-4 form-group">
                                                         <label for="item_produto_id"><b>Produto</b><span
                                                                 class="obrigatorio">*</span></label>
-                                                        <select class="form-control select2" id="item_produto_id">
+                                                        <select class="form-control select2" name="item_produto_id" id="item_produto_id">
                                                             <option value="">Selecione...</option>
                                                             @foreach ($produtos as $produto)
-                                                                <option value="{{ $produto->id }}"
-                                                                    data-preco="{{ $produto->preco_actual }}"
-                                                                    data-iva="{{ $produto->iva ?? 0 }}">
-                                                                    {{ $produto->descricao }} (Stock:
-                                                                    {{ $produto->qnt_actual }})</option>
+                                                                <option value="{{ $produto->id }}">{{ $produto->nome }}</option>
                                                             @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4 form-group">
+                                                        <label for="item_lote_id"><b>Lote</b><span
+                                                                class="obrigatorio">*</span></label>
+                                                        <select class="form-control select2" id="item_lote_id" disabled>
+                                                            <option value="">Selecione um produto primeiro...</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2 form-group">
@@ -162,14 +165,58 @@
             hideLoader();
             calculateTotals(); // Initial calculation
 
-            // Update item_total when quantity or unit price changes
-            // Auto-fill item_preco_unitario when product is selected
+            // Handle product selection to load batches
             $('#item_produto_id').on('change', function() {
-                var selectedProductOption = $(this).find('option:selected');
-                var preco_actual = parseFloat(selectedProductOption.data('preco')) || 0;
+                var productId = $(this).val();
+                var loteSelect = $('#item_lote_id');
+                loteSelect.empty().append('<option value="">Carregando lotes...</option>').prop('disabled', true);
+                $('#item_preco_unitario').val('');
+                $('#item_quantidade').val('');
+                $('#item_total').val('');
+
+                if (productId) {
+                    $.ajax({
+                        url: '{{ route('saida.getBatchesByProduct') }}', // Need to define this route
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            product_id: productId
+                        },
+                        dataType: 'json',
+                        success: function(batches) {
+                            loteSelect.empty().append('<option value="">Selecione um lote...</option>');
+                            if (batches.length > 0) {
+                                $.each(batches, function(index, batch) {
+                                    loteSelect.append('<option value="' + batch.entrada_item_id + '" ' +
+                                        'data-preco="' + batch.preco_actual + '" ' +
+                                        'data-qnt-actual="' + batch.qnt_actual_entrada_item + '">' +
+                                        'Lote: ' + batch.entrada_item_id + ' | Stock: ' + batch.qnt_actual_entrada_item +
+                                        '</option>');
+                                });
+                                loteSelect.prop('disabled', false);
+                            } else {
+                                loteSelect.append('<option value="">Nenhum lote disponível.</option>');
+                            }
+                        },
+                        error: function(err) {
+                            console.error("Erro ao carregar lotes:", err);
+                            loteSelect.empty().append('<option value="">Erro ao carregar lotes.</option>');
+                        }
+                    });
+                } else {
+                    loteSelect.empty().append('<option value="">Selecione um produto primeiro...</option>').prop('disabled', true);
+                }
+            });
+
+            // Handle batch selection
+            $('#item_lote_id').on('change', function() {
+                var selectedBatchOption = $(this).find('option:selected');
+                var preco_actual = parseFloat(selectedBatchOption.data('preco')) || 0;
+                var qnt_actual_entrada_item = parseFloat(selectedBatchOption.data('qnt-actual')) || 0;
+
                 $('#item_preco_unitario').val(preco_actual.toFixed(2));
-                // Also trigger item_total calculation
-                $('#item_quantidade').trigger('input'); // Trigger input event on quantity to update total
+                $('#item_quantidade').attr('max', qnt_actual_entrada_item); // Set max quantity
+                $('#item_quantidade').trigger('input'); // Trigger input event to update total
             });
 
             // Update item_total when quantity or unit price changes
@@ -179,32 +226,54 @@
                 $('#item_total').val((quantidade * preco_unitario).toFixed(2));
             });
 
+            // Calculate trocos when valor_entregue changes
+            $(document).on('input', '#modal_valor_entregue', function() {
+                var valor_entregue = parseFloat($(this).val()) || 0;
+                var total_geral = parseFloat($('#modal_custo_total').val()) || 0;
+                var trocos = valor_entregue - total_geral;
+                $('#modal_trocos').val(trocos.toFixed(2));
+            });
+
             // Add item to cart
             $('#add_item_to_cart').click(function() {
-                var produto_id = $('#item_produto_id').val();
-                var produto_text = $('#item_produto_id option:selected').text();
+                var produto_id = $('#item_produto_id').val(); // Get product_id from product dropdown
+                var entrada_item_id = $('#item_lote_id').val(); // Get entrada_item_id from batch dropdown
+                var selectedProductOption = $('#item_produto_id option:selected');
+                var selectedBatchOption = $('#item_lote_id option:selected');
+
+                var produto_text = selectedProductOption.text() + ' - ' + selectedBatchOption.text(); // Combine product and batch text
                 var quantidade = parseFloat($('#item_quantidade').val()) || 0;
                 var preco_unitario = parseFloat($('#item_preco_unitario').val()) || 0;
                 var item_total = parseFloat($('#item_total').val()) || 0;
 
-                // Get data attributes from selected product
-                var selectedProductOption = $('#item_produto_id option:selected');
-                var preco_actual = parseFloat(selectedProductOption.data('preco')) || 0;
-                var iva_rate = parseFloat(selectedProductOption.data('iva')) || 0;
+                // Get data attributes from selected batch
+                var preco_actual = parseFloat(selectedBatchOption.data('preco')) || 0;
+                var iva_rate = parseFloat(selectedBatchOption.data('iva')) || 0;
+                var qnt_actual_entrada_item = parseFloat(selectedBatchOption.data('qnt-actual')) || 0;
 
-                if (!produto_id || quantidade <= 0 || preco_unitario <= 0) {
+                if (!produto_id || !entrada_item_id || quantidade <= 0 || preco_unitario <= 0) {
                     Swal.fire({
                         icon: "error",
                         title: "Erro de Validação",
-                        html: "Preencha o produto, quantidade e preço unitário com valores válidos.",
+                        html: "Preencha o produto, lote, quantidade e preço unitário com valores válidos.",
                     });
                     return;
                 }
 
-                // Check for duplicate product
+                // Validate quantity against available stock for this entrada_item
+                if (quantidade > qnt_actual_entrada_item) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Stock Insuficiente",
+                        html: `A quantidade (${quantidade}) excede o stock disponível para este lote (${qnt_actual_entrada_item}).`,
+                    });
+                    return;
+                }
+
+                // Check for duplicate product (now by entrada_item_id)
                 var isDuplicate = false;
                 $('#itens_saida_table tbody tr').each(function() {
-                    if ($(this).find('input[name$="[produto_id]"]').val() == produto_id) {
+                    if ($(this).find('input[name$="[entrada_item_id]"]').val() == entrada_item_id) {
                         isDuplicate = true;
                         return false; // Exit loop
                     }
@@ -214,7 +283,7 @@
                     Swal.fire({
                         icon: "warning",
                         title: "Produto Duplicado",
-                        html: "Este produto já foi adicionado à lista.",
+                        html: "Este lote do produto já foi adicionado à lista.",
                     });
                     return;
                 }
@@ -237,7 +306,7 @@
 
                 var rowIndex = $('#itens_saida_table tbody tr').length;
                 var newRow = `
-                <tr data-produto-id="${produto_id}">
+                <tr data-produto-id="${produto_id}" data-entrada-item-id="${entrada_item_id}">
                     <td>${rowIndex + 1}</td>
                     <td>${produto_text}<input type="hidden" name="itens[${rowIndex}][produto_id]" value="${produto_id}"></td>
                     <td>${quantidade}<input type="hidden" name="itens[${rowIndex}][quantidade]" value="${quantidade}"></td>
@@ -250,12 +319,14 @@
                     <input type="hidden" name="itens[${rowIndex}][custo]" value="${custo}">
                     <input type="hidden" name="itens[${rowIndex}][desconto_percentual]" value="${desconto_percentual}">
                     <input type="hidden" name="itens[${rowIndex}][desconto_valor]" value="${desconto_valor}">
+                    <input type="hidden" name="itens[${rowIndex}][entrada_item_id]" value="${entrada_item_id}">
                 </tr>
             `;
                 $('#itens_saida_table tbody').append(newRow);
 
                 // Clear form fields
                 $('#item_produto_id').val('').trigger('change');
+                $('#item_lote_id').empty().append('<option value="">Selecione um produto primeiro...</option>').prop('disabled', true); // Clear and disable lote
                 $('#item_quantidade').val('');
                 $('#item_preco_unitario').val('');
                 $('#item_total').val('');
@@ -295,11 +366,16 @@
             $('#modal_custo').val(total_venda_sum.toFixed(2)); // Subtotal
             $('#modal_total_taxa').val(total_valor_iva_sum.toFixed(2)); // Total IVA
             $('#modal_custo_total').val(total_geral_sum.toFixed(2)); // Total Geral
+
+            // Set initial valor_entregue and calculate trocos
+            $('#modal_valor_entregue').val(total_geral_sum.toFixed(2)); // Default to total
+            $('#modal_trocos').val('0.00'); // Default trocos to 0
         }
 
         // When modal is shown, update values
         $('#confirmarSaidaModal').on('show.bs.modal', function(e) {
             calculateTotals(); // Recalculate just before showing
+            $('#modal_valor_entregue').trigger('input'); // Trigger trocos calculation
         });
 
         // Submeter formulário com AJAX (agora do modal)
@@ -327,20 +403,26 @@
             formData.append('valor_total_iva', $('#total_valor_iva_sum').text());
 
             // Get payment details from modal
-            formData.append('valor_pago', $('#modal_custo_total').val()); // Assuming full payment for cash sale
-            formData.append('valor_remanescente', 0); // Assuming 0 for cash sale
-            formData.append('desconto', $('#modal_total_desconto').val());
-            formData.append('valor_entregue', $('#modal_custo_total').val()); // Assuming full amount delivered
-            formData.append('trocos', 0); // Assuming 0 trocos for simplicity
-            formData.append('tipo_pagamento_id', $('#modal_forma_pagamento').val());
-            formData.append('estado_pagamento', 'pago'); // Always 'pago' for cash sale
-            formData.append('activo', 1); // Always active
+            var valor_entregue = parseFloat($('#modal_valor_entregue').val()) || 0;
+            var total_geral = parseFloat($('#modal_custo_total').val()) || 0;
+            var trocos = parseFloat($('#modal_trocos').val()) || 0; // This will be valor_entregue - total_geral
 
-            // Other fields with default/empty values for simplicity
-            formData.append('numero', '');
-            formData.append('numero_cotacao', '');
-            formData.append('validade_cotacao', '');
-            formData.append('slip', '');
+            formData.append('valor_pago', valor_entregue); // Valor pago é o que o cliente entregou
+            formData.append('valor_remanescente', trocos); // Remanescente é o troco (pode ser negativo se faltar pagar)
+            formData.append('desconto', $('#modal_total_desconto').val());
+            formData.append('valor_entregue', valor_entregue);
+            formData.append('trocos', trocos);
+            formData.append('tipo_pagamento_id', $('#modal_forma_pagamento').val());
+
+            // Determine estado_pagamento
+            if (valor_entregue >= total_geral) {
+                formData.append('estado_pagamento', 'pago');
+            } else if (valor_entregue > 0 && valor_entregue < total_geral) {
+                formData.append('estado_pagamento', 'parcial');
+            } else {
+                formData.append('estado_pagamento', 'nao_pago');
+            }
+            formData.append('activo', 1); // Always active
 
             var itens = [];
             $('#itens_saida_table tbody tr').each(function() {
@@ -354,6 +436,7 @@
                     custo: $(this).find('input[name$="[custo]"]').val(),
                     desconto_percentual: $(this).find('input[name$="[desconto_percentual]"]').val(),
                     desconto_valor: $(this).find('input[name$="[desconto_valor]"]').val(),
+                    entrada_item_id: $(this).find('input[name$="[entrada_item_id]"]').val(), // Add this
                 };
                 itens.push(item);
             });
@@ -405,3 +488,4 @@
         });
     </script>
 @endsection
+            
