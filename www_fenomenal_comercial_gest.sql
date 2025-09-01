@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 31-Ago-2025 às 18:29
+-- Tempo de geração: 01-Set-2025 às 06:07
 -- Versão do servidor: 8.3.0
 -- versão do PHP: 8.2.18
 
@@ -249,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `historico` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `historico`
@@ -366,7 +366,9 @@ INSERT INTO `historico` (`id`, `descricao`, `tabela`, `row_id`, `user_id`, `crea
 (108, 'Registou a entrada Nº 23 com 1 itens.', 'entradas', 23, 3, '2025-08-31 18:06:23', '2025-08-31 18:06:23'),
 (109, 'Registou a entrada Nº 24 com 2 itens.', 'entradas', 24, 3, '2025-08-31 18:08:56', '2025-08-31 18:08:56'),
 (110, 'Registou a entrada Nº 25 com 1 itens.', 'entradas', 25, 3, '2025-08-31 18:19:31', '2025-08-31 18:19:31'),
-(111, 'Registou a entrada Nº 26 com 1 itens.', 'entradas', 26, 3, '2025-08-31 18:33:29', '2025-08-31 18:33:29');
+(111, 'Registou a entrada Nº 26 com 1 itens.', 'entradas', 26, 3, '2025-08-31 18:33:29', '2025-08-31 18:33:29'),
+(112, 'Registou a saída Nº VD 2/2025 com 1 itens.', 'saidas', 3, 3, '2025-08-31 22:50:10', '2025-08-31 22:50:10'),
+(113, 'Registou a saída Nº VD 3/2025 com 2 itens.', 'saidas', 6, 3, '2025-08-31 23:58:01', '2025-08-31 23:58:01');
 
 -- --------------------------------------------------------
 
@@ -405,6 +407,34 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (16, '2020_05_26_155618_create_forma_pagamentos_table', 1),
 (17, '2020_06_06_105127_create_permissaos_table', 1),
 (18, '2020_06_06_114529_create_permissao_user_table', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `numeracao`
+--
+
+DROP TABLE IF EXISTS `numeracao`;
+CREATE TABLE IF NOT EXISTS `numeracao` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `numero` int NOT NULL,
+  `ano` year NOT NULL,
+  `tipo` enum('venda_dinheiro','venda_credito','cotacao','fornecedor','nota_credito_fornecedor','inventario','devolucao','nota_credito','abate','cliente','sessao') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `tipo` (`tipo`),
+  KEY `ano` (`ano`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Extraindo dados da tabela `numeracao`
+--
+
+INSERT INTO `numeracao` (`id`, `numero`, `ano`, `tipo`, `created_at`, `updated_at`) VALUES
+(1, 8, '2025', 'fornecedor', '2025-03-27 09:41:57', '2025-08-31 14:21:06'),
+(2, 17, '2025', 'venda_credito', '2025-03-28 09:18:12', '2025-04-01 08:40:35'),
+(3, 3, '2025', 'venda_dinheiro', '2025-08-31 16:04:34', '2025-08-31 23:58:01');
 
 -- --------------------------------------------------------
 
@@ -503,8 +533,8 @@ INSERT INTO `produtos` (`id`, `codigo_barras`, `nome`, `descricao`, `stock_minim
 (2, 'PB002', 'Veludo HL001', 'Veludo HL001', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
 (3, 'PB003', 'Linho', 'Linho', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
 (4, 'PB004', 'Linho RE', 'Linho RE', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
-(5, 'PB005', 'Molas grandes', 'Molas grandes', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
-(6, 'PB006', 'Molas pequenas', 'Molas pequenas', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
+(5, 'PB005', 'Molas grandes', 'Molas grandes', -10, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
+(6, 'PB006', 'Molas pequenas', 'Molas pequenas', -100, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
 (7, 'PB007', 'Mola Quadrada', 'Mola Quadrada', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
 (8, 'PB008', 'Prega mola', 'Prega mola', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
 (9, 'PB009', 'Cinta elástica grande', 'Cinta elástica grande', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
@@ -514,7 +544,7 @@ INSERT INTO `produtos` (`id`, `codigo_barras`, `nome`, `descricao`, `stock_minim
 (13, 'PB013', 'Caixinha de Agrafo montagem N-21', 'Caixinha de Agrafo montagem N-21', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 4),
 (14, 'PB014', 'Encaixo', 'Encaixo', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
 (15, 'PB015', 'Cola (contato, Spray) 1L', 'Cola 1L', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 5),
-(16, 'PB016', 'Dacron', 'Dacron', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
+(16, 'PB016', 'Dacron', 'Dacron', -5, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
 (17, 'PB017', 'Rolo Dacron', 'Rolo Dacron', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 6),
 (18, 'PB018', 'Botões diamante', 'Botões diamante', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 1),
 (19, 'PB019', 'Calico', 'Calico', 0, NULL, 2, 1, '2025-08-26 09:18:26', '2025-08-26 09:18:26', 2),
@@ -629,7 +659,16 @@ CREATE TABLE IF NOT EXISTS `saidas` (
   KEY `idx_estado_pagamento` (`estado_pagamento`),
   KEY `idx_saidas_id` (`id`),
   KEY `idx_saidas_tipo_saida_id` (`tipo_saida_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Extraindo dados da tabela `saidas`
+--
+
+INSERT INTO `saidas` (`id`, `cliente_id`, `tipo_saida_id`, `data`, `valor_total`, `valor_total_iva`, `valor_pago`, `valor_remanescente`, `desconto`, `valor_entregue`, `trocos`, `tipo_pagamento_id`, `numero`, `numero_cotacao`, `validade_cotacao`, `slip`, `numero_factura`, `estado_pagamento`, `activo`, `user_id`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, '2025-08-31', 1500.00, 240.00, 1000.00, 500.00, 0.00, 1000.00, 0.00, 1, 123, 'COT-2025-001', '2025-09-30', 'slip123.pdf', 'FACT-2025-001', 'parcial', '1', 1, '2025-08-31 18:33:42', '2025-08-31 18:33:42'),
+(3, 1, 1, '2025-08-31', 1500.00, 0.00, NULL, 1500.00, 0.00, 1000.00, NULL, 1, NULL, NULL, NULL, NULL, 'VD 2/2025', 'pago', '1', 3, '2025-08-31 20:50:10', '2025-08-31 20:50:10'),
+(6, 1, 1, '2025-08-31', 63250.00, 0.00, 63250.00, 0.00, 0.00, 63250.00, 0.00, NULL, NULL, NULL, NULL, NULL, 'VD 3/2025', 'pago', '1', 3, '2025-08-31 21:58:01', '2025-08-31 21:58:01');
 
 -- --------------------------------------------------------
 
@@ -665,7 +704,17 @@ CREATE TABLE IF NOT EXISTS `saida_itens` (
   KEY `idx_activo` (`activo`),
   KEY `idx_tipo_motivo` (`tipo_motivo`),
   KEY `idx_saida_itens_saida_id` (`saida_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Extraindo dados da tabela `saida_itens`
+--
+
+INSERT INTO `saida_itens` (`id`, `saida_id`, `produto_id`, `entrada_item_id`, `quantidade`, `preco_unitario`, `preco_compra`, `iva`, `valor_iva`, `custo`, `desconto_percentual`, `desconto_valor`, `tipo_motivo`, `motivo`, `user_id`, `activo`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 10, 5.000, 200.00, 150.00, 16.00, 80.00, 750.00, 0.00, 0.00, 1, 'Venda normal', 1, '1', '2025-08-31 18:34:06', '2025-08-31 18:34:06'),
+(2, 3, 5, NULL, 10.000, 150.00, 350.00, 0.00, 0.00, 1500.00, 0.00, 0.00, 1, 'kjhkk', 3, '1', '2025-08-31 20:50:10', '2025-08-31 20:50:10'),
+(3, 6, 6, NULL, 100.000, 600.00, 600.00, 0.00, 0.00, 60000.00, 0.00, 0.00, NULL, NULL, 3, '1', '2025-08-31 21:58:01', '2025-08-31 21:58:01'),
+(4, 6, 16, NULL, 5.000, 650.00, 650.00, 0.00, 0.00, 3250.00, 0.00, 0.00, NULL, NULL, 3, '1', '2025-08-31 21:58:01', '2025-08-31 21:58:01');
 
 -- --------------------------------------------------------
 
@@ -718,6 +767,65 @@ INSERT INTO `tipos_saidas` (`id`, `nome`, `descricao`, `estado`, `created_at`, `
 (1, 'Venda Normal', 'Venda direta a clientes', 1, NULL, NULL),
 (2, 'Venda a Crédito', 'Venda com pagamento posterior', 1, NULL, NULL),
 (3, 'Transferência', 'Saída via transferência', 1, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `tipo_motivo`
+--
+
+DROP TABLE IF EXISTS `tipo_motivo`;
+CREATE TABLE IF NOT EXISTS `tipo_motivo` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `descricao` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `estado` enum('1','0') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Extraindo dados da tabela `tipo_motivo`
+--
+
+INSERT INTO `tipo_motivo` (`id`, `descricao`, `estado`, `created_at`, `updated_at`) VALUES
+(1, 'Transferência', '1', '2024-05-02 13:32:57', '2024-05-02 13:32:57'),
+(2, 'Fora do prazo', '1', '2024-05-02 13:36:02', '2024-05-02 13:36:02'),
+(3, 'Outros', '1', '2024-05-02 13:36:02', '2024-05-02 13:36:02'),
+(4, 'Oferta', '1', '2024-05-02 13:36:02', '2024-05-02 13:36:02'),
+(5, 'Danificado', '1', '2024-05-02 13:36:02', '2024-05-02 13:36:02');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `tipo_pagamentos`
+--
+
+DROP TABLE IF EXISTS `tipo_pagamentos`;
+CREATE TABLE IF NOT EXISTS `tipo_pagamentos` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `designacao` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `is_active` enum('1','0') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tipo_pagamentos_user_id_foreign` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Extraindo dados da tabela `tipo_pagamentos`
+--
+
+INSERT INTO `tipo_pagamentos` (`id`, `designacao`, `user_id`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'Numerário', NULL, '1', '2020-08-19 12:27:02', '2020-08-19 12:27:02'),
+(2, 'MPesa', NULL, '1', '2020-08-19 12:27:03', '2020-08-19 12:27:03'),
+(3, 'POS MBim', NULL, '1', '2020-08-19 12:27:03', '2020-08-19 12:27:03'),
+(4, 'Cheque', NULL, '1', '2020-08-19 12:27:03', '2020-08-19 12:27:03'),
+(5, 'Paga Fácil', NULL, '1', '2020-08-19 12:27:04', '2020-08-19 12:27:04'),
+(6, 'POS Moza Banco', NULL, '1', '2020-08-19 12:27:03', '2020-08-19 12:27:03'),
+(7, 'POS BCI', NULL, '1', '2020-08-19 12:27:03', '2020-08-19 12:27:03'),
+(8, 'Transferência Bancária', NULL, '1', '2020-08-19 12:27:03', '2020-08-19 12:27:03');
 
 -- --------------------------------------------------------
 
