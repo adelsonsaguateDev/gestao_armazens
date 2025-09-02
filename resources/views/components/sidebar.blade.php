@@ -100,7 +100,7 @@
                             <ul class="mm-collapse">
                                 <li class="Ul_li--hover {{ request()->is('utilizador*') ? 'active' : '' }}"><a href="{{ route('utilizador.list') }}"><i
                                             class="i-Administrator text-20 mr-2"></i><span
-                                            class="item-name text-15">Funcionarios</span></a></li>
+                                            class="item-name text-15">Utilizadores</span></a></li>
                                 <li class="Ul_li--hover {{ request()->is('relatorio*') ? 'active' : '' }}"><a href="{{ route('relatorio.list') }}"><i
                                             class="i-Line-Chart-4 text-20 mr-2"></i><span
                                             class="item-name text-15">Relatórios</span></a></li>

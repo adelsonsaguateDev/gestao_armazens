@@ -19,11 +19,12 @@
         <thead>
             <tr style="font-weight: bold; color:black">
                 <th style="width: 1%;">#</th>
-                <th class="text-center" style="width: 30%;" >Nome</th>
-                <th class="text-center" style="width: 10%;" >Função</th>
-                <th class="text-center" style="width: 16.67%;" >E-mail</th>
-                <th class="text-center" style="width: 16.67%;" >Contacto</th>
-                <th class="text-center" style="width: 10%;" >Estado</th>
+                <th class="text-center">Nome</th>
+                <th class="text-center"  >Username</th>
+                <th class="text-center"  >Função</th>
+                <th class="text-center"  >E-mail</th>
+                <th class="text-center"  >Contacto</th>
+                <th class="text-center"  >Estado</th>
     @php
         $content .= ob_get_contents();
     @endphp
@@ -42,6 +43,7 @@
                 <tr>
                     <th scope="row">{{ $cont++ }}</th>
                     <td class="text-center">{{ $item->name }}</td>
+                    <td class="text-center">{{ $item->username }}</td>
                     <td class="text-center">{{ $item->permissoes[0]->nome }}</td>
                     <td class="text-center">{{ $item->email }}</td>
                     <td class="text-center" >{{ $item->contacto ?? " Sem contacto" }}</td>
