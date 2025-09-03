@@ -72,7 +72,7 @@ class SaidasController extends Controller
 
     public function add(Request $request)
     {
-        
+
         DB::beginTransaction();
         try {
             $json['success'] = null;
@@ -119,8 +119,8 @@ class SaidasController extends Controller
             $dataSaida['data_factura'] = $dataSaida['data'];
 
             // Handle payment details from modal
-            $dataSaida['desconto'] = $request->input('modal_total_desconto', 0);
-            $dataSaida['tipo_pagamento_id'] = $request->input('modal_forma_pagamento');
+            $dataSaida['desconto'] = $request->input('desconto', 0);
+            $dataSaida['tipo_pagamento_id'] = $request->input('tipo_pagamento_id');
 
             $itens = json_decode($request->input('itens'), true);
             if (empty($itens)) {
@@ -132,6 +132,19 @@ class SaidasController extends Controller
             foreach ($itens as $itemData) {
                 $total_venda_calculated += ($itemData['quantidade'] * $itemData['preco_unitario']);
             }
+
+            if ($dataSaida['desconto'] > 0) {
+                $total_venda_calculated -= $dataSaida['desconto'];
+            }
+
+            if ($dataSaida['valor_total_iva'] > 0) {
+                $total_venda_calculated += $dataSaida['valor_total_iva'];
+            }
+
+            if ($dataSaida['valor_pago'] > 0 && $dataSaida['desconto'] > 0) {
+                $dataSaida['valor_pago'] -= $dataSaida['desconto'];
+            }
+
 
             // Validate valor_total against calculated total
             if ($dataSaida['valor_total'] < $total_venda_calculated) {
@@ -430,9 +443,9 @@ class SaidasController extends Controller
     private function getInvoiceNumber($ano, $tipo)
     {
         $numeracao = DB::table('numeracao')
-                        ->where('ano', $ano)
-                        ->where('tipo', $tipo)
-                        ->first();
+            ->where('ano', $ano)
+            ->where('tipo', $tipo)
+            ->first();
         return $numeracao ? $numeracao->numero : 0;
     }
 

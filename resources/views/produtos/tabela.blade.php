@@ -47,7 +47,7 @@
                     <td class="text-center">{{ $item->unidade }}</td>
                     <td class="text-center">
                         @php
-                        if($item->stock_minimo > 0 && $item->quantidade <= $item->stock_minimo) :
+                        if($item->quantidade <= 0) :
                        @endphp
                         <div class="badge bg-danger text-white">{{ number_format($item->quantidade, 2, ',', '.') }}</div>
                        @php

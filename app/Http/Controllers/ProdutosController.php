@@ -34,6 +34,7 @@ class ProdutosController extends Controller
             ->select('si.produto_id', DB::raw('SUM(si.quantidade) as total_saidas'))
             ->where('si.activo', 1)
             ->groupBy('si.produto_id');
+            
 
         $query = DB::table('produtos as p')
             ->leftJoin('unidades as u', 'p.unidade_id', '=', 'u.id') // JOIN with unidades
