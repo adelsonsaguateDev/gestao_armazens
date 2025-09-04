@@ -8,7 +8,7 @@
     <div class="app-admin-wrap layout-sidebar-vertical sidebar-full">
 
         @include('components.sidebar')
-        @include('clientes.modal.AddUtilizador')
+        @include('clientes.modal.AddCliente')
         @include('clientes.modal.form_edit')
 
 
@@ -37,7 +37,7 @@
                                     </div>
                                     <div class="col-md-12 text-right ">
                                         <button title="Adicionar novo cliente" class="btn btn-success" type="button"
-                                            data-toggle="modal" data-target="#rg_utilizador" id="btn_registar"><i
+                                            data-toggle="modal" data-target="#rg_cliente" id="btn_registar"><i
                                                 class="fa fa-plus"></i> REGISTAR CLIENTE</button>
                                         <button title="Imprimir um pdf" class="btn btn-info" type="button"
                                             id="print"><i class="fa fa-print"></i> PDF</button>
@@ -149,8 +149,8 @@
                     success: function(response) {
                         console.log(response)
 
-                        $('.conteudo_funcionario').html(response);
-                        $('#edit_funcionario').modal('show');
+                        $('.conteudo_cliente').html(response);
+                        $('#edit_cliente').modal('show');
 
 
 
@@ -173,7 +173,7 @@
 
                 Swal.fire({
                     title: 'ALERTA!',
-                    text: "Tem certeza que deseja apagar o funcionario?",
+                    text: "Tem certeza que deseja apagar o cliente?",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#0CC27E',
@@ -188,9 +188,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         update_estado(cliente_id, estado);
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        Swal.fire('', 'Operação foi cancelada!', 'warning');
-                    }
+                    } 
                 });
 
 
@@ -285,7 +283,7 @@
 
                 Swal.fire({
                     title: 'ALERTA!',
-                    text: "Tem certeza que deseja activar o funcionario?",
+                    text: "Tem certeza que deseja activar o cliente?",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#0CC27E',
@@ -301,10 +299,7 @@
                     if (result.isConfirmed) {
                         // Ação quando o botão de confirmação é clicado
                         update_estado(cliente_id, estado);
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        // Ação quando o botão de cancelamento é clicado
-                        Swal.fire('', 'Operação foi cancelada!', 'error');
-                    }
+                    } 
                 });
 
 

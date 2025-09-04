@@ -99,7 +99,7 @@
                                     class="item-name text-15">Administração</span></a>
                             <ul class="mm-collapse">
                                 <li class="Ul_li--hover {{ request()->is('cliente*') ? 'active' : '' }}"><a href="{{ route('cliente.list') }}"><i
-                                            class="i-Administrator text-20 mr-2"></i><span
+                                            class="fas fa-users text-20 mr-2"></i><span
                                             class="item-name text-15">Clientes</span></a></li>
                                 <li class="Ul_li--hover {{ request()->is('utilizador*') ? 'active' : '' }}"><a href="{{ route('utilizador.list') }}"><i
                                             class="i-Administrator text-20 mr-2"></i><span

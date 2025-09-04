@@ -28,8 +28,7 @@ class ClientesController extends Controller
 
         $tipo_utilizador = Permissao::all();
 
-        return view('clientes.index',compact('tipo_utilizador'));
-
+        return view('clientes.index', compact('tipo_utilizador'));
     }
 
     public function list(Request $request)
@@ -45,15 +44,13 @@ class ClientesController extends Controller
             $query->where('estado', $estado);
 
             $total = $query->count();
-
         }
 
         if ($request->has('nome')) {
             $nome = $request->input('nome');
-            $query->where('nome', 'like','%' . $nome . '%');
+            $query->where('nome', 'like', '%' . $nome . '%');
 
             $total = $query->count();
-
         }
 
         // Define o número de itens por página (você pode ajustar conforme necessário)
@@ -82,150 +79,28 @@ class ClientesController extends Controller
             $historico = new Historico();
 
             $data = $request->validate([
-                'name' => 'required|unique:users',
-                'username' => 'required|unique:users',
-                'email' => 'required|unique:users',
-                'contacto' => 'required|unique:users',
-                'password' => 'min:6|required_with:password_confirmation|same:password_confirm',
-                'password_confirm' => 'min:6',
+                'nome' => 'required|unique:clientes',
+                'nuit' => 'required|unique:clientes',
+                'endereco' => 'nullable:clientes',
+                'contacto' => 'required|unique:clientes',
 
             ]);
 
-            $data['password'] = Hash::make($data['password']);
             $data['estado'] = 1;
-            $utilizador = User::create($data);
-            if($utilizador){
-
-                $utilizador->permissoes()->attach($request->permissao);
-                $descricao = 'Registou o utilizador ' . $utilizador->name . '.';
-                $historico->insert($utilizador->getTable(), $utilizador->id, $descricao);
+            $data['user_id'] = auth()->user()->id;
+            $cliente = Cliente::create($data);
+            if ($cliente) {
+                $descricao = 'Registou o cliente ' . $cliente->nome . '.';
+                $historico->insert($cliente->getTable(), $cliente->id, $descricao);
 
                 $json['success'] = true;
-                $json['message'] = 'O utilizador' . $utilizador->name . ' foi adicionado com sucesso.';
+                $json['message'] = 'O cliente' . $cliente->nome . ' foi adicionado com sucesso.';
                 $json['code'] = 200;
-
-            }else{
+            } else {
                 $json['success'] = false;
-                $json['message'] = 'Erro ao adicionar o utilizador '. $utilizador->name;
+                $json['message'] = 'Erro ao adicionar o cliente ' . $cliente->nome;
                 $json['code'] = 500;
             }
-
-             } catch (\Illuminate\Validation\ValidationException $e) {
-
-            $errors = $e->validator->errors()->all();
-
-            $json['success'] = false;
-            $json['message'] = $errors;
-            $json['code'] = 422; // HTTP 422 Unprocessable Entity
-        }
-
-        echo json_encode($json);
-
-
-    }
-
-
-    public function show_details($id)
-    {
-
-        $utilizador = User::find($id);
-
-
-        $historico = Historico::where('row_id', $id)
-                       ->where('tabela', 'users')->with('users')->get();
-
-
-        if (!$utilizador) {
-            return response()->json(['error' => 'Urilizador não encontrado'], 404);
-        }
-
-        return response()->view('utilizador.detalhes', compact('utilizador', 'historico'));
-    }
-
-    public function delete()
-    {
-        $id = $_POST['utilizador_id'];
-        $estado = $_POST['estado'];
-        $json['success'] = false;
-        $utilizador = User::find($id);
-        $historico = new Historico();
-
-        if (!empty($utilizador)) {
-            $data = ['estado' => $estado];
-            if ($utilizador->update($data)) {
-                $json['success'] = true;
-                if($estado == '1'){
-                    $json['message'] = 'Funcionario activado com sucesso.';
-
-                    $descricao = 'Activou o funcionario ' . $utilizador->name . '.';
-                    $historico->insert($utilizador->getTable(), $utilizador->id, $descricao);
-
-                }else if($estado == '2'){
-                    $json['message'] = 'Funcionario removido com sucesso.';
-
-                    $descricao = 'Removeu o funcionario ' . $utilizador->name . '.';
-                    $historico->insert($utilizador->getTable(), $utilizador->id, $descricao);
-                }
-                $json['code'] = 200;
-            }else{
-                $json['success'] = false;
-                $json['message'] = 'Ocorreu um erro ao remover o funcionario.';
-                $json['code'] = 500;
-            }
-        }
-        echo json_encode($json);
-    }
-
-    public function show($id)
-    {
-        $utilizador = User::find($id);
-        $tipo_utilizador = Permissao::all();
-        return view('utilizador.form_update', compact('utilizador', 'tipo_utilizador'));
-
-    }
-
-
-
-    public function edit(Request $request)
-    {
-        $id = $request->id;
-        $json['success'] = false;
-        $json['message'] = null;
-        $json['code'] = null;
-        $utilizador = User::find($id);
-        $historico = new Historico();
-
-        $data = request()->validate([
-            'name' => 'required',
-            'username' => 'required',
-            'email' => 'required|email',
-            'contacto' => 'required',
-
-        ]);
-
-
-        if(!empty($request->password)){
-            $data['password'] = Hash::make($request->password);
-        }
-
-        try {
-
-
-            if ($utilizador->update($data)) {
-                $utilizador->permissoes()->sync($request->permissao);
-                $json['success'] = true;
-                $json['message'] = 'Funcionario ' . $utilizador->name . ' actualizado com sucesso.';
-                $json['code'] = 200;
-
-                $descricao = "Actualizou o funcionario ". $utilizador->name ."";
-                $historico->insert($utilizador->getTable(), $utilizador->id, $descricao);
-
-            }else{
-                $json['success'] = false;
-                $json['message'] = 'Ocorreu um erro ao editar o funcionario.';
-                $json['code'] = 500;
-            }
-
         } catch (\Illuminate\Validation\ValidationException $e) {
 
             $errors = $e->validator->errors()->all();
@@ -238,4 +113,106 @@ class ClientesController extends Controller
         echo json_encode($json);
     }
 
+
+    public function show_details($id)
+    {
+
+        $clientes = Cliente::find($id);
+
+
+        $historico = Historico::where('row_id', $id)
+            ->where('tabela', 'clientes')->with('clientes')->get();
+
+
+        if (!$clientes) {
+            return response()->json(['error' => 'Cliente não encontrado'], 404);
+        }
+
+        return response()->view('clientes.detalhes', compact('clientes', 'historico'));
+    }
+
+    public function delete()
+    {
+        $id = $_POST['cliente_id'];
+        $estado = $_POST['estado'];
+        $json['success'] = false;
+        $cliente = User::find($id);
+        $historico = new Historico();
+
+        if (!empty($cliente)) {
+            $data = ['estado' => $estado];
+            if ($cliente->update($data)) {
+                $json['success'] = true;
+                if ($estado == '1') {
+                    $json['message'] = 'Cliente activado com sucesso.';
+
+                    $descricao = 'Activou o cliente ' . $cliente->nome . '.';
+                    $historico->insert($cliente->getTable(), $cliente->id, $descricao);
+                } else if ($estado == '2') {
+                    $json['message'] = 'Cliente removido com sucesso.';
+
+                    $descricao = 'Removeu o cleinte ' . $cliente->nome . '.';
+                    $historico->insert($cliente->getTable(), $cliente->id, $descricao);
+                }
+                $json['code'] = 200;
+            } else {
+                $json['success'] = false;
+                $json['message'] = 'Ocorreu um erro ao remover o cliente.';
+                $json['code'] = 500;
+            }
+        }
+        echo json_encode($json);
+    }
+
+    public function show($id)
+    {
+        $cleintes = Cliente::find($id);
+        return view('cleintes.form_update', compact('clientes'));
+    }
+
+
+
+    public function edit(Request $request)
+    {
+        $id = $request->id;
+        $json['success'] = false;
+        $json['message'] = null;
+        $json['code'] = null;
+        $cliente = Cliente::find($id);
+        $historico = new Historico();
+
+        $data = request()->validate([
+            'nome' => 'required',
+            'nuit' => 'required',
+            'endereco' => 'required',
+            'contacto' => 'required',
+
+        ]);
+
+        try {
+
+
+            if ($cliente->update($data)) {
+                $json['success'] = true;
+                $json['message'] = 'Cliente ' . $cliente->nome . ' actualizado com sucesso.';
+                $json['code'] = 200;
+
+                $descricao = "Actualizou o cliente " . $cliente->nome . "";
+                $historico->insert($cliente->getTable(), $cliente->id, $descricao);
+            } else {
+                $json['success'] = false;
+                $json['message'] = 'Ocorreu um erro ao editar o cliente.';
+                $json['code'] = 500;
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+
+            $errors = $e->validator->errors()->all();
+
+            $json['success'] = false;
+            $json['message'] = $errors;
+            $json['code'] = 422;
+        }
+
+        echo json_encode($json);
+    }
 }
