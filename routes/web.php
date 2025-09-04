@@ -8,6 +8,7 @@ use App\Http\Controllers\EntradasController;
 use App\Http\Controllers\SaidasController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\UtilizadorController;
+use App\Http\Controllers\Admin\ClientesController;
 
 
 
@@ -111,6 +112,15 @@ Route::get('utilizador_detalhes/{id}', [UtilizadorController::class, 'show_detai
 Route::post('utilizador/add', [UtilizadorController::class, 'add'])->name('create');
 Route::post('utilizador/delete', [UtilizadorController::class, 'delete'])->name('delete');
 Route::post('utilizador/edit', [UtilizadorController::class, 'edit'])->name('edit');
+
+//Cliente
+Route::get('cliente', [ClientesController::class, 'index'])->name('cliente.list');
+Route::get('clientes', [ClientesController::class, 'list'])->name('listar');
+Route::get('cliente/{id}', [ClientesController::class, 'show'])->name('show');
+Route::get('cliente_detalhes/{id}', [ClientesController::class, 'show_details'])->name('cliente.detalhes');
+Route::post('cliente/add', [ClientesController::class, 'add'])->name('create');
+Route::post('cliente/delete', [ClientesController::class, 'delete'])->name('delete');
+Route::post('cliente/edit', [ClientesController::class, 'edit'])->name('edit');
 
 
 

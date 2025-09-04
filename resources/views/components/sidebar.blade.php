@@ -94,10 +94,13 @@
                                 class="i-Remove-Cart text-20 mr-2"></i><span
                                 class="item-name text-15">Requisições</span></a></li>
                     @if (session('permissao_nome') == 'admin' || session('permissao_nome') == 'gestor')
-                        <li class="Ul_li--hover {{ (request()->is('utilizador*') || request()->is('relatorio*')) ? 'active' : '' }}">
+                        <li class="Ul_li--hover {{ (request()->is('utilizador*') || request()->is('relatorio*') || request()->is('cliente*')) ? 'active' : '' }}">
                             <a class="has-arrow" href="#"><i class="i-Gears text-20 mr-2"></i><span
                                     class="item-name text-15">Administração</span></a>
                             <ul class="mm-collapse">
+                                <li class="Ul_li--hover {{ request()->is('cliente*') ? 'active' : '' }}"><a href="{{ route('cliente.list') }}"><i
+                                            class="i-Administrator text-20 mr-2"></i><span
+                                            class="item-name text-15">Clientes</span></a></li>
                                 <li class="Ul_li--hover {{ request()->is('utilizador*') ? 'active' : '' }}"><a href="{{ route('utilizador.list') }}"><i
                                             class="i-Administrator text-20 mr-2"></i><span
                                             class="item-name text-15">Utilizadores</span></a></li>

@@ -15,6 +15,7 @@ class EntradaItem extends Model
         'entrada_id',
         'produto_id',
         'codigo_barras_lote',
+        'quantidade_disponivel',
         'qtd_caixas',
         'qtd_por_caixa',
         'preco_compra_caixa',

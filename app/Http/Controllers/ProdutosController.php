@@ -25,35 +25,25 @@ class ProdutosController extends Controller
     {
         // Subquery for total entradas (in units)
         $entradas = DB::table('entradas_itens')
-            ->select('produto_id', DB::raw('SUM(qtd_caixas * qtd_por_caixa) as total_entradas'))
+            ->select('produto_id', DB::raw('SUM(quantidade_disponivel) as total_disponivel'))
             ->where('estado', 1)
-            ->groupBy('produto_id');
-
-        // Subquery for total saidas (in units)
-        $saidas = DB::table('saida_itens as si')
-            ->select('si.produto_id', DB::raw('SUM(si.quantidade) as total_saidas'))
-            ->where('si.activo', 1)
-            ->groupBy('si.produto_id');
-            
+            ->groupBy('produto_id');      
 
         $query = DB::table('produtos as p')
-            ->leftJoin('unidades as u', 'p.unidade_id', '=', 'u.id') // JOIN with unidades
+            ->leftJoin('unidades as u', 'p.unidade_id', '=', 'u.id') 
             ->leftJoinSub($entradas, 'entradas', function ($join) {
                 $join->on('p.id', '=', 'entradas.produto_id');
             })
-            ->leftJoinSub($saidas, 'saidas', function ($join) {
-                $join->on('p.id', '=', 'saidas.produto_id');
-            })
             ->select(
-                'p.id',
+       'p.id',
                 'p.descricao',
                 'p.created_at',
                 'p.estado',
                 'p.nome',
                 'p.stock_minimo',
-                'u.nome as unidade', // Get unit name from unidades table
+                'u.nome as unidade',
                 'p.codigo_barras',
-                DB::raw('COALESCE(entradas.total_entradas, 0) - COALESCE(saidas.total_saidas, 0) as quantidade')
+                DB::raw('COALESCE(entradas.total_disponivel, 0) as quantidade')
             );
 
 

@@ -18,6 +18,7 @@ class CreateEntradasItensTable extends Migration
             $table->foreignId('entrada_id')->constrained('entradas')->cascadeOnDelete();
             $table->foreignId('produto_id')->constrained('produtos');
             $table->string('codigo_barras_lote', 100)->nullable();
+            $table->decimal('quantidade_disponivel', 12, 2);
             $table->integer('qtd_caixas')->default(0);
             $table->integer('qtd_por_caixa')->default(1);
             $table->decimal('preco_compra_caixa', 12, 2);

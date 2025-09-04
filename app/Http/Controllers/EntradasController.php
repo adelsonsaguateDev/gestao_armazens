@@ -121,6 +121,7 @@ class EntradasController extends Controller
                 $itemData['entrada_id'] = $entrada->id;
                 $itemData['user_id'] = auth()->user()->id;
                 $itemData['estado'] = 1;
+                $itemData['quantidade_disponivel'] = $itemData['qtd_caixas'] * $itemData['qtd_por_caixa'];
                 EntradaItem::create($itemData);
             }
 
@@ -231,6 +232,7 @@ class EntradasController extends Controller
                 $itemData['entrada_id'] = $entrada->id;
                 $itemData['user_id'] = auth()->user()->id;
                 $itemData['estado'] = 1;
+                $itemData['quantidade_disponivel'] = $itemData['qtd_caixas'] * $itemData['qtd_por_caixa'];
                 EntradaItem::create($itemData);
             }
 

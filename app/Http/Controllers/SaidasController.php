@@ -179,10 +179,10 @@ class SaidasController extends Controller
 
                 SaidaItem::create($itemDataValidated);
 
-                // Stock reduction
-                // DB::table('produtos')
-                //     ->where('id', $itemDataValidated['produto_id'])
-                //     ->decrement('stock_minimo', $itemDataValidated['quantidade']);
+                // Reduz o stock do lote (entrada_item)
+                DB::table('entradas_itens')
+                    ->where('id', $itemDataValidated['entrada_item_id'])
+                    ->decrement('quantidade_disponivel', $itemDataValidated['quantidade']);
             }
 
             $descricao = 'Registou a saída Nº ' . $saida->numero_factura . ' com ' . count($itens) . ' itens.';
@@ -420,22 +420,14 @@ class SaidasController extends Controller
     {
         $productId = $request->input('product_id');
 
-        $batches = DB::select("SELECT
-                                    ei.id AS entrada_item_id,
-                                    ei.preco_venda_unitario AS preco_actual,
-                                    (ei.qtd_caixas * ei.qtd_por_caixa) - COALESCE(SUM(si.quantidade), 0) AS qnt_actual_entrada_item
-                                FROM
-                                    entradas_itens ei
-                                LEFT JOIN
-                                    saida_itens si ON ei.id = si.entrada_item_id AND si.activo = 1
-                                WHERE
-                                    ei.produto_id = ? AND ei.estado = 1
-                                GROUP BY
-                                    ei.id, ei.preco_venda_unitario, ei.qtd_caixas, ei.qtd_por_caixa
-                                HAVING
-                                    qnt_actual_entrada_item > 0
-                                ORDER BY
-                                    ei.id", [$productId]);
+        // This now uses the 'quantidade_disponivel' column.
+        $batches = DB::table('entradas_itens')
+            ->where('produto_id', $productId)
+            ->where('estado', 1)
+            ->where('quantidade_disponivel', '>', 0)
+            ->select('id as entrada_item_id', 'preco_venda_unitario as preco_actual', 'quantidade_disponivel as qnt_actual_entrada_item')
+            ->orderBy('id')
+            ->get();
 
         return response()->json($batches);
     }
