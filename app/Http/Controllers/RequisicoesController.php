@@ -46,8 +46,8 @@ class RequisicoesController extends Controller
         // Define o número de itens por página (você pode ajustar conforme necessário)
         $itensPorPagina = $request->input('limite', 10); // Padrão: 10 itens por página
 
-        // Paginação os dados buscados
-        $requisicoes = $query->paginate($itensPorPagina);
+        // Paginação os dados buscados ordenados por ID (mais recentes primeiro)
+        $requisicoes = $query->orderBy('id', 'desc')->paginate($itensPorPagina);
 
         // Adiciona parâmetros de filtro à URL da páginação
         $requisicoes->appends($request->query());

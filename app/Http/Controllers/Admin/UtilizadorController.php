@@ -57,8 +57,8 @@ class UtilizadorController extends Controller
         // Define o número de itens por página (você pode ajustar conforme necessário)
         $itensPorPagina = $request->input('limite', 10); // Padrão: 10 itens por página
 
-        // Recupera os utilizadores paginados
-        $utilizadores = $query->paginate($itensPorPagina);
+        // Recupera os utilizadores paginados ordenados por ID (mais recentes primeiro)
+        $utilizadores = $query->orderBy('id', 'desc')->paginate($itensPorPagina);
 
         // Adiciona parâmetros de filtro à URL da páginação
         $utilizadores->appends($request->query());

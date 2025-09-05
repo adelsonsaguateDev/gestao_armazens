@@ -175,6 +175,7 @@
                 let descricao = $(this).attr('descricao');
                 let quantidade = $(this).attr('quantidade');
                 let stock_minimo = $(this).attr('stock_minimo');
+                let unidade_id = $(this).attr('unidade_id');
 
                 //Preencher os campos do modal de upadte
 
@@ -183,6 +184,15 @@
                 $("#quantidade_update").val(quantidade)
                 $("#stock_minimo_update").val(stock_minimo)
                 $("#descricao_update").val(descricao)
+                $("#unidade_id_update").val(unidade_id).trigger('change')
+
+                // Inicializar select2 no modal se ainda não foi inicializado
+                if (!$("#unidade_id_update").hasClass("select2-hidden-accessible")) {
+                    $("#unidade_id_update").select2({
+                        dropdownParent: $('#edit_produto'),
+                        allowClear: true
+                    });
+                }
 
             });
 

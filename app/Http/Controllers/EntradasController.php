@@ -59,7 +59,7 @@ class EntradasController extends Controller
         $total = $query->count();
 
         $itensPorPagina = $request->input('limite', 10);
-        $entradas = $query->paginate($itensPorPagina);
+        $entradas = $query->orderBy('id', 'desc')->paginate($itensPorPagina);
         $entradas->appends($request->query());
 
         return view('entradas.tabela', compact('entradas', 'total'));

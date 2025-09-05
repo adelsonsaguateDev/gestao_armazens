@@ -56,8 +56,8 @@ class ClientesController extends Controller
         // Define o número de itens por página (você pode ajustar conforme necessário)
         $itensPorPagina = $request->input('limite', 10); // Padrão: 10 itens por página
 
-        // Recupera os clientes paginados
-        $clientes = $query->paginate($itensPorPagina);
+        // Recupera os clientes paginados ordenados por ID (mais recentes primeiro)
+        $clientes = $query->orderBy('id', 'desc')->paginate($itensPorPagina);
 
         // Adiciona parâmetros de filtro à URL da páginação
         $clientes->appends($request->query());
