@@ -82,6 +82,10 @@ class SaidasController extends Controller
 
     public function add(Request $request)
     {
+        // Se for uma venda a crédito, garantir que o tipo_pagamento_id é nulo antes da validação
+        if ($request->input('tipo_saida_id') == 2) { // Assumindo 2 para 'Venda a Crédito'
+            $request->merge(['tipo_pagamento_id' => null]);
+        }
 
         DB::beginTransaction();
         try {
@@ -118,7 +122,7 @@ class SaidasController extends Controller
 
             // Invoice Numbering & Logic based on Sale Type (tipo_saida_id)
             $ano = date("Y");
-            $isCreditSale = ($dataSaida['tipo_saida_id'] == 2); // Assumindo 2 para 'Venda a Crédito'
+            $isCreditSale = ($dataSaida['tipo_saida_id'] == 2);
 
             if ($isCreditSale) {
                 $tipo = 'venda_credito';
