@@ -37,6 +37,16 @@ class SaidasController extends Controller
         return view('saidas.create', compact('produtos', 'clientes', 'tipos_saida', 'pagamentos'));
     }
 
+    public function createCredito()
+    {
+        $produtos = Produto::where('estado', 1)->get();
+        $clientes = Cliente::where('estado', 1)->get();
+        $tipos_saida = TipoSaida::where('estado', 1)->get();
+        $pagamentos = TipoPagamento::all();
+
+        return view('saidas.create_credito', compact('produtos', 'clientes', 'tipos_saida', 'pagamentos'));
+    }
+
     public function list(Request $request)
     {
         $query = Saida::with(['tipoSaida', 'cliente', 'user', 'estadoObj']);
@@ -106,21 +116,34 @@ class SaidasController extends Controller
                 $dataSaida['data'] = date('Y-m-d');
             }
 
-            // Invoice Numbering
+            // Invoice Numbering & Logic based on Sale Type (tipo_saida_id)
             $ano = date("Y");
-            $tipo = 'venda_dinheiro';
-            $numeracao = $this->getInvoiceNumber($ano, $tipo) + 1;
-            $numero_factura = "VD {$numeracao}/{$ano}";
+            $isCreditSale = ($dataSaida['tipo_saida_id'] == 2); // Assumindo 2 para 'Venda a Crédito'
+
+            if ($isCreditSale) {
+                $tipo = 'venda_credito';
+                $numeracao = $this->getInvoiceNumber($ano, $tipo) + 1;
+                $numero_factura = "VC {$numeracao}/{$ano}";
+                
+                // Force credit sale rules
+                $dataSaida['valor_pago'] = 0;
+                $dataSaida['tipo_pagamento_id'] = null;
+                $dataSaida['estado_pagamento'] = 'nao_pago';
+                $dataSaida['valor_remanescente'] = $dataSaida['valor_total'];
+                $dataSaida['valor_entregue'] = 0;
+                $dataSaida['trocos'] = 0;
+
+            } else { // Logic for other sale types
+                $tipo = 'venda_dinheiro';
+                $numeracao = $this->getInvoiceNumber($ano, $tipo) + 1;
+                $numero_factura = "VD {$numeracao}/{$ano}";
+            }
 
             $dataSaida['numero_factura'] = $numero_factura;
             $dataSaida['user_id'] = auth()->user()->id;
             $dataSaida['estado'] = 1;
             $dataSaida['data_aquisicao'] = $dataSaida['data'];
             $dataSaida['data_factura'] = $dataSaida['data'];
-
-            // Handle payment details from modal
-            $dataSaida['desconto'] = $request->input('desconto', 0);
-            $dataSaida['tipo_pagamento_id'] = $request->input('tipo_pagamento_id');
 
             $itens = json_decode($request->input('itens'), true);
             if (empty($itens)) {
@@ -141,10 +164,11 @@ class SaidasController extends Controller
                 $total_venda_calculated += $dataSaida['valor_total_iva'];
             }
 
-            if ($dataSaida['valor_pago'] > 0 && $dataSaida['desconto'] > 0) {
-                $dataSaida['valor_pago'] -= $dataSaida['desconto'];
+            if (!$isCreditSale) {
+                if ($dataSaida['valor_pago'] > 0 && $dataSaida['desconto'] > 0) {
+                    $dataSaida['valor_pago'] -= $dataSaida['desconto'];
+                }
             }
-
 
             // Validate valor_total against calculated total
             if ($dataSaida['valor_total'] < $total_venda_calculated) {

@@ -35,7 +35,7 @@
                                         <a type="button" href="{{route('saida.create')}}" class="btn btn-success mb-3" data-toggle="tooltip" title="Venda à Dinheiro">
                                             <span style="font-weight: bold"><i class="fas fa-plus-circle"></i> V. DINHEIRO</span>
                                         </a>
-                                        <a type="button" href="#" class="btn btn-info mb-3" data-toggle="tooltip" title="Venda à Crédito">
+                                        <a type="button" href="{{route('saida.create.credito')}}" class="btn btn-info mb-3" data-toggle="tooltip" title="Venda à Crédito">
                                             <span style="font-weight: bold"><i class="fas fa-plus-circle"></i> V. CRÉDITO</span>
                                         </a>
                                         <button class="btn btn-danger mb-3" id="print" data-toggle="tooltip" title="Exportar lista de produtos para PDF">

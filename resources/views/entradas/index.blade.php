@@ -172,7 +172,7 @@
 
             function list(page, limite) {
                 showLoader();
-                var estado = $("#estado_filtro").val();
+                var estado = $("#estado_filtro").val() == "" ? "1" : $("#estado_filtro").val();
                 var numero_factura = $("#numero_factura_filtro").val();
                 var fornecedor_id = $("#fornecedor_filtro").val();
                 var tipo_entrada_id = $("#tipo_entrada_filtro").val();

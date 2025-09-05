@@ -62,47 +62,24 @@ Route::post('entrada/edit', [EntradasController::class, 'edit'])->name('entrada.
 Route::post('entrada/delete', [EntradasController::class, 'delete'])->name('entrada.delete');
 
 
-//Saidas
+// Saida routes
+// Saidas (Refatorado e Unificado)
+// Mantendo as rotas originais e adicionando as que faltavam do bloco duplicado.
+
+// Rotas GET
 Route::get('saida', [SaidasController::class, 'index'])->name('saida.list');
 Route::get('saida/create', [SaidasController::class, 'create'])->name('saida.create');
+Route::get('saida/create-credito', [SaidasController::class, 'createCredito'])->name('saida.create.credito'); // Adicionada
+Route::get('saida/recibo/{id}', [SaidasController::class, 'recibo'])->name('saida.recibo'); // Adicionada
+Route::get('saida_detalhes/{id}', [SaidasController::class, 'show_details'])->name('saida.detalhes');
+Route::get('saida/{id}', [SaidasController::class, 'show'])->name('saida.show'); // Rota com parâmetro no final
+
+// Rotas POST
 Route::post('saidas', [SaidasController::class, 'list'])->name('saidas.list'); // Para listagem via AJAX
 Route::post('saida/add', [SaidasController::class, 'add'])->name('saida.add');
-Route::get('saida/{id}', [SaidasController::class, 'show'])->name('saida.show'); // Para formulário de edição/visualização
-Route::get('saida_detalhes/{id}', [SaidasController::class, 'show_details'])->name('saida.detalhes');
 Route::post('saida/edit', [SaidasController::class, 'edit'])->name('saida.edit');
 Route::post('saida/delete', [SaidasController::class, 'delete'])->name('saida.delete');
-
-
-
-// Saida routes
-Route::prefix('saida')->name('saida.')->group(function () {
-    Route::get('/', [SaidasController::class, 'index'])->name('list'); //
-
-    Route::post('/', [SaidasController::class, 'list'])->name('list'); // For
-
-
-    Route::get('/create', [SaidasController::class, 'create'])->name(
-        'create'
-    ); // Show create form
-    Route::post('/add', [SaidasController::class, 'add'])->name('add'); //
-
-
-    Route::get('/detalhes/{id}', [SaidasController::class, 'show_details'])->name('detalhes'); // Show details
-    Route::get('/show/{id}', [SaidasController::class, 'show'])->name(
-        'show'
-    ); // Show edit form (used by modal)
-    Route::post('/edit', [SaidasController::class, 'edit'])->name('edit'); //
-
-    Route::post('/delete', [SaidasController::class, 'delete'])->name(
-        'delete'
-    ); // Delete/deactivate saida
-
-    Route::get('/recibo/{id}', [SaidasController::class, 'recibo'])->name(
-        'recibo'
-    ); // Generate receipt
-
-    Route::post('/getBatchesByProduct', [SaidasController::class, 'getBatchesByProduct'])->name('getBatchesByProduct');
-});
+Route::post('saida/getBatchesByProduct', [SaidasController::class, 'getBatchesByProduct'])->name('saida.getBatchesByProduct'); // Adicionada
 
 //Utilizador
 Route::get('utilizador', [UtilizadorController::class, 'index'])->name('utilizador.list');

@@ -295,3 +295,26 @@ CREATE TABLE IF NOT EXISTS `pagamentos` (
     KEY `tipo_pagamento_id` (`tipo_pagamento_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
+
+DROP TABLE IF EXISTS `pagamentos`;
+CREATE TABLE IF NOT EXISTS `pagamentos` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `valor_pago` double(12,2) NOT NULL,
+  `numero_recibo` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `data_pagamento` datetime NOT NULL,
+  `numero` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tipo_pagamento_id` bigint UNSIGNED NOT NULL,
+  `cliente_id` bigint UNSIGNED NOT NULL,
+  `saida_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `cliente_id` (`cliente_id`),
+  KEY `saida_id` (`saida_id`),
+  KEY `user_id` (`user_id`),
+  KEY `tipo_pagamento_id` (`tipo_pagamento_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+COMMIT;
+
+

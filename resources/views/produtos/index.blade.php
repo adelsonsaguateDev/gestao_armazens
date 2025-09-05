@@ -322,7 +322,7 @@
 
             function list(page, limite) {
                 showLoader();
-                var estado = $("#estado_filtro").val();
+                var estado = $("#estado_filtro").val() == "" ? "1" : $("#estado_filtro").val();
                 var descricao = $("#descricao_filtro").val();
                 var codigo = $("#codigo_filtro").val();
                 var quantidade = $("#quantidade_filtro").val();
