@@ -41,6 +41,7 @@ class ProdutosController extends Controller
                 'p.estado',
                 'p.nome',
                 'p.stock_minimo',
+                'p.unidade_id',
                 'u.nome as unidade',
                 'p.codigo_barras',
                 DB::raw('COALESCE(entradas.total_disponivel, 0) as quantidade')
@@ -73,8 +74,8 @@ class ProdutosController extends Controller
         // Define o número de itens por página (você pode ajustar conforme necessário)
         $itensPorPagina = $request->input('limite', 10); // Padrão: 10 itens por página
 
-        // Paginação dos dados retornados
-        $produtos = $query->paginate($itensPorPagina);
+        // Ordenar por ID (mais recentes primeiro) e paginação
+        $produtos = $query->orderBy('p.id', 'desc')->paginate($itensPorPagina);
 
         // Adiciona parâmetros de filtro à URL da páginação
         $produtos->appends($request->query());
@@ -208,7 +209,8 @@ class ProdutosController extends Controller
     public function show($id)
     {
         $produto = Produto::where('id', $id)->get();
-        return view('produtos.form_update', compact('produto'));
+        $unidades = Unidade::where('estado', 1)->get();
+        return view('produtos.form_update', compact('produto', 'unidades'));
     }
 
     public function edit()
@@ -225,7 +227,8 @@ class ProdutosController extends Controller
             'nome' => (string)$_POST['nome_update'] ?? "",
             'descricao' => (string)$_POST['descricao_update'] ?? "",
             'stock_minimo' => $_POST['stock_minimo_update'] ?? 0,
-            'quantidade' => $_POST['quantidade_update'] ?? 0
+            'quantidade' => $_POST['quantidade_update'] ?? 0,
+            'unidade_id' => $_POST['unidade_id_update'] ?? null
         ];
 
 

@@ -86,7 +86,7 @@
                         <a href="{{ route('detalhes', ['id' => $item->id]) }}"  class="btn btn-primary"><i class="fa fa-eye text-white"></i> </a>
 
                         @if($item->estado == '1')
-                        <button class="btn btn-warning" nome="{{ $item->nome }}" stock_minimo="{{ $item->stock_minimo }}" quantidade="{{ $item->quantidade }}" descricao="{{ $item->descricao }}" value="{{ $item->id }}"   data-toggle="modal" data-target="#edit_produto" id="btn_edit"><i class="fa fa-pencil text-white"></i> </button>
+                        <button class="btn btn-warning" nome="{{ $item->nome }}" stock_minimo="{{ $item->stock_minimo }}" quantidade="{{ $item->quantidade }}" descricao="{{ $item->descricao }}" unidade_id="{{ $item->unidade_id ?? '' }}" value="{{ $item->id }}"   data-toggle="modal" data-target="#edit_produto" id="btn_edit"><i class="fa fa-pencil text-white"></i> </button>
                         <button title="Remover a produto" class="btn btn-danger" value="{{ $item->id }}" id="btn_delete"><i class="fa fa-trash"></i> </button>
                         @endif
 

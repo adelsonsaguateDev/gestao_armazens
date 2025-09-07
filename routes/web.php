@@ -42,12 +42,13 @@ Route::get('/', [LoginController::class, 'logout'])->name('logout');
 
 //Produto
 Route::get('produto', [ProdutosController::class, 'index'])->name('produto.list');
+Route::get('produtos', [ProdutosController::class, 'index'])->name('produtos');
 Route::get('produto/{id}', [ProdutosController::class, 'show'])->name('show');
 Route::get('produto_detalhes/{id}', [ProdutosController::class, 'show_details'])->name('detalhes');
 Route::post('produtos', [ProdutosController::class, 'list'])->name('listar');
 Route::post('produto/add', [ProdutosController::class, 'add'])->name('create');
 Route::post('produto/delete', [ProdutosController::class, 'delete'])->name('delete');
-Route::post('produto/edit', [ProdutosController::class, 'edit'])->name('edit');
+Route::post('produto/edit', [ProdutosController::class, 'edit'])->name('produto.edit');
 Route::post('produto/requisicao', [ProdutosController::class, 'add_requisicao'])->name('requisicao');
 
 

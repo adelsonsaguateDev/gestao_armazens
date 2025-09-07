@@ -74,7 +74,7 @@ class SaidasController extends Controller
         $total = $query->count();
 
         $itensPorPagina = $request->input('limite', 10);
-        $saidas = $query->paginate($itensPorPagina);
+        $saidas = $query->orderBy('id', 'desc')->paginate($itensPorPagina);
         $saidas->appends($request->query());
 
         return view('saidas.tabela', compact('saidas', 'total'));
