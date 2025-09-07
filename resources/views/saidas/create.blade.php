@@ -337,7 +337,7 @@
 
                 // Clear form fields
                 $('#item_produto_id').val('').trigger('change');
-                $('#item_lote_id').empty().append('<option value="">Selecione um produto primeiro...</option>').prop('disabled', true); // Clear and disable lote
+                $('#item_lote_id').empty().append('<option value="">Selecione um produto primeiro...</option>').prop('disabled', true).trigger('change'); // Clear and disable lote
                 $('#item_quantidade').val('');
                 $('#item_preco_unitario').val('');
                 $('#item_total').val('');

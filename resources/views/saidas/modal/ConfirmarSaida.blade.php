@@ -44,7 +44,7 @@
           <div class="row">
             <div class="col col-md-12">
               <label for="">Método de pagamento</label>
-              <select name="modal_forma_pagamento" id="modal_forma_pagamento" class="form-control ">
+              <select name="modal_forma_pagamento" id="modal_forma_pagamento" class="form-control select2">
                 {{-- Assuming $pagamentos is passed from controller --}}
                 @if(isset($pagamentos))
                     @foreach ($pagamentos as $item)

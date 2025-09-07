@@ -135,7 +135,7 @@
 
                             <div class="card-footer">
                                 <a href="{{ route('saida.list') }}" class="btn btn-danger">Cancelar</a>
-                                <button class="btn btn-success ml-2" id="confirmar_venda_credito_btn" type="button" data-toggle="modal" data-target="#confirmarSaidaModal">Confirmar Venda a Crédito</button>
+                                <button class="btn btn-success ml-2" id="confirmar_venda_credito_btn" type="button">Confirmar Venda a Crédito</button>
                             </div>
                         </form>
                     </div>
@@ -314,7 +314,7 @@
                 $('#itens_saida_table tbody').append(newRow);
 
                 $('#item_produto_id').val('').trigger('change');
-                $('#item_lote_id').empty().append('<option value="">Selecione um produto primeiro...</option>').prop('disabled', true);
+                $('#item_lote_id').empty().append('<option value="">Selecione um produto primeiro...</option>').prop('disabled', true).trigger('change');
                 $('#item_quantidade').val('');
                 $('#item_preco_unitario').val('');
                 $('#item_total').val('');
@@ -371,6 +371,15 @@
         });
 
         $('#confirmar_venda_credito_btn').click(function() {
+            if ($('#itens_saida_table tbody tr').length === 0) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Carrinho Vazio",
+                    html: "Adicione produtos à saída antes de confirmar.",
+                });
+                return;
+            }
+
             if (!$('#cliente_id').val()) {
                 Swal.fire({
                     icon: "error",
@@ -380,7 +389,8 @@
                 return;
             }
             
-            // O modal será aberto automaticamente pelo data-toggle
+            // Se a validação passar, abre o modal
+            $('#confirmarSaidaModal').modal('show');
         });
 
         // Submeter formulário com AJAX (agora do modal)
