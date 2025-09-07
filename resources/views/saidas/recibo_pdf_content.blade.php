@@ -155,7 +155,7 @@
                                 <h6 class="sub font-weight-bold">Cliente </h6>
                                 <p class="text-left">
                                     Nome:{{ $saidaData['cliente_nome'] }}
-                                    <br />Nuit: {{ $saidaData['cliente_nuit'] || '' }}
+                                    <br />Nuit: {{ $saidaData['cliente_nuit'] ?? '' }}
                                     <br />Contacto: {{ $saidaData['cliente_contacto'] }}
                                 </p>
                             </div>
@@ -264,36 +264,6 @@
         </div>
 
         <div class="card-footer">
-            @if ($saidaData['tipo_saida_id'] == 3)
-                <table class="table" style="width: 100%; color:black; font-size: 10px;">
-                    <tbody>
-                        <tr>
-                            <td style="text-align: left; width: 100px;margin-right: 0;padding-right: 0">Cliente: </td>
-                            <td style="text-align: left; border-color: black;">
-                                <hr>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left; width: 100px;margin-right: 0;padding-right: 0">Contacto: </td>
-                            <td style="text-align: left; border-color: black;">
-                                <hr>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left; width: 100px;margin-right: 0;padding-right: 0">N.º Membro:
-                            </td>
-                            <td style="text-align: left; border-color: black;">{{ $saidaData['numero_membro'] }}</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left; width: 100px;margin-right: 0;padding-right: 0">C. Autorização:
-                            </td>
-                            <td style="text-align: left; border-color: black;">{{ $saidaData['codigo_autorizacao'] }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <br>
-            @endif
             <p class="mt-4 mb-3 fw-bold text-center text-uppercase">
                 <strong>{{ $empresa->slogan ?? null }}</strong>
             </p>
