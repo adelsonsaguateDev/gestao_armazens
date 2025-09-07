@@ -213,24 +213,47 @@ class ProdutosController extends Controller
         return view('produtos.form_update', compact('produto', 'unidades'));
     }
 
-    public function edit()
+    public function edit(Request $request)
     {
-        $id = $_POST['id'];
+        $id = $request->input('id');
         $json['success'] = false;
         $json['message'] = null;
         $json['code'] = null;
         $produto = Produto::find($id);
         $historico = new Historico();
 
-
         $data = [
-            'nome' => (string)$_POST['nome_update'] ?? "",
-            'descricao' => (string)$_POST['descricao_update'] ?? "",
-            'stock_minimo' => $_POST['stock_minimo_update'] ?? 0,
-            'quantidade' => $_POST['quantidade_update'] ?? 0,
-            'unidade_id' => $_POST['unidade_id_update'] ?? null
+            'nome' => $request->input('nome_update') ?? "",
+            'descricao' => $request->input('descricao_update') ?? "",
+            'stock_minimo' => $request->input('stock_minimo_update') ?? 0,
+            'quantidade' => $request->input('quantidade_update') ?? 0,
+            'unidade_id' => $request->input('unidade_id_update') ?? null
         ];
 
+        // Handle File Upload - Nova imagem
+        if($request->hasFile('imagem_update')){
+            // Validar o arquivo
+            $request->validate([
+                'imagem_update' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            ]);
+
+            // Get filename with the extension
+            $filenameWithExt = $request->file('imagem_update')->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $request->file('imagem_update')->getClientOriginalExtension();
+            // Filename to store
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            // Upload Image
+            $path = $request->file('imagem_update')->storeAs('public/produtosImg', $fileNameToStore);
+            $data['imagem'] = $fileNameToStore;
+
+            // Remover imagem antiga se existir
+            if($produto->imagem && file_exists(storage_path('app/public/produtosImg/' . $produto->imagem))) {
+                unlink(storage_path('app/public/produtosImg/' . $produto->imagem));
+            }
+        }
 
         if (!empty($produto)) {
             if ($produto->update($data)) {

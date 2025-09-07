@@ -194,6 +194,25 @@
                     });
                 }
 
+                // Limpar preview da imagem quando abrir o modal
+                $("#imagem_preview").hide();
+                $("#imagem_update").val('');
+
+            });
+
+            // Preview da imagem no modal
+            $(document).on("change", "#imagem_update", function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        $("#preview_img").attr("src", e.target.result);
+                        $("#imagem_preview").show();
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    $("#imagem_preview").hide();
+                }
             });
 
 

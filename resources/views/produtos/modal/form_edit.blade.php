@@ -44,7 +44,17 @@
                     </select>
                 </div>
 
-                      
+                <div class="col-md-12 form-group">
+                    <label for="imagem_update"><b>Imagem do Produto</b></label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="imagem_update" name="imagem_update" accept="image/*">
+                        <label class="custom-file-label" for="imagem_update">Escolher nova imagem...</label>
+                    </div>
+                    <small class="form-text text-muted">Formatos aceites: JPEG, PNG, JPG, GIF, SVG. Tamanho máximo: 2MB</small>
+                    <div id="imagem_preview" class="mt-2" style="display: none;">
+                        <img id="preview_img" src="" alt="Preview" style="max-width: 150px; max-height: 150px; border-radius: 5px;">
+                    </div>
+                </div>
                       
              </div>
 

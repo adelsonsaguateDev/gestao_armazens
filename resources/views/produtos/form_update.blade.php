@@ -64,6 +64,29 @@
                                             @endif
                                         </select>
                                     </div>
+
+                                    <div class="col-md-12 form-group">
+                                        <label for="imagem_update"><b>Imagem do Produto</b></label>
+                                        @if(isset($produto[0]->imagem) && $produto[0]->imagem)
+                                            <div class="mb-2">
+                                                <label class="text-muted">Imagem atual:</label>
+                                                <div>
+                                                    <img src="{{ asset('storage/produtosImg/' . $produto[0]->imagem) }}" alt="Imagem atual" style="max-width: 150px; max-height: 150px; border-radius: 5px; border: 1px solid #ddd;">
+                                                </div>
+                                            </div>
+                                        @endif
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="imagem_update" name="imagem_update" accept="image/*">
+                                            <label class="custom-file-label" for="imagem_update">Escolher nova imagem...</label>
+                                        </div>
+                                        <small class="form-text text-muted">Formatos aceites: JPEG, PNG, JPG, GIF, SVG. Tamanho máximo: 2MB</small>
+                                        <div id="imagem_preview" class="mt-2" style="display: none;">
+                                            <label class="text-muted">Nova imagem:</label>
+                                            <div>
+                                                <img id="preview_img" src="" alt="Preview" style="max-width: 150px; max-height: 150px; border-radius: 5px; border: 1px solid #ddd;">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="row mt-3">
@@ -91,13 +114,33 @@ $(document).ready(function() {
         allowClear: true,
     });
 
+    // Preview da imagem
+    $("#imagem_update").change(function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $("#preview_img").attr("src", e.target.result);
+                $("#imagem_preview").show();
+            };
+            reader.readAsDataURL(file);
+        } else {
+            $("#imagem_preview").hide();
+        }
+    });
+
     $("#editar_produto").click(function() {
         showLoader();
+        
+        // Criar FormData para suportar upload de arquivos
+        const formData = new FormData($("#form_editar_produto")[0]);
         
         $.ajax({
             url: '{{ route("produto.edit") }}',
             method: 'POST',
-            data: $("#form_editar_produto").serialize(),
+            data: formData,
+            processData: false,
+            contentType: false,
             dataType: 'json',
             success: function(response) {
                 if (response.success == true) {
