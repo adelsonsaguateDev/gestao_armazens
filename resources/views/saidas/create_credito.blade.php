@@ -135,7 +135,7 @@
 
                             <div class="card-footer">
                                 <a href="{{ route('saida.list') }}" class="btn btn-danger">Cancelar</a>
-                                <button class="btn btn-success ml-2" id="confirmar_venda_credito_btn" type="button">Confirmar Venda a Crédito</button>
+                                <button class="btn btn-success ml-2" id="confirmar_venda_credito_btn" type="button" data-toggle="modal" data-target="#confirmarSaidaModal">Confirmar Venda a Crédito</button>
                             </div>
                         </form>
                     </div>
@@ -149,6 +149,8 @@
             <!-- fotter end -->
         </div>
     </div>
+
+    @include('saidas.modal.ConfirmarSaida')
 
 @endsection
 
@@ -282,12 +284,23 @@
 
                 var rowIndex = $('#itens_saida_table tbody tr').length;
                 var newRow = `
-                <tr data-produto-id="${produto_id}" data-entrada-item-id="${entrada_item_id}">
+                <tr data-produto-id="${produto_id}" data-entrada-item-id="${entrada_item_id}" data-row-index="${rowIndex}">
                     <td>${rowIndex + 1}</td>
                     <td>${produto_text}<input type="hidden" name="itens[${rowIndex}][produto_id]" value="${produto_id}"></td>
-                    <td>${quantidade}<input type="hidden" name="itens[${rowIndex}][quantidade]" value="${quantidade}"></td>
-                    <td>${preco_unitario.toFixed(2)}<input type="hidden" name="itens[${rowIndex}][preco_unitario]" value="${preco_unitario}"></td>
-                    <td>${item_total.toFixed(2)}<input type="hidden" name="itens[${rowIndex}][item_total]" value="${item_total}"></td>
+                    <td class="editable-quantity" data-max="${qnt_actual_entrada_item}">
+                        <span class="quantity-display" title="Duplo clique para editar">${quantidade}</span>
+                        <input type="number" class="form-control quantity-input" value="${quantidade}" min="1" max="${qnt_actual_entrada_item}" style="display: none;">
+                        <input type="hidden" name="itens[${rowIndex}][quantidade]" value="${quantidade}">
+                    </td>
+                    <td class="editable-price">
+                        <span class="price-display" title="Duplo clique para editar">${preco_unitario.toFixed(2)}</span>
+                        <input type="number" class="form-control price-input" value="${preco_unitario}" step="0.01" min="0.01" style="display: none;">
+                        <input type="hidden" name="itens[${rowIndex}][preco_unitario]" value="${preco_unitario}">
+                    </td>
+                    <td class="item-total">
+                        <span class="total-display">${item_total.toFixed(2)}</span>
+                        <input type="hidden" name="itens[${rowIndex}][item_total]" value="${item_total}">
+                    </td>
                     <td><button type="button" class="btn btn-danger btn-sm remove_item_saida">Remover</button></td>
                     <input type="hidden" name="itens[${rowIndex}][preco_compra]" value="${preco_compra}">
                     <input type="hidden" name="itens[${rowIndex}][iva]" value="${iva_rate}">
@@ -316,8 +329,8 @@
         });
 
         function calculateTotals() {
-            var total_venda_sum = 0;
-            var total_valor_iva_sum = 0;
+            var total_venda_sum = 0; // Subtotal
+            var total_valor_iva_sum = 0; // Total IVA
 
             $('#itens_saida_table tbody tr').each(function() {
                 var item_total = parseFloat($(this).find('input[name$="[item_total]"]').val()) || 0;
@@ -332,22 +345,49 @@
             $('#total_venda_sum').text(total_venda_sum.toFixed(2));
             $('#total_valor_iva_sum').text(total_valor_iva_sum.toFixed(2));
             $('#total_geral_sum').text(total_geral_sum.toFixed(2));
+
+            // Update modal fields
+            $('#modal_custo').val(total_venda_sum.toFixed(2)); // Subtotal
+            $('#modal_total_taxa').val(total_valor_iva_sum.toFixed(2)); // Total IVA
+            $('#modal_custo_total').val(total_geral_sum.toFixed(2)); // Total Geral
+
+            // Set initial valor_entregue and calculate trocos
+            $('#modal_valor_entregue').val(total_geral_sum.toFixed(2)); // Default to total
+            $('#modal_trocos').val('0.00'); // Default trocos to 0
         }
 
-        $('#confirmar_venda_credito_btn').click(function() {
-            showLoader();
+        // Calculate trocos when valor_entregue changes
+        $(document).on('input', '#modal_valor_entregue', function() {
+            var valor_entregue = parseFloat($(this).val()) || 0;
+            var total_geral = parseFloat($('#modal_custo_total').val()) || 0;
+            var trocos = valor_entregue - total_geral;
+            $('#modal_trocos').val(trocos.toFixed(2));
+        });
 
+        // When modal is shown, update values
+        $('#confirmarSaidaModal').on('show.bs.modal', function(e) {
+            calculateTotals(); // Recalculate just before showing
+            $('#modal_valor_entregue').trigger('input'); // Trigger trocos calculation
+        });
+
+        $('#confirmar_venda_credito_btn').click(function() {
             if (!$('#cliente_id').val()) {
                 Swal.fire({
                     icon: "error",
                     title: "Erro de Validação",
                     html: "O cliente é obrigatório para uma venda a crédito.",
                 });
-                hideLoader();
                 return;
             }
+            
+            // O modal será aberto automaticamente pelo data-toggle
+        });
 
-            var total_geral_sum_calculated = parseFloat($('#total_geral_sum').text()) || 0;
+        // Submeter formulário com AJAX (agora do modal)
+        $('#registar_venda_modal').click(function() {
+            showLoader();
+
+            var total_geral_sum_calculated = parseFloat($('#modal_custo_total').val()) || 0;
             if (total_geral_sum_calculated <= 0) {
                 Swal.fire({
                     icon: "error",
@@ -363,15 +403,15 @@
             formData.append('cliente_id', $('#cliente_id').val());
             formData.append('tipo_saida_id', 2); // Assumindo 2 para Venda a Crédito
 
-            formData.append('valor_total', $('#total_geral_sum').text());
-            formData.append('valor_total_iva', $('#total_valor_iva_sum').text());
+            formData.append('valor_total', $('#modal_custo_total').val());
+            formData.append('valor_total_iva', $('#modal_total_taxa').val());
 
             formData.append('valor_pago', 0);
-            formData.append('valor_remanescente', $('#total_geral_sum').text());
-            formData.append('desconto', 0);
-            formData.append('valor_entregue', 0);
-            formData.append('trocos', 0);
-            formData.append('tipo_pagamento_id', null);
+            formData.append('valor_remanescente', $('#modal_custo_total').val());
+            formData.append('desconto', $('#modal_total_desconto').val() || 0);
+            formData.append('valor_entregue', $('#modal_valor_entregue').val());
+            formData.append('trocos', $('#modal_trocos').val());
+            formData.append('tipo_pagamento_id', $('#modal_forma_pagamento').val());
             formData.append('estado_pagamento', 'nao_pago');
             formData.append('activo', 1);
 
@@ -437,5 +477,136 @@
                 hideLoader();
             });
         });
+        // Edição simples com duplo clique
+        $(document).on('dblclick', '.quantity-display', function() {
+            const row = $(this).closest('tr');
+            const display = $(this);
+            const input = row.find('.quantity-input');
+            const maxValue = parseInt(row.find('.editable-quantity').attr('data-max'));
+            
+            display.hide();
+            input.show().focus().attr('max', maxValue);
+        });
+        
+        $(document).on('dblclick', '.price-display', function() {
+            const row = $(this).closest('tr');
+            const display = $(this);
+            const input = row.find('.price-input');
+            
+            display.hide();
+            input.show().focus();
+        });
+        
+        // Salvar ao perder foco
+        $(document).on('blur', '.quantity-input', function() {
+            const row = $(this).closest('tr');
+            const input = $(this);
+            const display = row.find('.quantity-display');
+            const newValue = parseInt(input.val());
+            const maxValue = parseInt(row.find('.editable-quantity').attr('data-max'));
+            
+            // Validações
+            if (newValue <= 0) {
+                Swal.fire("Erro!", "A quantidade deve ser maior que zero.", "error");
+                input.val(display.text());
+                input.hide();
+                display.show();
+                return;
+            }
+            
+            if (newValue > maxValue) {
+                Swal.fire("Erro!", `A quantidade não pode ser maior que ${maxValue} (disponível).`, "error");
+                input.val(display.text());
+                input.hide();
+                display.show();
+                return;
+            }
+            
+            // Atualizar display e campo hidden
+            display.text(newValue);
+            row.find('input[name$="[quantidade]"]').val(newValue);
+            
+            // Esconder input e mostrar display
+            input.hide();
+            display.show();
+            
+            // Recalcular total do item
+            recalcularItemTotal(row);
+        });
+        
+        $(document).on('blur', '.price-input', function() {
+            const row = $(this).closest('tr');
+            const input = $(this);
+            const display = row.find('.price-display');
+            const newValue = parseFloat(input.val());
+            
+            // Validações
+            if (newValue <= 0) {
+                Swal.fire("Erro!", "O preço deve ser maior que zero.", "error");
+                input.val(display.text());
+                input.hide();
+                display.show();
+                return;
+            }
+            
+            // Atualizar display e campo hidden
+            display.text(newValue.toFixed(2));
+            row.find('input[name$="[preco_unitario]"]').val(newValue);
+            
+            // Esconder input e mostrar display
+            input.hide();
+            display.show();
+            
+            // Recalcular total do item
+            recalcularItemTotal(row);
+        });
+        
+        // Função para recalcular total do item
+        function recalcularItemTotal(row) {
+            const quantidade = parseInt(row.find('input[name$="[quantidade]"]').val());
+            const precoUnitario = parseFloat(row.find('input[name$="[preco_unitario]"]').val());
+            const ivaRate = parseFloat(row.find('input[name$="[iva]"]').val());
+            
+            const itemTotal = quantidade * precoUnitario;
+            const valorIva = (itemTotal * ivaRate / 100);
+            
+            // Atualizar campos
+            row.find('input[name$="[item_total]"]').val(itemTotal.toFixed(2));
+            row.find('input[name$="[valor_iva]"]').val(valorIva.toFixed(2));
+            row.find('.item-total .total-display').text(itemTotal.toFixed(2));
+            
+            // Recalcular totais gerais
+            calculateTotals();
+        }
     </script>
+
+    <style>
+        .quantity-display, .price-display {
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 3px;
+            display: inline-block;
+            min-width: 50px;
+        }
+
+        .quantity-display:hover, .price-display:hover {
+            background-color: #f8f9fa;
+        }
+
+        .quantity-input, .price-input {
+            border: 1px solid #007bff;
+            border-radius: 3px;
+            text-align: center;
+            width: 80px;
+        }
+
+        .quantity-input:focus, .price-input:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+        .editable-quantity, .editable-price {
+            text-align: center;
+        }
+    </style>
 @endsection

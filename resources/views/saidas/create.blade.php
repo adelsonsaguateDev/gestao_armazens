@@ -306,12 +306,23 @@
 
                 var rowIndex = $('#itens_saida_table tbody tr').length;
                 var newRow = `
-                <tr data-produto-id="${produto_id}" data-entrada-item-id="${entrada_item_id}">
+                <tr data-produto-id="${produto_id}" data-entrada-item-id="${entrada_item_id}" data-row-index="${rowIndex}">
                     <td>${rowIndex + 1}</td>
                     <td>${produto_text}<input type="hidden" name="itens[${rowIndex}][produto_id]" value="${produto_id}"></td>
-                    <td>${quantidade}<input type="hidden" name="itens[${rowIndex}][quantidade]" value="${quantidade}"></td>
-                    <td>${preco_unitario.toFixed(2)}<input type="hidden" name="itens[${rowIndex}][preco_unitario]" value="${preco_unitario}"></td>
-                    <td>${item_total.toFixed(2)}<input type="hidden" name="itens[${rowIndex}][item_total]" value="${item_total}"></td>
+                    <td class="editable-quantity" data-max="${qnt_actual_entrada_item}">
+                        <span class="quantity-display" title="Duplo clique para editar">${quantidade}</span>
+                        <input type="number" class="form-control quantity-input" value="${quantidade}" min="1" max="${qnt_actual_entrada_item}" style="display: none;">
+                        <input type="hidden" name="itens[${rowIndex}][quantidade]" value="${quantidade}">
+                    </td>
+                    <td class="editable-price">
+                        <span class="price-display" title="Duplo clique para editar">${preco_unitario.toFixed(2)}</span>
+                        <input type="number" class="form-control price-input" value="${preco_unitario}" step="0.01" min="0.01" style="display: none;">
+                        <input type="hidden" name="itens[${rowIndex}][preco_unitario]" value="${preco_unitario}">
+                    </td>
+                    <td class="item-total">
+                        <span class="total-display">${item_total.toFixed(2)}</span>
+                        <input type="hidden" name="itens[${rowIndex}][item_total]" value="${item_total}">
+                    </td>
                     <td><button type="button" class="btn btn-danger btn-sm remove_item_saida">Remover</button></td>
                     <input type="hidden" name="itens[${rowIndex}][preco_compra]" value="${preco_compra}">
                     <input type="hidden" name="itens[${rowIndex}][iva]" value="${iva_rate}">
@@ -487,6 +498,136 @@
                 hideLoader();
             });
         });
-    </script>
-@endsection
+        // Edição simples com duplo clique
+        $(document).on('dblclick', '.quantity-display', function() {
+            const row = $(this).closest('tr');
+            const display = $(this);
+            const input = row.find('.quantity-input');
+            const maxValue = parseInt(row.find('.editable-quantity').attr('data-max'));
             
+            display.hide();
+            input.show().focus().attr('max', maxValue);
+        });
+        
+        $(document).on('dblclick', '.price-display', function() {
+            const row = $(this).closest('tr');
+            const display = $(this);
+            const input = row.find('.price-input');
+            
+            display.hide();
+            input.show().focus();
+        });
+        
+        // Salvar ao perder foco
+        $(document).on('blur', '.quantity-input', function() {
+            const row = $(this).closest('tr');
+            const input = $(this);
+            const display = row.find('.quantity-display');
+            const newValue = parseInt(input.val());
+            const maxValue = parseInt(row.find('.editable-quantity').attr('data-max'));
+            
+            // Validações
+            if (newValue <= 0) {
+                Swal.fire("Erro!", "A quantidade deve ser maior que zero.", "error");
+                input.val(display.text());
+                input.hide();
+                display.show();
+                return;
+            }
+            
+            if (newValue > maxValue) {
+                Swal.fire("Erro!", `A quantidade não pode ser maior que ${maxValue} (disponível).`, "error");
+                input.val(display.text());
+                input.hide();
+                display.show();
+                return;
+            }
+            
+            // Atualizar display e campo hidden
+            display.text(newValue);
+            row.find('input[name$="[quantidade]"]').val(newValue);
+            
+            // Esconder input e mostrar display
+            input.hide();
+            display.show();
+            
+            // Recalcular total do item
+            recalcularItemTotal(row);
+        });
+        
+        $(document).on('blur', '.price-input', function() {
+            const row = $(this).closest('tr');
+            const input = $(this);
+            const display = row.find('.price-display');
+            const newValue = parseFloat(input.val());
+            
+            // Validações
+            if (newValue <= 0) {
+                Swal.fire("Erro!", "O preço deve ser maior que zero.", "error");
+                input.val(display.text());
+                input.hide();
+                display.show();
+                return;
+            }
+            
+            // Atualizar display e campo hidden
+            display.text(newValue.toFixed(2));
+            row.find('input[name$="[preco_unitario]"]').val(newValue);
+            
+            // Esconder input e mostrar display
+            input.hide();
+            display.show();
+            
+            // Recalcular total do item
+            recalcularItemTotal(row);
+        });
+        
+        // Função para recalcular total do item
+        function recalcularItemTotal(row) {
+            const quantidade = parseInt(row.find('input[name$="[quantidade]"]').val());
+            const precoUnitario = parseFloat(row.find('input[name$="[preco_unitario]"]').val());
+            const ivaRate = parseFloat(row.find('input[name$="[iva]"]').val());
+            
+            const itemTotal = quantidade * precoUnitario;
+            const valorIva = (itemTotal * ivaRate / 100);
+            
+            // Atualizar campos
+            row.find('input[name$="[item_total]"]').val(itemTotal.toFixed(2));
+            row.find('input[name$="[valor_iva]"]').val(valorIva.toFixed(2));
+            row.find('.item-total .total-display').text(itemTotal.toFixed(2));
+            
+            // Recalcular totais gerais
+            calculateTotals();
+        }
+    </script>
+
+    <style>
+        .quantity-display, .price-display {
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 3px;
+            display: inline-block;
+            min-width: 50px;
+        }
+
+        .quantity-display:hover, .price-display:hover {
+            background-color: #f8f9fa;
+        }
+
+        .quantity-input, .price-input {
+            border: 1px solid #007bff;
+            border-radius: 3px;
+            text-align: center;
+            width: 80px;
+        }
+
+        .quantity-input:focus, .price-input:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+        .editable-quantity, .editable-price {
+            text-align: center;
+        }
+    </style>
+@endsection
