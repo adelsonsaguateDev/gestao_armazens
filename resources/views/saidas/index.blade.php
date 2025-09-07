@@ -8,6 +8,8 @@
         @include('components.sidebar')
         @include('saidas.modal.form_edit')
 
+        @include('saidas.modal.pagamento') {{-- Adicionado --}}
+
         <div class="switch-overlay"></div>
         <div class="main-content-wrap mobile-menu-content bg-off-white m-0">
             @include('components.header')
@@ -134,6 +136,8 @@
 
 @section('scripts')
     <script>
+        var storePagamentoUrl = "{{ route('pagamentos.store') }}"; // Adicionado para o script de pagamentos
+
         $(document).ready(function() {
             $(".select2").select2({
                 allowClear: true,
@@ -276,4 +280,5 @@
             }
         });
     </script>
+    <script src="{{ asset('js/pagamentos.js') }}"></script> {{-- Adicionado --}}
 @endsection

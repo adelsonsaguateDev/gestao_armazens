@@ -9,6 +9,7 @@ use App\Http\Controllers\SaidasController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\UtilizadorController;
 use App\Http\Controllers\Admin\ClientesController;
+use App\Http\Controllers\PagamentoController;
 
 
 
@@ -99,6 +100,10 @@ Route::get('cliente_detalhes/{id}', [ClientesController::class, 'show_details'])
 Route::post('cliente/add', [ClientesController::class, 'add'])->name('create');
 Route::post('cliente/delete', [ClientesController::class, 'delete'])->name('delete');
 Route::post('cliente/edit', [ClientesController::class, 'edit'])->name('edit');
+
+
+//Pagamentos
+Route::resource('pagamentos', PagamentoController::class);
 
 
 

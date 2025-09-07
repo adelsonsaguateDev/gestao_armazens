@@ -99,10 +99,21 @@
                         <a href="{{ route('saida.detalhes', ['id' => $item->id]) }}"  class="btn btn-primary"><i class="fa fa-eye text-white"></i> </a>
 
                         @if($item->activo == '1')
-                        <button class="btn btn-warning" value="{{ $item->id }}"   data-toggle="modal" data-target="#edit_saida" id="btn_edit"><i class="fa fa-pencil text-white"></i> </button>
+                        {{-- <button class="btn btn-warning" value="{{ $item->id }}"   data-toggle="modal" data-target="#edit_saida" id="btn_edit"><i class="fa fa-pencil text-white"></i> </button> --}}
                         <button title="Remover a saida" class="btn btn-danger" value="{{ $item->id }}" id="btn_delete"><i class="fa fa-trash"></i> </button>
                         <button title="Imprimir Recibo" class="btn btn-info recibo" value="{{ $item->id }}"><i class="fa fa-print"></i> </button>
                         <input type="hidden" class="rota{{ $item->id }}" value="{{ route('saida.recibo', ['id' => $item->id]) }}">
+                        @endif
+
+                        {{-- Botão Pagar --}}
+                        @if($item->tipo_saida_id == 2 && in_array($item->estado_pagamento, ['nao_pago', 'parcial']))
+                            <button title="Registar Pagamento" class="btn btn-success btn-pagar" 
+                                data-id="{{ $item->id }}" 
+                                data-valor-total="{{ $item->valor_total }}"
+                                data-valor-remanescente="{{ $item->valor_remanescente }}"
+                                data-toggle="modal" data-target="#pagamentoModal">
+                                <i class="fas fa-dollar-sign"></i> Pagar
+                            </button>
                         @endif
 
                         @if($item->activo == '0')

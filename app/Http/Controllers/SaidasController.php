@@ -23,7 +23,8 @@ class SaidasController extends Controller
         $produtos = Produto::where('estado', 1)->get();
         $clientes = Cliente::where('estado', 1)->get();
         $tipos_saida = TipoSaida::where('estado', 1)->get();
-        return view('saidas.index', compact('produtos', 'clientes', 'tipos_saida'));
+        $tipos_pagamento = TipoPagamento::where('is_active', 1)->get(); // Adicionado
+        return view('saidas.index', compact('produtos', 'clientes', 'tipos_saida', 'tipos_pagamento')); // Adicionado
     }
 
     public function create()
