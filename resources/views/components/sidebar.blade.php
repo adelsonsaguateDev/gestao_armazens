@@ -88,7 +88,7 @@
                     </li>
                     <li class="Ul_li--hover {{ request()->is('saida*') ? 'active' : '' }}"><a href="{{ route('saida.list') }}"><i class="i-Shop-4 text-20 mr-2"></i><span
                                 class="item-name text-15">Vendas</span></a></li>
-                    <li class="Ul_li--hover"><a href="#"><i class="i-Financial text-20 mr-2"></i><span
+                    <li class="Ul_li--hover {{ request()->is('pagamento*') ? 'active' : '' }}"><a href="{{ route('pagamentos.index') }}"><i class="i-Financial text-20 mr-2"></i><span
                                 class="item-name text-15">Pagamentos</span></a></li>
                     <li class="Ul_li--hover {{ request()->is('requisicao*') ? 'active' : '' }}"><a href="{{ route('requisicao.list') }}"><i
                                 class="i-Remove-Cart text-20 mr-2"></i><span

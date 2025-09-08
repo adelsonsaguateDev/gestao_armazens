@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pagamento;
-use App\Models\Historico;
 use App\Models\Saida;
+use App\Models\Produto;
+use App\Models\Cliente;
+use App\Models\TipoSaida;
+use App\Models\Historico;
+use App\Models\TipoPagamento;
 use Illuminate\Support\Facades\DB;
 
 
@@ -15,7 +19,46 @@ setlocale(LC_ALL, 'pt', 'pt.utf-8', 'pt.utf-8', 'portuguese');
 
 class PagamentoController extends Controller
 {
-    public function store(Request $request)
+
+    public function index()
+    {
+        $clientes = Cliente::where('estado', 1)->get();
+        $tipos_pagamento = TipoPagamento::where('is_active', 1)->get(); 
+        return view('pagamentos.index', compact('clientes',  'tipos_pagamento')); 
+    }
+
+    public function list(Request $request)
+    {
+        $query = Pagamento::with(['tipoPagamento', 'cliente', 'user']);
+
+        
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->input('estado'));
+        }
+
+        if ($request->filled('numero_factura')) {
+            $query->where('numero_factura', 'like', '%' . $request->input('numero_factura') . '%');
+        }
+
+        if ($request->filled('cliente_id')) {
+            $query->where('cliente_id', $request->input('cliente_id'));
+        }
+
+       
+
+        if ($request->filled('data_inicio') && $request->filled('data_fim')) {
+            $query->whereBetween('created_at', [$request->input('data_inicio'), $request->input('data_fim')]);
+        }
+
+        $total = $query->count();
+
+        $itensPorPagina = $request->input('limite', 10);
+        $pagamentos = $query->orderBy('id', 'desc')->paginate($itensPorPagina);
+        $pagamentos->appends($request->query());
+
+        return view('pagamentos.tabela', compact('pagamentos', 'total'));
+    }
+    public function add(Request $request)
     {
 
         DB::beginTransaction();
@@ -77,7 +120,7 @@ class PagamentoController extends Controller
 
             $saida->save();
 
-            $descricao = 'Registou o pagamento Nº ' . $pagamento->numero . ' sobre a saida Nº ' . $pagamento->numero_recibo .' no valor de '.$valorAPagar;
+            $descricao = 'Registou o pagamento Nº ' . $pagamento->numero . ' sobre a saida Nº ' . $pagamento->numero_recibo . ' no valor de ' . $valorAPagar;
             $historico->insert($pagamento->getTable(), $pagamento->id, $descricao);
             $historico->insert($saida->getTable(), $saida->id, $descricao);
 
@@ -119,11 +162,5 @@ class PagamentoController extends Controller
         );
     }
 
-    // Manter os outros métodos vazios por enquanto
-    public function index() {}
-    public function create() {}
-    public function show($id) {}
-    public function edit($id) {}
-    public function update(Request $request, $id) {}
-    public function destroy($id) {}
+    
 }

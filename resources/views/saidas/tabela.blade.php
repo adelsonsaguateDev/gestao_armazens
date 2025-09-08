@@ -107,12 +107,12 @@
 
                         {{-- Botão Pagar --}}
                         @if($item->tipo_saida_id == 2 && in_array($item->estado_pagamento, ['nao_pago', 'parcial']))
-                            <button title="Registar Pagamento" class="btn btn-success btn-pagar" 
+                            <button title="Efectuar Pagamento" class="btn btn-success btn-pagar" 
                                 data-id="{{ $item->id }}" 
                                 data-valor-total="{{ $item->valor_total }}"
                                 data-valor-remanescente="{{ $item->valor_remanescente }}"
                                 data-toggle="modal" data-target="#pagamentoModal">
-                                <i class="fas fa-dollar-sign">PAGAR</i> 
+                                <i class="fas fa-credit-card"></i> 
                             </button>
                         @endif
 

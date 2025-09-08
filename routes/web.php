@@ -103,7 +103,10 @@ Route::post('cliente/edit', [ClientesController::class, 'edit'])->name('edit');
 
 
 //Pagamentos
-Route::resource('pagamentos', PagamentoController::class);
+Route::get('pagamento', [PagamentoController::class, 'index'])->name('pagamentos.index');
+// Rotas POST
+Route::post('pagamentos', [PagamentoController::class, 'list'])->name('pagamentos.list'); 
+Route::post('pagamento/add', [PagamentoController::class,'add'])->name('pagamento.create');
 
 
 

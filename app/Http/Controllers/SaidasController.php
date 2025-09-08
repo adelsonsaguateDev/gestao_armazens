@@ -52,6 +52,9 @@ class SaidasController extends Controller
     {
         $query = Saida::with(['tipoSaida', 'cliente', 'user', 'estadoObj']);
 
+        if ($request->filled('estado_pagamento')) {
+            $query->where('estado_pagamento', $request->input('estado_pagamento'));
+        }
         if ($request->filled('estado')) {
             $query->where('estado', $request->input('estado'));
         }
@@ -80,7 +83,7 @@ class SaidasController extends Controller
 
         return view('saidas.tabela', compact('saidas', 'total'));
     }
-
+    
     public function add(Request $request)
     {
         // Se for uma venda a crédito, garantir que o tipo_pagamento_id é nulo antes da validação
