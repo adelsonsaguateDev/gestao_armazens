@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Lista de utilizador | Gestão de Armazens')
+@section('title', 'Detalhes do Cliente | Gestão de Armazens')
 
 
 
@@ -17,7 +17,7 @@
         <!-- ============ Body content start ============= -->
         <div class="main-content pt-4">
             <div class="breadcrumb">
-                <h1 class="mr-2">Detalhes do Funcionario</h1>
+                <h1 class="mr-2">Detalhes do Cliente</h1>
             </div>
             <div class="separator-breadcrumb border-top"></div>
             <div class="row">
@@ -29,21 +29,33 @@
                             <div class="ul-widget__item">
                                 <div class="ul-widget__info">
                                     <span class="ul-widget__desc text-mute">Nome</span>
-                                    <h3 class="ul-widget1__title" style="font-size: 15px"><?= $utilizador->name ?? "Sem nome" ?></h3> 
+                                    <h3 class="ul-widget1__title" style="font-size: 15px"><?= $cliente->nome ?? "Sem nome" ?></h3> 
+                                </div>
+                                <div class="ul-widget__info">
+                                    <span class="ul-widget__desc text-mute">NUIT</span>
+                                    <h3 class="ul-widget1__title" style="font-size: 15px"><?= $cliente->nuit ?? "Sem nuit" ?></h3> 
+                                </div>
+                                <div class="ul-widget__info">
+                                    <span class="ul-widget__desc text-mute">Contacto</span>
+                                    <h3 class="ul-widget1__title" style="font-size: 15px"><?= $cliente->contacto ?? "Sem nuit" ?></h3> 
+                                </div>
+                                <div class="ul-widget__info">
+                                    <span class="ul-widget__desc text-mute">Endereço</span>
+                                    <h3 class="ul-widget1__title" style="font-size: 15px"><?= $cliente->endereco ?? "Sem nuit" ?></h3> 
                                 </div>
                                 <div class="ul-widget__info">
                                     <span class="ul-widget__desc text-mute">Data de Registo</span>
-                                    <h3 class="ul-widget1__title" style="font-size: 15px"><?= $utilizador->created_at ?></h3>
+                                    <h3 class="ul-widget1__title" style="font-size: 15px"><?= $cliente->created_at ?></h3>
                                 </div>
                                 
                                 <div class="ul-widget__info">
                                     <span class="ul-widget__desc text-mute">Estado</span>
                                     
-                                    @if($utilizador->estado == "1")
+                                    @if($cliente->estado == "1")
                                         <h3 class="ul-widget1__title" style="font-size: 15px"><span class="badge badge-success mr-1 mb-1"> Activo </span></h3>
                                     @endif
 
-                                    @if($utilizador->estado == "2")
+                                    @if($cliente->estado == "2")
                                         <h3 class="ul-widget1__title" style="font-size: 15px"><span class="badge badge-danger mr-1 mb-1"> Inactivo </span></h3>
                                     @endif
                                         

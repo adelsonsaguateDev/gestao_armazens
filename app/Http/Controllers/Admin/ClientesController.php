@@ -117,18 +117,20 @@ class ClientesController extends Controller
     public function show_details($id)
     {
 
-        $clientes = Cliente::find($id);
+        $cliente = Cliente::find($id);
 
 
         $historico = Historico::where('row_id', $id)
-            ->where('tabela', 'clientes')->with('clientes')->get();
+            ->where('tabela', 'clientes')->with('users')->get();
+
+        
 
 
-        if (!$clientes) {
+        if (!$cliente) {
             return response()->json(['error' => 'Cliente não encontrado'], 404);
         }
 
-        return response()->view('clientes.detalhes', compact('clientes', 'historico'));
+        return response()->view('clientes.detalhes', compact('cliente', 'historico'));
     }
 
     public function delete()
@@ -136,7 +138,7 @@ class ClientesController extends Controller
         $id = $_POST['cliente_id'];
         $estado = $_POST['estado'];
         $json['success'] = false;
-        $cliente = User::find($id);
+        $cliente = Cliente::find($id);
         $historico = new Historico();
 
         if (!empty($cliente)) {
@@ -166,8 +168,8 @@ class ClientesController extends Controller
 
     public function show($id)
     {
-        $cleintes = Cliente::find($id);
-        return view('cleintes.form_update', compact('clientes'));
+        $cleinte = Cliente::find($id);
+        return view('cleintes.form_update', compact('cliente'));
     }
 
 
