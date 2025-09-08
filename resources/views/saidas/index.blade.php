@@ -7,8 +7,7 @@
 
         @include('components.sidebar')
         @include('saidas.modal.form_edit')
-
-        @include('saidas.modal.pagamento') {{-- Adicionado --}}
+        @include('saidas.modal.pagamento') 
 
         <div class="switch-overlay"></div>
         <div class="main-content-wrap mobile-menu-content bg-off-white m-0">

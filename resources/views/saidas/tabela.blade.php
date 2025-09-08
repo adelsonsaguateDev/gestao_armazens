@@ -28,7 +28,7 @@
     @php
         $content .= ob_get_contents();
     @endphp
-                <th class="text-center col-2">Acções</th>
+                <th class="text-center col-3">Acções</th>
    @php
         ob_start();
    @endphp
@@ -112,7 +112,7 @@
                                 data-valor-total="{{ $item->valor_total }}"
                                 data-valor-remanescente="{{ $item->valor_remanescente }}"
                                 data-toggle="modal" data-target="#pagamentoModal">
-                                <i class="fas fa-dollar-sign"></i> Pagar
+                                <i class="fas fa-dollar-sign">PAGAR</i> 
                             </button>
                         @endif
 

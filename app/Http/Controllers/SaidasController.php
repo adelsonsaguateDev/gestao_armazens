@@ -31,7 +31,7 @@ class SaidasController extends Controller
     {
         $produtos = Produto::where('estado', 1)->get();
 
-        $clientes = Cliente::where('estado', 1)->get();
+        $clientes = Cliente::data('estado', 1)->get();
         $tipos_saida = TipoSaida::where('estado', 1)->get();
         $pagamentos = TipoPagamento::all();
 
@@ -128,7 +128,7 @@ class SaidasController extends Controller
             if ($isCreditSale) {
                 $tipo = 'venda_credito';
                 $numeracao = $this->getInvoiceNumber($ano, $tipo) + 1;
-                $numero_factura = "VC {$numeracao}/{$ano}";
+                $numero_factura = "VC{$numeracao}/{$ano}";
                 
                 // Force credit sale rules
                 $dataSaida['valor_pago'] = 0;
@@ -141,7 +141,7 @@ class SaidasController extends Controller
             } else { // Logic for other sale types
                 $tipo = 'venda_dinheiro';
                 $numeracao = $this->getInvoiceNumber($ano, $tipo) + 1;
-                $numero_factura = "VD {$numeracao}/{$ano}";
+                $numero_factura = "VD{$numeracao}/{$ano}";
             }
 
             $dataSaida['numero_factura'] = $numero_factura;

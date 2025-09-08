@@ -69,7 +69,7 @@ $(document).ready(function() {
             url: storePagamentoUrl, // Corrigido
             method: 'POST',
             data: {
-                _token: '{{ csrf_token() }}',
+                _token: $('meta[name="csrf-token"]').attr('content'),
                 saida_id: saidaId,
                 valor_a_pagar: valorAPagar,
                 tipo_pagamento_id: tipoPagamentoId

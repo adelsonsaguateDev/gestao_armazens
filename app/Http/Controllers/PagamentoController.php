@@ -4,31 +4,40 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pagamento;
+use App\Models\Historico;
 use App\Models\Saida;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
+
+date_default_timezone_set('Africa/Maputo');
+setlocale(LC_ALL, 'pt', 'pt.utf-8', 'pt.utf-8', 'portuguese');
+
 
 class PagamentoController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'saida_id' => 'required|exists:saidas,id',
-            'valor_a_pagar' => 'required|numeric|min:0.01',
-            'tipo_pagamento_id' => 'required|exists:tipos_pagamentos,id',
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
+        DB::beginTransaction();
         try {
+            $json['success'] = null;
+            $json['code'] = null;
+            $json['message'] = null;
+
+            $historico = new Historico();
+
+            $dataPagamento = $request->validate([
+                'saida_id' => 'required|exists:saidas,id',
+                'valor_a_pagar' => 'required|numeric|min:0.01',
+                'tipo_pagamento_id' => 'required|exists:tipo_pagamentos,id',
+            ]);
+
+            $ano = date("Y");
+
+            $tipo = 'pagamento';
+            $numeracao = $this->getInvoiceNumber($ano, $tipo) + 1;
+            $numero = "P{$numeracao}/{$ano}";
+
             $saida = Saida::findOrFail($request->saida_id);
 
             $valorAPagar = floatval($request->valor_a_pagar);
@@ -38,13 +47,21 @@ class PagamentoController extends Controller
                 return response()->json(['errors' => ['valor_a_pagar' => ['O valor a pagar não pode ser maior que o valor remanescente.']]], 422);
             }
 
-            // Criar o registo de pagamento
-            Pagamento::create([
-                'saida_id' => $saida->id,
-                'valor' => $valorAPagar,
+
+            $dataPagamento = [
+                'valor_pago' => $valorAPagar,
+                'numero_recibo' => $saida->numero_factura,
+                'data_pagamento' => date('Y-m-d'),
+                'numero' => $numero,
                 'tipo_pagamento_id' => $request->tipo_pagamento_id,
-                'user_id' => auth()->id(),
-            ]);
+                'cliente_id' => $saida->cliente_id,
+                'saida_id' => $saida->id,
+                'user_id' => auth()->user()->id,
+            ];
+
+            $pagamento = Pagamento::create($dataPagamento);
+
+            $this->updateInvoiceNumber($ano, $tipo);
 
             // Atualizar os valores na saida
             $saida->valor_pago += $valorAPagar;
@@ -53,29 +70,60 @@ class PagamentoController extends Controller
             // Atualizar o estado do pagamento
             if ($saida->valor_remanescente <= 0) {
                 $saida->estado_pagamento = 'pago';
-                $saida->valor_remanescente = 0; // Garantir que não fica negativo
+                $saida->valor_remanescente = 0;
             } else {
                 $saida->estado_pagamento = 'parcial';
             }
 
             $saida->save();
 
-            return response()->json([
-                'message' => 'Pagamento registado com sucesso!',
-                'saida' => $saida
-            ], 200);
+            $descricao = 'Registou o pagamento Nº ' . $pagamento->numero . ' sobre a saida Nº ' . $pagamento->numero_recibo .' no valor de '.$valorAPagar;
+            $historico->insert($pagamento->getTable(), $pagamento->id, $descricao);
+            $historico->insert($saida->getTable(), $saida->id, $descricao);
 
+
+            DB::commit();
+            $json['success'] = true;
+            $json['message'] = 'Pagamento registado com sucesso.';
+            $json['code'] = 200;
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            $errors = $e->validator->errors()->all();
+            $json['success'] = false;
+            $json['message'] = $errors;
+            $json['code'] = 422;
         } catch (\Exception $e) {
-            Log::error('Erro ao registar pagamento: ' . $e->getMessage());
-            return response()->json(['message' => 'Ocorreu um erro no servidor.'], 500);
+            DB::rollBack();
+            $json['success'] = false;
+            $json['message'] = $e->getMessage();
+            $json['code'] = 500;
         }
+
+        echo json_encode($json);
+    }
+
+    private function getInvoiceNumber($ano, $tipo)
+    {
+        $numeracao = DB::table('numeracao')
+            ->where('ano', $ano)
+            ->where('tipo', $tipo)
+            ->first();
+        return $numeracao ? $numeracao->numero : 0;
+    }
+
+    private function updateInvoiceNumber($ano, $tipo)
+    {
+        DB::table('numeracao')->updateOrInsert(
+            ['ano' => $ano, 'tipo' => $tipo],
+            ['numero' => DB::raw('numero + 1')]
+        );
     }
 
     // Manter os outros métodos vazios por enquanto
-    public function index() { }
-    public function create() { }
-    public function show($id) { }
-    public function edit($id) { }
-    public function update(Request $request, $id) { }
-    public function destroy($id) { }
+    public function index() {}
+    public function create() {}
+    public function show($id) {}
+    public function edit($id) {}
+    public function update(Request $request, $id) {}
+    public function destroy($id) {}
 }
