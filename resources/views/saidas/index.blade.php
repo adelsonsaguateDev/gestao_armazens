@@ -402,8 +402,6 @@
                         update_estado(saida_id, estado);
                     }
                 });
-
-
             });
 
 

@@ -272,8 +272,8 @@ class EntradasController extends Controller
             if ($entrada->update($data)) {
                 $json['success'] = true;
                 if ($estado == '1') {
-                    $json['message'] = 'Entrada ativada com sucesso.';
-                    $descricao = 'Ativou a entrada Nº ' . $entrada->id . '.';
+                    $json['message'] = 'Entrada activada com sucesso.';
+                    $descricao = 'Activou a entrada Nº ' . $entrada->id . '.';
                 } else if ($estado == '2') {
                     $json['message'] = 'Entrada removida com sucesso.';
                     $descricao = 'Removeu a entrada Nº ' . $entrada->id . '.';

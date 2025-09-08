@@ -165,11 +165,6 @@
                 list(page, limite);
             })
 
-            // Funções para adicionar/editar/deletar (serão implementadas nos próximos passos)
-            // $(document).on("click", "#btn_edit", function() { /* ... */ });
-            // $(document).on("click", "#btn_delete", function() { /* ... */ });
-            // $(document).on("click", "#btn_active", function() { /* ... */ });
-
             function list(page, limite) {
                 showLoader();
                 var estado = $("#estado_filtro").val() == "" ? "1" : $("#estado_filtro").val();
@@ -206,7 +201,6 @@
                 });
             }
 
-            // Lógica para o formulário de adição (será implementada)
             $('#registrar_entrada').click(function() {
                 showLoader();
                 var form = $('#form_registrar_entrada');
@@ -274,6 +268,110 @@
                     }
                 }).always(function() {
                     hideLoader();
+                });
+            });
+
+
+            function update_estado(entrada_id, estado) {
+                showLoader();
+                $.ajax({
+                    url: '{{ url('entrada/delete') }}',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        entrada_id: entrada_id,
+                        estado: estado,
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success == true) {
+                            Swal.fire({
+                                icon: "success",
+                                title: `${response.message}`,
+                                showConfirmButton: false,
+                                timer: 2000,
+                            });
+
+                            list(page, limite);
+
+
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: `${response.message}`,
+                                showConfirmButton: false,
+                                timer: 2000,
+                            });
+                        }
+
+
+                    },
+                    error: function(err) {
+                        console.log(err);
+                        Swal.fire({
+                            icon: "error",
+                            title: `${err}`,
+                            showConfirmButton: false,
+                            timer: 2000,
+                        });
+
+                    }
+                }).always(function() {
+                    hideLoader();
+                });
+            }
+
+            $(document).on("click", "#btn_delete", function() {
+                var entrada_id = $(this).val();
+                var estado = '2'
+
+
+                Swal.fire({
+                    title: 'ALERTA!',
+                    text: "Tem certeza que deseja apagar a entrada?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#0CC27E',
+                    cancelButtonColor: '#FF586B',
+                    confirmButtonText: 'Sim, Tenho!',
+                    cancelButtonText: 'Não, cancelar!',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-success mr-5',
+                        cancelButton: 'btn btn-danger'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        update_estado(entrada_id, estado);
+                    }
+                });
+
+
+            });
+
+            $(document).on("click", "#btn_active", function() {
+                var entrada_id = $(this).val();
+                var estado = '1';
+
+
+                Swal.fire({
+                    title: 'ALERTA!',
+                    text: "Tem certeza que deseja activar a entrada?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#0CC27E',
+                    cancelButtonColor: '#FF586B',
+                    confirmButtonText: 'Sim, Tenho!',
+                    cancelButtonText: 'Não, cancelar!',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-success mr-5',
+                        cancelButton: 'btn btn-danger'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        update_estado(entrada_id, estado);
+                    }
                 });
             });
         });
