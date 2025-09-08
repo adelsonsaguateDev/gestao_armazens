@@ -72,7 +72,7 @@ class SaidasController extends Controller
         }
 
         if ($request->filled('data_inicio') && $request->filled('data_fim')) {
-            $query->whereBetween('data_aquisicao', [$request->input('data_inicio'), $request->input('data_fim')]);
+            $query->whereBetween('data', [$request->input('data_inicio'), $request->input('data_fim')]);
         }
 
         $total = $query->count();
@@ -357,13 +357,13 @@ class SaidasController extends Controller
         $historico = new Historico();
 
         if (!empty($saida)) {
-            $data['estado'] = $estado;
+            $data['activo'] = $estado;
             if ($saida->update($data)) {
                 $json['success'] = true;
                 if ($estado == '1') {
                     $json['message'] = 'Saida ativada com sucesso.';
-                    $descricao = 'Ativou a saida Nº ' . $saida->id . '.';
-                } else if ($estado == '2') {
+                    $descricao = 'Activou a saida Nº ' . $saida->id . '.';
+                } else if ($estado == '0') {
                     $json['message'] = 'Saida removida com sucesso.';
                     $descricao = 'Removeu a saida Nº ' . $saida->id . '.';
                 }
@@ -382,12 +382,9 @@ class SaidasController extends Controller
     {
         $saida = Saida::with(['cliente', 'tipoSaida', 'user', 'itens.produto'])->findOrFail($id);
 
-        // Assuming 'Config' model holds company details and 'TipoPagamento' for payment types
         $empresa = Config::first();
-        // Fetch only the payment method used in this sale
         $tipoPagamentoUsado = TipoPagamento::find($saida->tipo_pagamento_id);
 
-        // Prepare data for the receipt view, similar to ver_htmlRecibo.php
         $saidaData = [
             'id' => $saida->id,
             'numero_factura' => $saida->numero_factura,

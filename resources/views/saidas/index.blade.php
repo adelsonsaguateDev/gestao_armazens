@@ -152,7 +152,7 @@
 
 @section('scripts')
     <script>
-        var storePagamentoUrl = "{{ route('pagamento.create') }}"; // Adicionado para o script de pagamentos
+        var storePagamentoUrl = "{{ route('pagamento.create') }}";
 
         $(document).ready(function() {
             $(".select2").select2({
@@ -185,7 +185,7 @@
                 showLoader();
                 var estado = $("#estado_filtro").val();
                 var estado_pagamento = $("#estado_pagamento_filtro").val();
-                var cliente_id = $("#cliente_filtro").val();
+                var saida_id = $("#cliente_filtro").val();
                 var tipo_saida_id = $("#tipo_saida_filtro").val();
                 var data_inicio = $("#data_inicio_saida").val();
                 var data_fim = $("#data_fim_saida").val();
@@ -197,7 +197,7 @@
                         _token: '{{ csrf_token() }}',
                         estado: estado,
                         estado_pagamento: estado_pagamento,
-                        cliente_id: cliente_id,
+                        saida_id: saida_id,
                         tipo_saida_id: tipo_saida_id,
                         data_inicio: data_inicio,
                         data_fim: data_fim,
@@ -217,7 +217,6 @@
                 });
             }
 
-            // Lógica para o formulário de adição (será implementada)
             $('#registrar_saida').click(function() {
                 showLoader();
                 var form = $('#form_registrar_saida');
@@ -301,6 +300,114 @@
                 var TheNewWin = window.open(rota, "_blank",
                     "toolbar=yes, scrollbars=yes, resizable=yes, top=100, left=150, width=1024, height=700");
             }
+
+            function update_estado(saida_id, estado) {
+                showLoader();
+                $.ajax({
+                    url: '{{ url('saida/delete') }}',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        saida_id: saida_id,
+                        estado: estado,
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success == true) {
+                            Swal.fire({
+                                icon: "success",
+                                title: `${response.message}`,
+                                showConfirmButton: false,
+                                timer: 2000,
+                            });
+
+                            list(page, limite);
+
+
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: `${response.message}`,
+                                showConfirmButton: false,
+                                timer: 2000,
+                            });
+                        }
+
+
+                    },
+                    error: function(err) {
+                        console.log(err);
+                        Swal.fire({
+                            icon: "error",
+                            title: `${err}`,
+                            showConfirmButton: false,
+                            timer: 2000,
+                        });
+
+                    }
+                }).always(function() {
+                    hideLoader();
+                });
+            }
+
+            $(document).on("click", "#btn_delete", function() {
+                var saida_id = $(this).val();
+                var estado = '0'
+
+
+                Swal.fire({
+                    title: 'ALERTA!',
+                    text: "Tem certeza que deseja apagar a venda?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#0CC27E',
+                    cancelButtonColor: '#FF586B',
+                    confirmButtonText: 'Sim, Tenho!',
+                    cancelButtonText: 'Não, cancelar!',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-success mr-5',
+                        cancelButton: 'btn btn-danger'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        update_estado(saida_id, estado);
+                    }
+                });
+
+
+            });
+
+            $(document).on("click", "#btn_active", function() {
+                var saida_id = $(this).val();
+                var estado = '1';
+
+
+                Swal.fire({
+                    title: 'ALERTA!',
+                    text: "Tem certeza que deseja activar a venda?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#0CC27E',
+                    cancelButtonColor: '#FF586B',
+                    confirmButtonText: 'Sim, Tenho!',
+                    cancelButtonText: 'Não, cancelar!',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-success mr-5',
+                        cancelButton: 'btn btn-danger'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        update_estado(saida_id, estado);
+                    }
+                });
+
+
+            });
+
+
+
         });
     </script>
     <script src="{{ asset('js/pagamentos.js') }}"></script> {{-- Adicionado --}}
