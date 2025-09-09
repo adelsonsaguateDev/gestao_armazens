@@ -31,7 +31,7 @@ class SaidasController extends Controller
     {
         $produtos = Produto::where('estado', 1)->get();
 
-        $clientes = Cliente::data('estado', 1)->get();
+        $clientes = Cliente::where('estado', 1)->get();
         $tipos_saida = TipoSaida::where('estado', 1)->get();
         $pagamentos = TipoPagamento::all();
 
