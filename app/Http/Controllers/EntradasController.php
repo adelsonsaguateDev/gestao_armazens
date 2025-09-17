@@ -162,21 +162,17 @@ class EntradasController extends Controller
         return response()->view('entradas.detalhes', compact('entrada', 'historico'));
     }
 
-    public function show($id)
+    public function edit(Entrada $entrada)
     {
-        $entrada = Entrada::with('itens')->find($id);
+        $entrada->load('itens.produto');
         $produtos = Produto::where('estado', 1)->get();
         $fornecedores = Fornecedor::where('estado', 1)->get();
         $tipos_entrada = TipoEntrada::where('estado', 1)->get();
 
-        if (!$entrada) {
-            return response()->json(['error' => 'Entrada não encontrada'], 404);
-        }
-
-        return view('entradas.form_edit', compact('entrada', 'produtos', 'fornecedores', 'tipos_entrada'));
+        return view('entradas.edit', compact('entrada', 'produtos', 'fornecedores', 'tipos_entrada'));
     }
 
-    public function edit(Request $request)
+    public function update(Request $request, Entrada $entrada)
     {
         DB::beginTransaction();
         try {
@@ -185,11 +181,6 @@ class EntradasController extends Controller
             $json['message'] = null;
 
             $historico = new Historico();
-
-            $entrada = Entrada::find($request->input('id'));
-            if (!$entrada) {
-                throw new \Exception('Entrada não encontrada para edição.');
-            }
 
             $dataEntrada = $request->validate([
                 'tipo_entrada_id' => 'required|exists:tipos_entradas,id',
@@ -202,14 +193,19 @@ class EntradasController extends Controller
                 'total_desconto' => 'nullable|numeric|min:0',
                 'total_iva' => 'nullable|numeric|min:0',
                 'valor_remanescente' => 'nullable|numeric|min:0',
-                'ficheiro_entrada' => 'nullable|string|max:255',
+                'ficheiro_entrada' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             ]);
 
-            $dataEntrada['user_id'] = auth()->user()->id;
-            $dataEntrada['estado'] = 1;
+            if ($request->hasFile('ficheiro_entrada')) {
+                $file = $request->file('ficheiro_entrada');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $file->storeAs('entradas_ficheiros', $fileName, 'public');
+                $dataEntrada['ficheiro_entrada'] = $fileName;
+            }
 
-            // Handle Entrada Items
-            $itens = json_decode($request->input('itens'), true); // Assuming items come as a JSON string
+            $dataEntrada['user_id'] = auth()->user()->id;
+
+            $itens = json_decode($request->input('itens'), true);
             if (empty($itens)) {
                 throw new \Exception('Nenhum item de entrada foi fornecido.');
             }
@@ -225,7 +221,6 @@ class EntradasController extends Controller
 
             $entrada->update($dataEntrada);
 
-            // Handle Entrada Items - Delete existing and re-create
             EntradaItem::where('entrada_id', $entrada->id)->delete();
 
             foreach ($itens as $itemData) {

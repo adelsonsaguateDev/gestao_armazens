@@ -66,7 +66,7 @@
                         <a href="{{ route('entrada.detalhes', ['id' => $item->id]) }}"  class="btn btn-primary"><i class="fa fa-eye text-white"></i> </a>
 
                         @if($item->estado == '1')
-                        <button class="btn btn-warning" value="{{ $item->id }}"   data-toggle="modal" data-target="#edit_entrada" id="btn_edit"><i class="fa fa-pencil text-white"></i> </button>
+                        <a href="{{ route('entradas.edit', $item->id) }}" class="btn btn-warning"><i class="fa fa-pencil text-white"></i> </a>
                         <button title="Remover a entrada" class="btn btn-danger" value="{{ $item->id }}" id="btn_delete"><i class="fa fa-trash"></i> </button>
                         @endif
 

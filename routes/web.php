@@ -58,10 +58,14 @@ Route::get('entrada', [EntradasController::class, 'index'])->name('entrada.list'
 Route::get('entrada/create', [EntradasController::class, 'create'])->name('entrada.create');
 Route::post('entradas', [EntradasController::class, 'list'])->name('entradas.list'); // Para listagem via AJAX
 Route::post('entrada/add', [EntradasController::class, 'add'])->name('entrada.add');
-Route::get('entrada/{id}', [EntradasController::class, 'show'])->name('entrada.show'); // Para formulário de edição/visualização
+// Route::get('entrada/{id}', [EntradasController::class, 'show'])->name('entrada.show'); // Rota antiga para edição
 Route::get('entrada_detalhes/{id}', [EntradasController::class, 'show_details'])->name('entrada.detalhes');
-Route::post('entrada/edit', [EntradasController::class, 'edit'])->name('entrada.edit');
+// Route::post('entrada/edit', [EntradasController::class, 'edit'])->name('entrada.edit'); // Rota antiga para update
 Route::post('entrada/delete', [EntradasController::class, 'delete'])->name('entrada.delete');
+
+// Novas rotas RESTful para editar e actualizar
+Route::get('entradas/{entrada}/edit', [EntradasController::class, 'edit'])->name('entradas.edit');
+Route::put('entradas/{entrada}', [EntradasController::class, 'update'])->name('entradas.update');
 
 
 // Saida routes
