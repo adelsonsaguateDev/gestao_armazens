@@ -7,8 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f7fafc;
+            font-family: 'Karla', sans-serif;
+            background-color: #f4f7f6;
             color: #718096;
             display: flex;
             justify-content: center;
@@ -24,7 +24,7 @@
         .title {
             font-size: 2rem;
             font-weight: 700;
-            color: #4a5568;
+            color: #333;
             margin-bottom: 1rem;
         }
         .message {
@@ -40,16 +40,16 @@
             display: inline-block;
             padding: 0.75rem 1.5rem;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: bold;
             color: #fff;
-            background-color: #4a5568;
+            background-color: #FF6666;
             border-radius: 0.375rem;
             text-decoration: none;
-            transition: background-color 0.2s;
+            transition: background-color 0.3s;
             margin-top: 1.5rem;
         }
         .back-button:hover {
-            background-color: #2d3748;
+            background-color: #E55A5A;
         }
     </style>
 </head>
