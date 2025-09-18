@@ -1,170 +1,154 @@
 @extends('layouts.main')
 
-@section('title', 'Lista de requisicao | Gestão de Armazens')
-
+@section('title', 'Relatórios | Gestão de Armazens')
 
 @section('content')
+    <div class="app-admin-wrap layout-sidebar-vertical sidebar-full">
 
-<div class="app-admin-wrap layout-sidebar-vertical sidebar-full">
-    
-    @include('components.sidebar')
+        @include('components.sidebar')
 
+        <div class="switch-overlay"></div>
+        <div class="main-content-wrap mobile-menu-content bg-off-white m-0">
+            @include('components.header')
 
-    <div class="switch-overlay"></div>
-    <div class="main-content-wrap mobile-menu-content bg-off-white m-0">
-        @include('components.header')
-        
-        <!-- ============ Body content start ============= -->
-        <div class="main-content pt-4">
-            <div class="breadcrumb">
-                <h1 class="mr-2">Relatórios de Movimentos</h1>
-                <ul>
-                </ul>
-            </div>
-            <div class="separator-breadcrumb border-top"></div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card mb-3">
-                        <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-12 text-left ">
-                                        <i style="color:crimson; font-size:large" title="Estes campos permitem realizar filtros, pelos diversos paramêtros." class="fa fa-info-circle"></i>
-                                    </div>
-                                    <div class="col-md-12 text-right ">
-                                        <button  title="Imprimir um pdf" class="btn btn-info" type="button" id="print"><i class="fa fa-print"></i> PDF</button> 
-                                    </div>
+            <!-- ============ Body content start ============= -->
+            <div class="main-content pt-4">
+                <div class="breadcrumb">
+                    <h1 class="mr-2">Secção de Relatórios</h1>
+                </div>
+                <div class="separator-breadcrumb border-top"></div>
+
+                <!-- Cards de Totais -->
+                <div class="row">
+                    <!-- Card 1 -->
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                            <div class="card-body text-center">
+                                <i class="i-Full-Cart"></i>
+                                <div class="content">
+                                    <p class="text-muted mt-2 mb-0">Total de Entradas</p>
+                                    <p class="text-primary text-24 line-height-1 mb-2">{{ number_format($totalEntradas, 2, ',', '.') }} MZN</p>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-3 mb-3">
-                                        <label for="" style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Descrição</label>
-                                        <input type="text" class="form-control" name="descricao_filtro" id="descricao_filtro" />
-                                    </div>
-                                    <div class="col-md-3 form-group mb-3">
-                                        <label>Data Início:</label>
-                                        <input placeholder="yyyy-mm-dd" style="background: white !important;" name="data_inicio" value="" type="date" id="data_inicio" class="form-control" />
-                                    </div>
-                                    <div class="col-md-3 form-group mb-3">
-                                        <label>Data Fim:</label>
-                                        <input placeholder="yyyy-mm-dd" style="background: white !important;" name="data_fim" value="" type="date" id="data_fim" class="form-control" />
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <label for="" style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Estado da Requisição</label>
-                                        <select name="estado_filtro" id="estado_filtro" class="form-control select2">
-
-                                            <option value=""> Selecione uma opção </option>
-                                            <option value="1">PENDENTE</option>
-                                            <option value="2">APROVADA</option>
-                                            <option value="3">REPROVADA</option>
-
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <label for="" style="font-family: 'Arial narrow'; font-size: 14px; color: #2C304D; font-weight: 600;">Limite</label>
-                                        <select name="limit" id="limit" class="form-control select2">
-
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                            <option value="200">200</option>
-                                            <option value="1000">1000</option>
-                                            <option value="2000">2000</option>
-                                            <option value="">Todos</option>
-                                        </select>
-                                    </div>
-                                
-                                    <div class="col-md-12 mb-3 text-right" style="text-align: right">
-                                        <button class="btn btn-primary btn-lg  pesquisar">Pesquisar</button>
-                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                            <div class="card-body text-center">
+                                <i class="i-Shop-4"></i>
+                                <div class="content">
+                                    <p class="text-muted mt-2 mb-0">Total de Saídas</p>
+                                    <p class="text-primary text-24 line-height-1 mb-2">{{ number_format($totalSaidas, 2, ',', '.') }} MZN</p>
                                 </div>
-                                <br><br>
-
-                                <div class="table-responsive"> 
-                                    <div class="list_relatorios">
-                                    
-                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="card card-icon-bg card-icon-bg-primary o-hidden mb-4">
+                            <div class="card-body text-center">
+                                <i class="i-Business-Man"></i>
+                                <div class="content">
+                                    <p class="text-muted mt-2 mb-0">Total de Clientes</p>
+                                    <p class="text-primary text-24 line-height-1 mb-2">{{ $totalClientes }}</p>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            <!-- end of row-->
-            
-            <!-- end of main-content -->
-            </div>
-                <div class="sidebar-overlay open"></div>
-                <!-- Footer Start -->
-                @include('components.footer')
-                <!-- fotter end -->
-        </div>
 
+                <!-- Gráfico de Vendas -->
+                <div class="row">
+                    <div class="col-lg-12 col-md-12">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="card-title">Vendas Mensais (Ano Corrente)</div>
+                                <canvas id="salesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabela de Baixo Stock -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title">Produtos com Baixo Stock (Abaixo ou igual ao Stock Mínimo)</div>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Produto</th>
+                                                <th>Stock Mínimo</th>
+                                                <th>Stock Actual</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           @forelse ($lowStockProducts as $produto)
+                                               <tr>
+                                                   <td>{{ $loop->iteration }}</td>
+                                                   <td>{{ $produto->descricao }}</td>
+                                                   <td>{{ $produto->stock_minimo }}</td>
+                                                   <td>{{ (int)($produto->itens_entrada_sum_quantidade_disponivel ?? 0) }}</td>
+                                               </tr>
+                                           @empty
+                                               <tr>
+                                                   <td colspan="4" class="text-center">Nenhum produto com baixo stock.</td>
+                                               </tr>
+                                           @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- end of main-content -->
+
+            <!-- Footer Start -->
+            @include('components.footer')
+            <!-- fotter end -->
+        </div>
     </div>
-</div>
 
 @endsection
-
 
 @section('scripts')
-<script>
+    <!-- Incluir Chart.js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
         $(document).ready(function() {
-            $(".select2").select2({
-                allowClear: true,
-            });
+            hideLoader();
+            $("#relatorios_li").addClass("nav-item-active");
+            $("#relatorios_link").addClass("nav-item-active-text");
 
-            var limite = $('#limit').val()
-            var page = 1
-
-            list(page,limite);
-
-            $(document).on('click', '.pagination a', function(event) {
-                    event.preventDefault();
-                    page = $(this).attr('href').split('page=')[1];
-                    $(this).attr('href', '');
-                    list(page, limite);
-
-                });
-
-
-            $(".pesquisar").click(function() {
-                let limite = $('#limit').val();
-                list(page,limite);
-
-            })
-
-            function list(page, limite) {
-                showLoader();
-                var estado_requisicao = $("#estado_filtro").val();
-                var descricao = $("#descricao_filtro").val()
-                var data_inicio = $("#data_inicio").val()
-                var data_fim = $("#data_fim").val()
-
-
-                
-
-                $.ajax({
-                    url: '{{url("relatorios")}}?page=' + page,
-                    method: 'GET',
-                    data: {
-                        "estado_requisicao": estado_requisicao,
-                        "descricao": descricao,
-                        "data_inicio": data_inicio,
-                        "data_fim": data_fim,
-                        "limite": limite,
-                    },
-                    dataType: 'html', 
-                    success: function(data) {
-                        $(".list_relatorios").html(data);
-                        hideLoader();
-                    },
-                    error: function(err) {
-                        console.log(err);
+            // Configuração do Gráfico de Vendas
+            var ctx = document.getElementById('salesChart').getContext('2d');
+            var salesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: @json($salesLabels),
+                    datasets: [{
+                        label: 'Total de Vendas (MZN)',
+                        data: @json($salesValues),
+                        backgroundColor: 'rgba(255, 102, 102, 0.8)',
+                        borderColor: 'rgba(255, 102, 102, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
-                }).always(function() {
-                    hideLoader();
-                });
-            }
+                }
+            });
         });
-
-
-</script>
+    </script>
 @endsection
-

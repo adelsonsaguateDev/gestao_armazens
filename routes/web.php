@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\UtilizadorController;
 use App\Http\Controllers\Admin\ClientesController;
 use App\Http\Controllers\PagamentoController;
+use App\Http\Controllers\RelatorioController;
 
 
 
@@ -134,4 +135,7 @@ Route::get('/dashboard/requisicoes_grafico_pizza', [DashboardController::class, 
 
 //Relatorios
 Route::get('relatorio', [DashboardController::class, 'index1'])->name('relatorio.list');
-Route::get('relatorios', [DashboardController::class, 'list'])->name('listar');
+
+
+// Reports
+Route::get('relatorios', [RelatorioController::class, 'index'])->name('relatorios.index');

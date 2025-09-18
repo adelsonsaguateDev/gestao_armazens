@@ -30,4 +30,9 @@ class Produto extends Model
         // Relationship to Unidade model
         return $this->belongsTo(Unidade::class, 'unidade_id');
     }
+
+    public function itensEntrada()
+    {
+        return $this->hasMany(EntradaItem::class, 'produto_id');
+    }
 }

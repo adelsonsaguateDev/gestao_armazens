@@ -93,6 +93,9 @@
                     <li class="Ul_li--hover {{ request()->is('requisicao*') ? 'active' : '' }}"><a href="{{ route('requisicao.list') }}"><i
                                 class="i-Remove-Cart text-20 mr-2"></i><span
                                 class="item-name text-15">Requisições</span></a></li>
+                    <li class="Ul_li--hover {{ request()->is('relatorios*') ? 'active' : '' }}"><a href="{{ route('relatorios.index') }}"><i
+                                class="i-Line-Chart-4 text-20 mr-2"></i><span
+                                class="item-name text-15">Relatórios</span></a></li>
                     @if (session('permissao_nome') == 'admin' || session('permissao_nome') == 'gestor')
                         <li class="Ul_li--hover {{ (request()->is('utilizador*') || request()->is('relatorio*') || request()->is('cliente*')) ? 'active' : '' }}">
                             <a class="has-arrow" href="#"><i class="i-Gears text-20 mr-2"></i><span
@@ -106,7 +109,7 @@
                                             class="item-name text-15">Utilizadores</span></a></li>
                                 <li class="Ul_li--hover {{ request()->is('relatorio*') ? 'active' : '' }}"><a href="{{ route('relatorio.list') }}"><i
                                             class="i-Line-Chart-4 text-20 mr-2"></i><span
-                                            class="item-name text-15">Relatórios</span></a></li>
+                                            class="item-name text-15">Relatórios Antigo</span></a></li>
                             </ul>
                         </li>
                     @endif
