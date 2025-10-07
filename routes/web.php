@@ -9,6 +9,7 @@ use App\Http\Controllers\SaidasController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\UtilizadorController;
 use App\Http\Controllers\Admin\ClientesController;
+use App\Http\Controllers\Admin\FornecedoresController;
 use App\Http\Controllers\PagamentoController;
 use App\Http\Controllers\RelatorioController;
 
@@ -105,6 +106,15 @@ Route::get('cliente_detalhes/{id}', [ClientesController::class, 'show_details'])
 Route::post('cliente/add', [ClientesController::class, 'add'])->name('create');
 Route::post('cliente/delete', [ClientesController::class, 'delete'])->name('delete');
 Route::post('cliente/edit', [ClientesController::class, 'edit'])->name('edit');
+
+//Fornecedor
+Route::get('fornecedor', [FornecedoresController::class, 'index'])->name('fornecedor.list');
+Route::get('fornecedores', [FornecedoresController::class, 'list'])->name('fornecedores.listar');
+Route::get('fornecedor/{id}', [FornecedoresController::class, 'show'])->name('fornecedor.show');
+Route::get('fornecedor_detalhes/{id}', [FornecedoresController::class, 'show_details'])->name('fornecedor.detalhes');
+Route::post('fornecedor/add', [FornecedoresController::class, 'add'])->name('fornecedor.create');
+Route::post('fornecedor/delete', [FornecedoresController::class, 'delete'])->name('fornecedor.delete');
+Route::post('fornecedor/edit', [FornecedoresController::class, 'edit'])->name('fornecedor.edit');
 
 
 //Pagamentos

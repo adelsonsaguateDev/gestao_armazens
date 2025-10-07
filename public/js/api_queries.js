@@ -33,6 +33,21 @@ $(document).on("click", "#registar_cliente", function(e){
 
 })
 
+$(document).on("click", "#registar_fornecedor", function(e){
+  submitForm(e, "form_registar_fornecedor", "fornecedor/add")
+
+})
+
+$(document).on("click", "#editar_cliente", function(e){
+  submitForm(e, "form_editar_cliente", "cliente/edit")
+
+})
+
+$(document).on("click", "#editar_fornecedor", function(e){
+  submitForm(e, "form_editar_fornecedor", "fornecedor/edit")
+
+})
+
 /**
  * Função que valida um formulário com base no seu ID
  * @param {string} formularioID - ID do formulário a ser validado
@@ -233,6 +248,72 @@ async function submitForm(e, formularioID, endPoint) {
               });
 
               $("#rg_cliente").modal('hide');
+              window.location.reload()
+          }else{
+              Swal.fire({
+                  icon: "warning",
+                  title: `${data.message}`,
+                  showConfirmButton: false,
+                  timer: 2000,
+              });
+          }
+
+
+      }else if (formularioID == "form_registar_fornecedor") {
+
+          if(data.success == true){
+              Swal.fire({
+                  icon: "success",
+                  title: `${data.message}`,
+                  showConfirmButton: false,
+                  timer: 8000,
+              });
+
+              $("#rg_fornecedor").modal('hide');
+              window.location.reload()
+          }else{
+              Swal.fire({
+                  icon: "warning",
+                  title: `${data.message}`,
+                  showConfirmButton: false,
+                  timer: 2000,
+              });
+          }
+
+
+      }else if (formularioID == "form_editar_cliente") {
+
+          if(data.success == true){
+              Swal.fire({
+                  icon: "success",
+                  title: `${data.message}`,
+                  showConfirmButton: false,
+                  timer: 4000,
+              });
+
+              $("#edit_cliente").modal('hide');
+              window.location.reload()
+          }else{
+              Swal.fire({
+                  icon: "warning",
+                  title: `${data.message}`,
+                  showConfirmButton: false,
+                  timer: 2000,
+              });
+          }
+
+
+      }else if (formularioID == "form_editar_fornecedor") {
+
+          if(data.success == true){
+              Swal.fire({
+                  icon: "success",
+                  title: `${data.message}`,
+                  showConfirmButton: false,
+                  timer: 4000,
+              });
+
+              $("#edit_fornecedor").modal('hide');
               window.location.reload()
           }else{
               Swal.fire({
