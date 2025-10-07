@@ -83,7 +83,7 @@
             </div>
 
             <!-- Row for Quick Reports -->
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-lg-12">
                     <div class="card mb-4">
                         <div class="card-body">
@@ -95,7 +95,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <!-- Row 3: Charts -->
             <div class="row">

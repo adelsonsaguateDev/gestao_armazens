@@ -104,8 +104,8 @@ async function submitForm(e, formularioID, endPoint) {
       // Exibe uma mensagem de erro usando a biblioteca SweetAlert
       Swal.fire({
         icon: "error",
-        title: `${data}`,
-        text: `${data}`,
+        title: `ERRO`,
+        text: `${data.message}`,
         showConfirmButton: true,
       });
     } else {

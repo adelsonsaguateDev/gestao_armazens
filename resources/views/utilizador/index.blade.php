@@ -147,13 +147,8 @@
                     },
                     dataType: 'html',
                     success: function(response) {
-                        console.log(response)
-
                         $('.conteudo_funcionario').html(response);
                         $('#edit_funcionario').modal('show');
-
-
-
                     },
                     error: function(err) {
                         // console.log(err);
