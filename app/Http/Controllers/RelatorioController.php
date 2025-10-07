@@ -7,6 +7,8 @@ use App\Models\Entrada;
 use App\Models\Saida;
 use App\Models\Cliente;
 use App\Models\Produto;
+use App\Models\SaidaItem;
+use App\Models\EntradaItem;
 use Illuminate\Support\Facades\DB;
 
 class RelatorioController extends Controller
@@ -41,15 +43,84 @@ class RelatorioController extends Controller
             $salesValues[] = $months[$i];
         }
 
-        // Low Stock Products
-        $lowStockProducts = Produto::withSum('itensEntrada', 'quantidade_disponivel')
-            ->where('estado', 1)
-            ->get()
-            ->filter(function ($produto) {
-                $stockAtual = $produto->itens_entrada_sum_quantidade_disponivel ?? 0;
-                return $stockAtual <= $produto->stock_minimo;
-            });
+        // 1. Relatório de Entradas e Saídas (Gráfico de Pizza)
+        $entradasSaidasData = [
+            'labels' => ['Entradas', 'Saídas'],
+            'values' => [$totalEntradas, $totalSaidas]
+        ];
 
+        // 2. Relatório de Vendas a Dinheiro vs Crédito (Gráfico de Pizza)
+        // tipo_saida_id = 1: Venda Normal (a dinheiro)
+        // tipo_saida_id = 2: Venda a Crédito
+        $vendasDinheiro = Saida::where('activo', 1)
+            ->where('tipo_saida_id', 1)
+            ->sum('valor_total');
+
+        $vendasCredito = Saida::where('activo', 1)
+            ->where('tipo_saida_id', 2)
+            ->sum('valor_total');
+
+        $vendasDinheiroVsCredito = [
+            'labels' => ['Vendas a Dinheiro', 'Vendas a Crédito'],
+            'values' => [$vendasDinheiro, $vendasCredito]
+        ];
+
+        // 3. Relatório de Vendas por Forma de Pagamento
+        $vendasPorFormaPagamento = Saida::select('tipo_pagamento_id', DB::raw('sum(valor_total) as total'))
+            ->where('activo', 1)
+            ->whereNotNull('tipo_pagamento_id')
+            ->groupBy('tipo_pagamento_id')
+            ->with('tipoPagamento')
+            ->get();
+
+        $formasPagamentoLabels = [];
+        $formasPagamentoValues = [];
+
+        foreach ($vendasPorFormaPagamento as $venda) {
+            $formasPagamentoLabels[] = $venda->tipoPagamento ? $venda->tipoPagamento->designacao : 'Não Definido';
+            $formasPagamentoValues[] = $venda->total;
+        }
+
+        $vendasPorFormaPagamentoData = [
+            'labels' => $formasPagamentoLabels,
+            'values' => $formasPagamentoValues
+        ];
+
+        // 4. Top 10 Produtos Mais Vendidos
+        $top10MaisVendidos = SaidaItem::select('produto_id', DB::raw('sum(quantidade) as total_vendido'))
+            ->where('activo', 1)
+            ->groupBy('produto_id')
+            ->orderBy('total_vendido', 'desc')
+            ->limit(10)
+            ->with('produto')
+            ->get();
+
+        // 5. Top 10 Produtos Menos Vendidos (que tiveram pelo menos uma venda)
+        $top10MenosVendidos = SaidaItem::select('produto_id', DB::raw('sum(quantidade) as total_vendido'))
+            ->where('activo', 1)
+            ->groupBy('produto_id')
+            ->orderBy('total_vendido', 'asc')
+            ->limit(10)
+            ->with('produto')
+            ->get();
+
+        // 6. Produtos com Mais Entradas
+        $produtosMaisEntradas = EntradaItem::select('produto_id', DB::raw('sum(qtd_caixas * qtd_por_caixa) as total_entrada'))
+            ->where('estado', 1)
+            ->groupBy('produto_id')
+            ->orderBy('total_entrada', 'desc')
+            ->limit(10)
+            ->with('produto')
+            ->get();
+
+        // 7. Produtos com Menos Entradas (que tiveram pelo menos uma entrada)
+        $produtosMenosEntradas = EntradaItem::select('produto_id', DB::raw('sum(qtd_caixas * qtd_por_caixa) as total_entrada'))
+            ->where('estado', 1)
+            ->groupBy('produto_id')
+            ->orderBy('total_entrada', 'asc')
+            ->limit(10)
+            ->with('produto')
+            ->get();
 
         return view('relatorios.index', compact(
             'totalEntradas',
@@ -57,7 +128,13 @@ class RelatorioController extends Controller
             'totalClientes',
             'salesLabels',
             'salesValues',
-            'lowStockProducts'
+            'entradasSaidasData',
+            'vendasDinheiroVsCredito',
+            'vendasPorFormaPagamentoData',
+            'top10MaisVendidos',
+            'top10MenosVendidos',
+            'produtosMaisEntradas',
+            'produtosMenosEntradas'
         ));
     }
 }
