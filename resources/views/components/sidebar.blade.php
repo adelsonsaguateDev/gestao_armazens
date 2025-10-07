@@ -76,35 +76,43 @@
         <div class="side-nav">
             <div class="main-menu">
                 <ul class="metismenu" id="menu">
-                    <li class="Ul_li--hover {{ request()->is('home') ? 'active' : '' }}"><a href="{{ route('pagina_inicial') }}"><i
-                                class="i-Bar-Chart text-20 mr-2"></i><span
+                    <li class="Ul_li--hover {{ request()->is('home') ? 'active' : '' }}"><a
+                            href="{{ route('pagina_inicial') }}"><i class="i-Bar-Chart text-20 mr-2"></i><span
                                 class="item-name text-15">Dashboard</span></a></li>
 
-                    <li class="Ul_li--hover {{ request()->is('produto*') ? 'active' : '' }}"><a href="{{ route('produto.list') }}"><i
-                                class="i-Library text-20 mr-2"></i><span class="item-name text-15">Produtos</span></a>
+                    <li class="Ul_li--hover {{ request()->is('produto*') ? 'active' : '' }}"><a
+                            href="{{ route('produto.list') }}"><i class="i-Library text-20 mr-2"></i><span
+                                class="item-name text-15">Produtos</span></a>
                     </li>
-                    <li class="Ul_li--hover {{ request()->is('entrada*') ? 'active' : '' }}"><a href="{{ route('entrada.list') }}"><i
-                                class="i-Full-Cart text-20 mr-2"></i><span class="item-name text-15">Entradas</span></a>
+                    <li class="Ul_li--hover {{ request()->is('entrada*') ? 'active' : '' }}"><a
+                            href="{{ route('entrada.list') }}"><i class="i-Full-Cart text-20 mr-2"></i><span
+                                class="item-name text-15">Entradas</span></a>
                     </li>
-                    <li class="Ul_li--hover {{ request()->is('saida*') ? 'active' : '' }}"><a href="{{ route('saida.list') }}"><i class="i-Shop-4 text-20 mr-2"></i><span
+                    <li class="Ul_li--hover {{ request()->is('saida*') ? 'active' : '' }}"><a
+                            href="{{ route('saida.list') }}"><i class="i-Shop-4 text-20 mr-2"></i><span
                                 class="item-name text-15">Vendas</span></a></li>
-                    <li class="Ul_li--hover {{ request()->is('pagamento*') ? 'active' : '' }}"><a href="{{ route('pagamentos.index') }}"><i class="i-Financial text-20 mr-2"></i><span
+                    <li class="Ul_li--hover {{ request()->is('pagamento*') ? 'active' : '' }}"><a
+                            href="{{ route('pagamentos.index') }}"><i class="i-Financial text-20 mr-2"></i><span
                                 class="item-name text-15">Pagamentos</span></a></li>
-                    <li class="Ul_li--hover {{ request()->is('requisicao*') ? 'active' : '' }}"><a href="{{ route('requisicao.list') }}"><i
-                                class="i-Remove-Cart text-20 mr-2"></i><span
-                                class="item-name text-15">Requisições</span></a></li>
-                    <li class="Ul_li--hover {{ request()->is('relatorios*') ? 'active' : '' }}"><a href="{{ route('relatorios.index') }}"><i
-                                class="i-Line-Chart-4 text-20 mr-2"></i><span
-                                class="item-name text-15">Relatórios</span></a></li>
+
                     @if (session('permissao_nome') == 'admin' || session('permissao_nome') == 'gestor')
-                        <li class="Ul_li--hover {{ (request()->is('utilizador*') || request()->is('relatorio*') || request()->is('cliente*')) ? 'active' : '' }}">
+                        <li class="Ul_li--hover {{ request()->is('requisicao*') ? 'active' : '' }}"><a
+                                href="{{ route('requisicao.list') }}"><i class="i-Remove-Cart text-20 mr-2"></i><span
+                                    class="item-name text-15">Requisições</span></a></li>
+                        <li class="Ul_li--hover {{ request()->is('relatorios*') ? 'active' : '' }}"><a
+                                href="{{ route('relatorios.index') }}"><i class="i-Line-Chart-4 text-20 mr-2"></i><span
+                                    class="item-name text-15">Relatórios</span></a></li>
+                        <li
+                            class="Ul_li--hover {{ request()->is('utilizador*') || request()->is('relatorio*') || request()->is('cliente*') ? 'active' : '' }}">
                             <a class="has-arrow" href="#"><i class="i-Gears text-20 mr-2"></i><span
                                     class="item-name text-15">Administração</span></a>
                             <ul class="mm-collapse">
-                                <li class="Ul_li--hover {{ request()->is('cliente*') ? 'active' : '' }}"><a href="{{ route('cliente.list') }}"><i
+                                <li class="Ul_li--hover {{ request()->is('cliente*') ? 'active' : '' }}"><a
+                                        href="{{ route('cliente.list') }}"><i
                                             class="fas fa-users text-20 mr-2"></i><span
                                             class="item-name text-15">Clientes</span></a></li>
-                                <li class="Ul_li--hover {{ request()->is('utilizador*') ? 'active' : '' }}"><a href="{{ route('utilizador.list') }}"><i
+                                <li class="Ul_li--hover {{ request()->is('utilizador*') ? 'active' : '' }}"><a
+                                        href="{{ route('utilizador.list') }}"><i
                                             class="i-Administrator text-20 mr-2"></i><span
                                             class="item-name text-15">Utilizadores</span></a></li>
                                 {{-- <li class="Ul_li--hover {{ request()->is('relatorio*') ? 'active' : '' }}"><a href="{{ route('relatorio.list') }}"><i
