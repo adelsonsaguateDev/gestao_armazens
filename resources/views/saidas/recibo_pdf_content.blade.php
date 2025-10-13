@@ -274,7 +274,7 @@
                 Operador: {{ $saidaData['userName'] }}
             </p>
             <p class="mt-4 mb-3 fw-bold text-center">
-                Desenvolvido pela: Eng.s Isabel Guivalar e Adelson Saguate
+                Desenvolvido pela: Eng Isabel Guivalar
             </p>
         </div>
     </div>
