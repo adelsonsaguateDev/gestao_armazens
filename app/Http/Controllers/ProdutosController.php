@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Produto;
 use App\Models\Historico;
 use App\Models\Requisicoes;
+use App\Models\Unidade;
 use Illuminate\Support\Facades\DB;
 
 date_default_timezone_set('Africa/Maputo');
@@ -16,35 +17,65 @@ class ProdutosController extends Controller
 {
     public function index()
     {
-        return view('produtos.index');
-
+        $unidades = Unidade::where('estado', 1)->get();
+        return view('produtos.index', compact('unidades'));
     }
 
     public function list(Request $request)
     {
-        $query = Produto::query();
+        // Subquery for total entradas (in units)
+        $entradas = DB::table('entradas_itens')
+            ->select('produto_id', DB::raw('SUM(quantidade_disponivel) as total_disponivel'))
+            ->where('estado', 1)
+            ->groupBy('produto_id');      
+
+        $query = DB::table('produtos as p')
+            ->leftJoin('unidades as u', 'p.unidade_id', '=', 'u.id') 
+            ->leftJoinSub($entradas, 'entradas', function ($join) {
+                $join->on('p.id', '=', 'entradas.produto_id');
+            })
+            ->select(
+       'p.id',
+                'p.descricao',
+                'p.created_at',
+                'p.estado',
+                'p.nome',
+                'p.stock_minimo',
+                'p.unidade_id',
+                'u.nome as unidade',
+                'p.codigo_barras',
+                DB::raw('COALESCE(entradas.total_disponivel, 0) as quantidade')
+            );
+
+
+        if ($request->filled('estado')) {
+            $query->where('p.estado', $request->input('estado'));
+        }
+
+        if ($request->filled('descricao')) {
+            $query->where('p.descricao', 'like', '%' . $request->input('descricao') . '%');
+        }
+
+        if ($request->filled('codigo_filtro')) {
+            $query->where('p.codigo_barras', 'like', '%' . $request->input('codigo_filtro') . '%');
+        }
+
+        if ($request->filled('stock_minimo_filtro')) {
+            $query->where('p.stock_minimo', '=', $request->input('stock_minimo_filtro'));
+        }
+
+        if ($request->filled('quantidade_filtro')) {
+            $query->having('quantidade', '=', $request->input('quantidade_filtro'));
+        }
+
+        // The total count should be calculated on the filtered query before pagination.
         $total = $query->count();
-
-        if ($request->has('estado')) {
-            $estado = $request->input('estado');
-            $query->where('estado', $estado);
-
-            $total = $query->count();
-        }
-
-        if ($request->has('descricao')) {
-            $descricao = $request->input('descricao');
-            $query->where('descricao', 'like','%' . $descricao . '%');
-
-            $total = $query->count();
-
-        }
 
         // Define o número de itens por página (você pode ajustar conforme necessário)
         $itensPorPagina = $request->input('limite', 10); // Padrão: 10 itens por página
 
-        // Paginação dos dados retornados
-        $produtos = $query->paginate($itensPorPagina);
+        // Ordenar por ID (mais recentes primeiro) e paginação
+        $produtos = $query->orderBy('p.id', 'desc')->paginate($itensPorPagina);
 
         // Adiciona parâmetros de filtro à URL da páginação
         $produtos->appends($request->query());
@@ -67,37 +98,53 @@ class ProdutosController extends Controller
             $data = $request->validate([
                 'nome' => 'nullable',
                 'descricao' => 'required|unique:produtos',
-                'codigo' => 'required|unique:produtos',
+                'codigo_barras' => 'required|unique:produtos',
                 'stock_minimo' => 'required',
-                'quantidade' => 'required'
+                'unidade_id' => 'nullable',
+                'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
+
+            // Handle File Upload
+            if($request->hasFile('imagem')){
+                // Get filename with the extension
+                $filenameWithExt = $request->file('imagem')->getClientOriginalName();
+                // Get just filename
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                // Get just ext
+                $extension = $request->file('imagem')->getClientOriginalExtension();
+                // Filename to store
+                $fileNameToStore= $filename.'_'.time().'.'.$extension;
+                // Upload Image
+                $path = $request->file('imagem')->storeAs('public/produtosImg', $fileNameToStore);
+                $data['imagem'] = $fileNameToStore;
+            }
 
             $data['estado'] = 1;
             $data['user_id'] = auth()->user()->id;
 
-            $check = DB::selectOne("SELECT codigo FROM produtos WHERE codigo = '{$request->codigo}' ");
-            if(empty($check)) {
+            // print_r($data);
+            // exit();
+
+            $check = DB::selectOne("SELECT codigo_barras FROM produtos WHERE codigo_barras = '{$request->codigo}' ");
+            if (empty($check)) {
                 if ($produto = Produto::create($data)) {
 
-                        $descricao = 'Registou o produto ' . $produto->descricao . '.';
-                        $historico->insert($produto->getTable(), $produto->id, $descricao);
+                    $descricao = 'Registou o produto ' . $produto->descricao . '.';
+                    $historico->insert($produto->getTable(), $produto->id, $descricao);
 
-                        $json['success'] = true;
-                        $json['message'] = 'O produto ' . $produto->descricao . ' foi adicionado com sucesso.';
-                        $json['code'] = 200;
-
+                    $json['success'] = true;
+                    $json['message'] = 'O produto ' . $produto->descricao . ' foi adicionado com sucesso.';
+                    $json['code'] = 200;
                 } else {
                     $json['success'] = false;
-                    $json['message'] = 'Erro ao adicionar o produto '. $produto->descricao;
+                    $json['message'] = 'Erro ao adicionar o produto ' . $produto->descricao;
                     $json['code'] = 500;
                 }
-            }else {
+            } else {
                 $json['success'] = false;
-                $json['message'] = 'O codigo do produto já existe.';
+                $json['message'] = 'O codigo de barras do produto já existe.';
                 $json['code'] = 409;
             }
-
-
         } catch (\Illuminate\Validation\ValidationException $e) {
 
             $errors = $e->validator->errors()->all();
@@ -108,7 +155,6 @@ class ProdutosController extends Controller
         }
 
         echo json_encode($json);
-
     }
 
     public function show_details($id)
@@ -117,7 +163,7 @@ class ProdutosController extends Controller
         $produtos = Produto::find($id);
 
         $historico = Historico::where('row_id', $id)
-                       ->where('tabela', 'produtos')->with('users')->get();
+            ->where('tabela', 'produtos')->with('users')->get();
 
 
         if (!$produtos) {
@@ -139,20 +185,19 @@ class ProdutosController extends Controller
             $data = ['estado' => $estado];
             if ($produto->update($data)) {
                 $json['success'] = true;
-                if($estado == '1'){
+                if ($estado == '1') {
                     $json['message'] = 'Produto activado com sucesso.';
 
                     $descricao = 'Activou o produto ' . $produto->descricao . '.';
                     $historico->insert($produto->getTable(), $produto->id, $descricao);
-
-                }else if($estado == '2'){
+                } else if ($estado == '2') {
                     $json['message'] = 'Produto removido com sucesso.';
 
                     $descricao = 'Removeu o produto ' . $produto->descricao . '.';
                     $historico->insert($produto->getTable(), $produto->id, $descricao);
                 }
                 $json['code'] = 200;
-            }else{
+            } else {
                 $json['success'] = false;
                 $json['message'] = 'Ocorreu um erro ao remover o produto.';
                 $json['code'] = 500;
@@ -164,27 +209,51 @@ class ProdutosController extends Controller
     public function show($id)
     {
         $produto = Produto::where('id', $id)->get();
-        return view('produtos.form_update', compact('produto'));
-
+        $unidades = Unidade::where('estado', 1)->get();
+        return view('produtos.form_update', compact('produto', 'unidades'));
     }
 
-    public function edit()
+    public function edit(Request $request)
     {
-        $id = $_POST['id'];
+        $id = $request->input('id');
         $json['success'] = false;
         $json['message'] = null;
         $json['code'] = null;
         $produto = Produto::find($id);
         $historico = new Historico();
 
-
         $data = [
-            'nome' => (string)$_POST['nome_update'] ?? "",
-            'descricao' => (string)$_POST['descricao_update'] ?? "",
-            'stock_minimo' => $_POST['stock_minimo_update'] ?? 0,
-            'quantidade' => $_POST['quantidade_update'] ?? 0
+            'nome' => $request->input('nome_update') ?? "",
+            'descricao' => $request->input('descricao_update') ?? "",
+            'stock_minimo' => $request->input('stock_minimo_update') ?? 0,
+            'quantidade' => $request->input('quantidade_update') ?? 0,
+            'unidade_id' => $request->input('unidade_id_update') ?? null
         ];
 
+        // Handle File Upload - Nova imagem
+        if($request->hasFile('imagem_update')){
+            // Validar o arquivo
+            $request->validate([
+                'imagem_update' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            ]);
+
+            // Get filename with the extension
+            $filenameWithExt = $request->file('imagem_update')->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $request->file('imagem_update')->getClientOriginalExtension();
+            // Filename to store
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            // Upload Image
+            $path = $request->file('imagem_update')->storeAs('public/produtosImg', $fileNameToStore);
+            $data['imagem'] = $fileNameToStore;
+
+            // Remover imagem antiga se existir
+            if($produto->imagem && file_exists(storage_path('app/public/produtosImg/' . $produto->imagem))) {
+                unlink(storage_path('app/public/produtosImg/' . $produto->imagem));
+            }
+        }
 
         if (!empty($produto)) {
             if ($produto->update($data)) {
@@ -192,10 +261,9 @@ class ProdutosController extends Controller
                 $json['message'] = 'Produto ' . $produto->descricao . ' actualizado com sucesso.';
                 $json['code'] = 200;
 
-                $descricao = "Actualizou o produto ". $produto->descricao ."";
+                $descricao = "Actualizou o produto " . $produto->descricao . "";
                 $historico->insert($produto->getTable(), $produto->id, $descricao);
-
-            }else{
+            } else {
                 $json['success'] = false;
                 $json['message'] = 'Ocorreu um erro ao editar o produto.';
                 $json['code'] = 500;
@@ -224,21 +292,19 @@ class ProdutosController extends Controller
                 'user_id' => auth()->user()->id
             ];
 
-                if ($requisicoes = Requisicoes::create($data)) {
+            if ($requisicoes = Requisicoes::create($data)) {
 
-                        $descricao = 'Registou a requisição ' . $requisicoes->id . '.';
-                        $historico->insert($requisicoes->getTable(), $requisicoes->id, $descricao);
+                $descricao = 'Registou a requisição ' . $requisicoes->id . '.';
+                $historico->insert($requisicoes->getTable(), $requisicoes->id, $descricao);
 
-                        $json['success'] = true;
-                        $json['message'] = 'A requisição foi adicionado com sucesso.';
-                        $json['code'] = 200;
-
-                } else {
-                    $json['success'] = false;
-                    $json['message'] = 'Erro ao fazer a requisição.';
-                    $json['code'] = 500;
-                }
-
+                $json['success'] = true;
+                $json['message'] = 'A requisição foi adicionado com sucesso.';
+                $json['code'] = 200;
+            } else {
+                $json['success'] = false;
+                $json['message'] = 'Erro ao fazer a requisição.';
+                $json['code'] = 500;
+            }
         } catch (\Illuminate\Validation\ValidationException $e) {
 
             $errors = $e->validator->errors()->all();
@@ -249,9 +315,5 @@ class ProdutosController extends Controller
         }
 
         echo json_encode($json);
-
     }
-
-
-
 }

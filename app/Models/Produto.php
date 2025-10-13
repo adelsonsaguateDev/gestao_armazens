@@ -11,9 +11,8 @@ class Produto extends Model
 
     protected $table = 'produtos';
 
-    protected $fillable = ['nome','descricao','codigo','stock_minimo','estado','quantidade','user_id'];
-    // Outras configurações e métodos, se necessário
-
+    // Assuming 'unidade' column is replaced by 'unidade_id'
+    protected $fillable = ['nome', 'descricao', 'codigo_barras', 'stock_minimo', 'estado', 'user_id', 'unidade_id', 'imagem'];
 
     public function users()
     {
@@ -22,6 +21,18 @@ class Produto extends Model
 
     public function requisicoes()
     {
-        return $this->hasMany(User::class, 'produto_id');
+        // Correcting the relationship to point to Requisicoes model
+        return $this->hasMany(Requisicoes::class, 'produto_id');
+    }
+
+    public function unidade()
+    {
+        // Relationship to Unidade model
+        return $this->belongsTo(Unidade::class, 'unidade_id');
+    }
+
+    public function itensEntrada()
+    {
+        return $this->hasMany(EntradaItem::class, 'produto_id');
     }
 }

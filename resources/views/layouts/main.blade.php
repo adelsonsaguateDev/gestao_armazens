@@ -5,6 +5,7 @@
       
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="shortcut icon" type="image/png" href="{{ asset('dist-assets/images/logo.png')}}">
 
       <!-- Bootstrap CSS
@@ -48,7 +49,7 @@
 
         {{-- fileinput css --}}
 
-        <link rel="stylesheet" href="{{asset('assets/bootstrap-fileinput/css/bootstrap-icons.min.css')}}" crossorigin="anonymous">
+        {{-- <link rel="stylesheet" href="{{asset('assets/bootstrap-fileinput/css/bootstrap-icons.min.css')}}" crossorigin="anonymous"> --}}
         <link href="{{asset('assets/bootstrap-fileinput/css/fileinput.css')}}" media="all" rel="stylesheet" type="text/css"/>
         <link href="{{asset('assets/bootstrap-fileinput/themes/explorer-fas/theme.css')}}" media="all" rel="stylesheet" type="text/css"/>
 

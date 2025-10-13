@@ -3,22 +3,22 @@
 <div class="row">
     <div class="col-md-6">
         <label for="exampleInputEmail1">Nome de utilizador<span class="obrigatorio">*</label>
-    <input type="text" name="username" value="" class="form-control" id="" aria-describedby="" placeholder="Enter username" >
+    <input type="text" name="username" value="" class="form-control" id="username" aria-describedby="" placeholder="Digite o nome de utilizador" >
     </div>
     <div class="col-md-6">
         <label for="exampleInputEmail1">Nome<span class="obrigatorio">*</label>
-        <input type="text" name="name" class="form-control" id="" value="" aria-describedby="" placeholder="Enter name" >
+        <input type="text" name="name" class="form-control" id="name" value="" aria-describedby="" placeholder="Digite o nome" >
     </div>
 </div>
 <br>
 <div class="row">
     <div class="col-md-6">
         <label for="exampleInputEmail1">E-mail<span class="obrigatorio">*</label>
-        <input type="email" name="email" class="form-control" value="" id="" aria-describedby="emailHelp" placeholder="Enter email" >
+        <input type="email" name="email" class="form-control" value="" id="email" aria-describedby="emailHelp" placeholder="Digite o email" >
     </div>
     <div class="col-md-6">
         <label for="exampleInputEmail1">Contacto<span class="obrigatorio">*</label>
-        <input type="text" maxlength="9" name="contacto" class="form-control numero" id="" value="" aria-describedby="" placeholder="Enter contact" >
+        <input type="text" maxlength="9" name="contacto" class="form-control numero" id="contacto" value="" aria-describedby="" placeholder="Digite o contacto" >
     </div>
 </div>
 

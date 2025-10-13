@@ -4,8 +4,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProdutosController;
 use App\Http\Controllers\RequisicoesController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EntradasController;
+use App\Http\Controllers\SaidasController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\UtilizadorController;
+use App\Http\Controllers\Admin\ClientesController;
+use App\Http\Controllers\Admin\FornecedoresController;
+use App\Http\Controllers\PagamentoController;
+use App\Http\Controllers\RelatorioController;
 
 
 
@@ -30,24 +36,58 @@ Route::get('/', function () {
 });
 
 //Pagina inicial
-Route::get('/home',  [DashboardController::class , 'index'])->name('pagina_inicial');
+Route::get('/home',  [DashboardController::class, 'index'])->name('pagina_inicial');
 
 //Login & Logout
-Route::post('/autenticar', [LoginController::class , 'autenticar'])->name('autenticar');
-Route::get('/', [LoginController::class , 'logout'])->name('logout');
+Route::post('/autenticar', [LoginController::class, 'autenticar'])->name('autenticar');
+Route::get('/', [LoginController::class, 'logout'])->name('logout');
 
 
 //Produto
 Route::get('produto', [ProdutosController::class, 'index'])->name('produto.list');
-Route::get('produtos', [ProdutosController::class, 'list'])->name('listar');
+Route::get('produtos', [ProdutosController::class, 'index'])->name('produtos');
 Route::get('produto/{id}', [ProdutosController::class, 'show'])->name('show');
 Route::get('produto_detalhes/{id}', [ProdutosController::class, 'show_details'])->name('detalhes');
+Route::post('produtos', [ProdutosController::class, 'list'])->name('listar');
 Route::post('produto/add', [ProdutosController::class, 'add'])->name('create');
 Route::post('produto/delete', [ProdutosController::class, 'delete'])->name('delete');
-Route::post('produto/edit', [ProdutosController::class, 'edit'])->name('edit');
+Route::post('produto/edit', [ProdutosController::class, 'edit'])->name('produto.edit');
 Route::post('produto/requisicao', [ProdutosController::class, 'add_requisicao'])->name('requisicao');
 
 
+//Entradas
+Route::get('entrada', [EntradasController::class, 'index'])->name('entrada.list');
+Route::get('entrada/create', [EntradasController::class, 'create'])->name('entrada.create');
+Route::post('entradas', [EntradasController::class, 'list'])->name('entradas.list'); // Para listagem via AJAX
+Route::post('entrada/add', [EntradasController::class, 'add'])->name('entrada.add');
+// Route::get('entrada/{id}', [EntradasController::class, 'show'])->name('entrada.show'); // Rota antiga para edição
+Route::get('entrada_detalhes/{id}', [EntradasController::class, 'show_details'])->name('entrada.detalhes');
+// Route::post('entrada/edit', [EntradasController::class, 'edit'])->name('entrada.edit'); // Rota antiga para update
+Route::post('entrada/delete', [EntradasController::class, 'delete'])->name('entrada.delete');
+
+// Novas rotas RESTful para editar e actualizar
+Route::get('entradas/{entrada}/edit', [EntradasController::class, 'edit'])->name('entradas.edit');
+Route::put('entradas/{entrada}', [EntradasController::class, 'update'])->name('entradas.update');
+
+
+// Saida routes
+// Saidas (Refatorado e Unificado)
+// Mantendo as rotas originais e adicionando as que faltavam do bloco duplicado.
+
+// Rotas GET
+Route::get('saida', [SaidasController::class, 'index'])->name('saida.list');
+Route::get('saida/create', [SaidasController::class, 'create'])->name('saida.create');
+Route::get('saida/create-credito', [SaidasController::class, 'createCredito'])->name('saida.create.credito'); // Adicionada
+Route::get('saida/recibo/{id}', [SaidasController::class, 'recibo'])->name('saida.recibo'); // Adicionada
+Route::get('saida_detalhes/{id}', [SaidasController::class, 'show_details'])->name('saida.detalhes');
+Route::get('saida/{id}', [SaidasController::class, 'show'])->name('saida.show'); // Rota com parâmetro no final
+
+// Rotas POST
+Route::post('saidas', [SaidasController::class, 'list'])->name('saidas.list'); // Para listagem via AJAX
+Route::post('saida/add', [SaidasController::class, 'add'])->name('saida.add');
+Route::post('saida/edit', [SaidasController::class, 'edit'])->name('saida.edit');
+Route::post('saida/delete', [SaidasController::class, 'delete'])->name('saida.delete');
+Route::post('saida/getBatchesByProduct', [SaidasController::class, 'getBatchesByProduct'])->name('saida.getBatchesByProduct'); // Adicionada
 
 //Utilizador
 Route::get('utilizador', [UtilizadorController::class, 'index'])->name('utilizador.list');
@@ -57,6 +97,31 @@ Route::get('utilizador_detalhes/{id}', [UtilizadorController::class, 'show_detai
 Route::post('utilizador/add', [UtilizadorController::class, 'add'])->name('create');
 Route::post('utilizador/delete', [UtilizadorController::class, 'delete'])->name('delete');
 Route::post('utilizador/edit', [UtilizadorController::class, 'edit'])->name('edit');
+
+//Cliente
+Route::get('cliente', [ClientesController::class, 'index'])->name('cliente.list');
+Route::get('clientes', [ClientesController::class, 'list'])->name('listar');
+Route::get('cliente/{id}', [ClientesController::class, 'show'])->name('show');
+Route::get('cliente_detalhes/{id}', [ClientesController::class, 'show_details'])->name('cliente.detalhes');
+Route::post('cliente/add', [ClientesController::class, 'add'])->name('create');
+Route::post('cliente/delete', [ClientesController::class, 'delete'])->name('delete');
+Route::post('cliente/edit', [ClientesController::class, 'edit'])->name('edit');
+
+//Fornecedor
+Route::get('fornecedor', [FornecedoresController::class, 'index'])->name('fornecedor.list');
+Route::get('fornecedores', [FornecedoresController::class, 'list'])->name('fornecedores.listar');
+Route::get('fornecedor/{id}', [FornecedoresController::class, 'show'])->name('fornecedor.show');
+Route::get('fornecedor_detalhes/{id}', [FornecedoresController::class, 'show_details'])->name('fornecedor.detalhes');
+Route::post('fornecedor/add', [FornecedoresController::class, 'add'])->name('fornecedor.create');
+Route::post('fornecedor/delete', [FornecedoresController::class, 'delete'])->name('fornecedor.delete');
+Route::post('fornecedor/edit', [FornecedoresController::class, 'edit'])->name('fornecedor.edit');
+
+
+//Pagamentos
+Route::get('pagamento', [PagamentoController::class, 'index'])->name('pagamentos.index');
+// Rotas POST
+Route::post('pagamentos', [PagamentoController::class, 'list'])->name('pagamentos.list'); 
+Route::post('pagamento/add', [PagamentoController::class,'add'])->name('pagamento.create');
 
 
 
@@ -80,9 +145,7 @@ Route::get('/dashboard/requisicoes_grafico_pizza', [DashboardController::class, 
 
 //Relatorios
 Route::get('relatorio', [DashboardController::class, 'index1'])->name('relatorio.list');
-Route::get('relatorios', [DashboardController::class, 'list'])->name('listar');
 
 
-
-
-
+// Reports
+Route::get('relatorios', [RelatorioController::class, 'index'])->name('relatorios.index');

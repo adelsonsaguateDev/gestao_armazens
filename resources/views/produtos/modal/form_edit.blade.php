@@ -32,7 +32,29 @@
                     <input type="number" name="stock_minimo_update" class="form-control" id="stock_minimo_update" value="" aria-describedby=""  required placeholder="Stock minimo" >
                 </div>
 
-                      
+                <div class="col-md-6 form-group">
+                    <label for="unidade_id_update"><b>Unidade</b><span class="obrigatorio">*</span></label>
+                    <select class="form-control select2" name="unidade_id_update" id="unidade_id_update" required>
+                        <option value="">Selecione...</option>
+                        @if(isset($unidades))
+                            @foreach ($unidades as $unidade)
+                                <option value="{{ $unidade->id }}">{{ $unidade->nome }}</option>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+
+                <div class="col-md-12 form-group">
+                    <label for="imagem_update"><b>Imagem do Produto</b></label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="imagem_update" name="imagem_update" accept="image/*">
+                        <label class="custom-file-label" for="imagem_update">Escolher nova imagem...</label>
+                    </div>
+                    <small class="form-text text-muted">Formatos aceites: JPEG, PNG, JPG, GIF, SVG. Tamanho máximo: 2MB</small>
+                    <div id="imagem_preview" class="mt-2" style="display: none;">
+                        <img id="preview_img" src="" alt="Preview" style="max-width: 150px; max-height: 150px; border-radius: 5px;">
+                    </div>
+                </div>
                       
              </div>
 
